@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Controls;
 using DisableNvidiaTelemetry.Properties;
+using DisableNvidiaTelemetry.Utilities;
 using Microsoft.Win32.TaskScheduler;
 
 #endregion
 
-namespace DisableNvidiaTelemetry
+namespace DisableNvidiaTelemetry.Forms
 {
     public partial class FormMain : Form
     {
@@ -31,6 +33,8 @@ namespace DisableNvidiaTelemetry
             tabPage1.Controls.Add(_servicesControl);
 
             txtLicense.Text = Resources.ApplicationLicense;
+
+            MessageBox.Show(Logging.GetLogFile());
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -97,6 +101,7 @@ namespace DisableNvidiaTelemetry
         private void AppendLog(string message)
         {
             textBox1.AppendText($"[{DateTime.Now:T}] {message}{Environment.NewLine}");
+            Logging.GetLogger().Info(message);
         }
 
         private void DisableTelemetryTasks()
@@ -293,7 +298,7 @@ namespace DisableNvidiaTelemetry
                 }
 
                 catch
-                {
+                {   
                     AppendLog($"Failed to disable service startup: {service.DisplayName} ({service.ServiceName})");
                 }
             }

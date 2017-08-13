@@ -54,6 +54,9 @@
     <ApplicationIcon>binoculars.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.5.24.0, Culture=neutral, PublicKeyToken=0d013ddd5178a2ae, processorArchitecture=MSIL">
       <HintPath>..\packages\TaskScheduler.2.5.24\lib\net35\Microsoft.Win32.TaskScheduler.dll</HintPath>
     </Reference>
@@ -64,23 +67,24 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormMain.cs">
+    <Compile Include="Forms\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormMain.Designer.cs">
+    <Compile Include="Forms\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="NvidiaController.cs" />
+    <Compile Include="Utilities\NvidiaController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceHelper.cs" />
-    <Compile Include="TelemetryControl.cs">
+    <Compile Include="Utilities\ServiceHelper.cs" />
+    <Compile Include="Controls\TelemetryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TelemetryControl.Designer.cs">
+    <Compile Include="Controls\TelemetryControl.Designer.cs">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="FormMain.resx">
+    <Compile Include="Utilities\Logging.cs" />
+    <EmbeddedResource Include="Forms\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -93,7 +97,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TelemetryControl.resx">
+    <EmbeddedResource Include="Controls\TelemetryControl.resx">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
@@ -125,5 +129,6 @@
     <None Include="Resources\GitHub-Mark-64px.png" />
     <None Include="Resources\binoculars-64.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

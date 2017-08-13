@@ -1,4 +1,4 @@
-﻿namespace DisableNvidiaTelemetry
+﻿namespace DisableNvidiaTelemetry.Controls
 {
     partial class TelemetryControl
     {

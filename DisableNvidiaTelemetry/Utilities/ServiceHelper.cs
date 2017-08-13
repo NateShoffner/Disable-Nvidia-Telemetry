@@ -7,7 +7,7 @@ using System.ServiceProcess;
 
 #endregion
 
-namespace DisableNvidiaTelemetry
+namespace DisableNvidiaTelemetry.Utilities
 {
     public static class ServiceHelper
     {

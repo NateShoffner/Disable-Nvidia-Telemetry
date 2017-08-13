@@ -1,4 +1,4 @@
-﻿namespace DisableNvidiaTelemetry
+﻿namespace DisableNvidiaTelemetry.Forms
 {
     partial class FormMain
     {

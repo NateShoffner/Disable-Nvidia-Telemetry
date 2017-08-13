@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 #endregion
 
-namespace DisableNvidiaTelemetry
+namespace DisableNvidiaTelemetry.Controls
 {
     public partial class TelemetryControl : UserControl
     {

@@ -7,7 +7,7 @@ using Microsoft.Win32.TaskScheduler;
 
 #endregion
 
-namespace DisableNvidiaTelemetry
+namespace DisableNvidiaTelemetry.Utilities
 {
     internal class TelemetryQuery<T>
     {

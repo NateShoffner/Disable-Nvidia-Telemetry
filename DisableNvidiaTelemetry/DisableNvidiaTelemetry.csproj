@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="binoculars.ico" />
+    <None Include="Resources\GitHub-Mark-64px.png" />
     <None Include="Resources\binoculars-64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

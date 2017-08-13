@@ -39,20 +39,22 @@
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtLicense = new System.Windows.Forms.TextBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblName = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.pbGithub = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -106,6 +108,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.pbGithub);
             this.tabPage3.Controls.Add(this.lblCopyright);
             this.tabPage3.Controls.Add(this.lblVersion);
             this.tabPage3.Controls.Add(this.tabControl2);
@@ -186,6 +189,30 @@
             this.txtLicense.Size = new System.Drawing.Size(527, 102);
             this.txtLicense.TabIndex = 62;
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.textBox2);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(533, 108);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "Credits";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox2.Location = new System.Drawing.Point(3, 3);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox2.Size = new System.Drawing.Size(527, 102);
+            this.textBox2.TabIndex = 63;
+            this.textBox2.Text = "Icon made by freepik from www.flaticon.com ";
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::DisableNvidiaTelemetry.Properties.Resources.binoculars_64;
@@ -245,29 +272,18 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
-            // tabPage5
+            // pbGithub
             // 
-            this.tabPage5.Controls.Add(this.textBox2);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(533, 108);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "Credits";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(3, 3);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(527, 102);
-            this.textBox2.TabIndex = 63;
-            this.textBox2.Text = "Icon made by freepik from www.flaticon.com ";
+            this.pbGithub.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbGithub.Image = global::DisableNvidiaTelemetry.Properties.Resources.GitHub_Mark_64px;
+            this.pbGithub.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbGithub.Location = new System.Drawing.Point(483, 6);
+            this.pbGithub.Name = "pbGithub";
+            this.pbGithub.Size = new System.Drawing.Size(64, 64);
+            this.pbGithub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbGithub.TabIndex = 78;
+            this.pbGithub.TabStop = false;
+            this.pbGithub.Click += new System.EventHandler(this.pbGithub_Click);
             // 
             // FormMain
             // 
@@ -293,9 +309,10 @@
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -319,6 +336,7 @@
         private System.Windows.Forms.LinkLabel lblCopyright;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.PictureBox pbGithub;
     }
 }
 

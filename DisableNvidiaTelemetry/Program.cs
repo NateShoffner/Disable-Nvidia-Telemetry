@@ -23,7 +23,18 @@ namespace DisableNvidiaTelemetry
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+
+#if PORTABLE
             var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+#else
+            var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Disable Nvidia Telemetry");
+            if (!Directory.Exists(appData))
+                Directory.CreateDirectory(appData);
+
+            var logDirectory = Path.Combine(appData, "Logs");
+            if (!Directory.Exists(logDirectory))
+                Directory.CreateDirectory(logDirectory);
+#endif
             Logging.SetLogDirectory(logDirectory);
 
             // log all the errors

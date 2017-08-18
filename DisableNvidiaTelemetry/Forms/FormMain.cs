@@ -34,7 +34,12 @@ namespace DisableNvidiaTelemetry.Forms
 
             txtLicense.Text = Resources.ApplicationLicense;
 
-            MessageBox.Show(Logging.GetLogFile());
+            LogExtensions.LogEvent += OnLogEvent;
+        }
+
+        private void OnLogEvent(object sender, LogExtensions.LogEventArgs e)
+        {
+            textBox1.AppendText($"[{DateTime.Now:T}] {e.Message}{Environment.NewLine}");
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -60,10 +65,10 @@ namespace DisableNvidiaTelemetry.Forms
         private void btnApply_Click(object sender, EventArgs e)
         {
             if (_servicesControl.CheckState == CheckState.Checked)
-                DisableTelemetryServices();
+                NvidiaController.DisableTelemetryServices(_telemetryServices);
 
             if (_tasksControl.CheckState == CheckState.Checked)
-                DisableTelemetryTasks();
+                NvidiaController.DisableTelemetryTasks(_telemetryTasks);
 
             RefreshControls();
 
@@ -75,8 +80,8 @@ namespace DisableNvidiaTelemetry.Forms
         {
             RefreshControls();
 
-            EnableTelemetryServices();
-            EnableTelemetryTasks();
+            NvidiaController.EnableTelemetryServices(_telemetryServices);
+            NvidiaController.EnableTelemetryTasks(_telemetryTasks);
 
             RefreshTelemetryServices(false);
             RefreshTelemetryTasks(false);
@@ -97,211 +102,46 @@ namespace DisableNvidiaTelemetry.Forms
             _servicesControl.Reset();
         }
 
-
         private void AppendLog(string message)
         {
-            textBox1.AppendText($"[{DateTime.Now:T}] {message}{Environment.NewLine}");
-            Logging.GetLogger().Info(message);
-        }
-
-        private void DisableTelemetryTasks()
-        {
-            foreach (var task in _telemetryTasks)
-            {
-                try
-                {
-                    if (task.Enabled)
-                    {
-                        task.Enabled = false;
-                        AppendLog($"Disabled task: {task.Path}");
-                    }
-                }
-
-                catch
-                {
-                    AppendLog($"Failed to disable task: {task.Path}");
-                }
-            }
-        }
-
-        private void EnableTelemetryTasks()
-        {
-            foreach (var task in _telemetryTasks)
-            {
-                if (task != null)
-                {
-                    try
-                    {
-                        if (!task.Enabled)
-                        {
-                            task.Enabled = true;
-                            AppendLog($"Enabled task: {task.Path}");
-                        }
-                    }
-
-                    catch
-                    {
-                        AppendLog($"Failed to enable task: {task.Path}");
-                    }
-                }
-            }
+            Logging.GetLogger().Log(log4net.Core.Level.Info, message);
         }
 
         private void RefreshTelemetryTasks(bool logging)
         {
-            var tasks = new List<Task>();
-            var taskQueries = NvidiaController.GetTelemetryTasks();
+            var tasks = NvidiaController.GetTelemetryTasks(logging);
 
-            if (taskQueries.Count > 0)
+            foreach (var task in tasks)
             {
-                foreach (var query in taskQueries)
+                if (!task.Enabled)
                 {
-                    if (query.Result == null)
-                    {
-                        if (logging)
-                            AppendLog($"Failed to find task: {query.Query}");
-                    }
-
-                    else
-                    {
-                        if (logging)
-                        {
-                            AppendLog($"Found Task: {query.Result.Name}");
-                            AppendLog($"Task is: {(query.Result.Enabled ? "Enabled" : "Disabled")}");
-                        }
-
-                        if (!query.Result.Enabled)
-                        {
-                            _tasksControl.DisabledCount++;
-                        }
-
-                        _tasksControl.AddSubAction($"Task: {query.Result.Path}", query.Result.Enabled);
-
-                        tasks.Add(query.Result);
-                    }
+                    _tasksControl.DisabledCount++;
                 }
+
+                _tasksControl.AddSubAction($"Task: {task.Path}", task.Enabled);
             }
 
             _tasksControl.Enabled = !_tasksControl.IsEmpty;
-
             _telemetryTasks = tasks;
         }
 
         private void RefreshTelemetryServices(bool logging)
         {
-            var services = new List<ServiceController>();
-            var serviceQueries = NvidiaController.GetTelemetryServices();
+            var services = NvidiaController.GetTelemetryServices(logging);
 
-            if (serviceQueries.Count > 0)
+            foreach (var service in services)
             {
-                foreach (var query in serviceQueries)
+                var running = service.Status == ServiceControllerStatus.Running;
+                if (!running)
                 {
-                    var serviceFound = false;
-                    var running = false;
-                    try
-                    {
-                        running = query.Result.Status == ServiceControllerStatus.Running;
-                        serviceFound = true;
-                    }
-
-                    catch
-                    {
-                        if (logging)
-                            AppendLog($"Failed to find service: {query.Query}");
-                    }
-
-                    if (serviceFound)
-                    {
-                        if (logging)
-                        {
-                            AppendLog($"Found Service: {query.Result.DisplayName} ({query.Result.ServiceName})");
-                            AppendLog($"Service is: {(running ? "Enabled" : "Disabled")}");
-                        }
-
-                        if (!running)
-                            _servicesControl.DisabledCount++;
-
-                        _servicesControl.AddSubAction($"Service: {query.Result.DisplayName} ({query.Result.ServiceName})", running);
-
-                        services.Add(query.Result);
-                    }
+                    _servicesControl.DisabledCount++;
                 }
+
+                _servicesControl.AddSubAction($"Service: {service.DisplayName} ({service.ServiceName})", running);
             }
 
             _servicesControl.Enabled = !_servicesControl.IsEmpty;
-
             _telemetryServices = services;
-        }
-
-        private void EnableTelemetryServices()
-        {
-            foreach (var service in _telemetryServices)
-            {
-                try
-                {
-                    if (ServiceHelper.GetServiceStartMode(service) != ServiceStartMode.Automatic)
-                    {
-                        ServiceHelper.ChangeStartMode(service, ServiceStartMode.Automatic);
-
-                        AppendLog($"Enabled automatic service startup: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    AppendLog($"Failed to enable automatic service startup: {service.DisplayName} ({service.ServiceName})");
-                }
-
-                try
-                {
-                    if (service.Status != ServiceControllerStatus.Running)
-                    {
-                        service.Start();
-                        service.WaitForStatus(ServiceControllerStatus.Running);
-                        AppendLog($"Enabled service: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    AppendLog($"Failed to start service: {service.DisplayName} ({service.ServiceName})");
-                }
-            }
-        }
-
-        private void DisableTelemetryServices()
-        {
-            foreach (var service in _telemetryServices)
-            {
-                try
-                {
-                    if (service.Status == ServiceControllerStatus.Running)
-                    {
-                        service.Stop();
-                        service.WaitForStatus(ServiceControllerStatus.Stopped);
-                        AppendLog($"Disabled service: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    AppendLog($"Failed to disable service: {service.DisplayName} ({service.ServiceName})");
-                }
-
-                try
-                {
-                    if (ServiceHelper.GetServiceStartMode(service) != ServiceStartMode.Disabled)
-                    {
-                        ServiceHelper.ChangeStartMode(service, ServiceStartMode.Disabled);
-                        AppendLog($"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {   
-                    AppendLog($"Failed to disable service startup: {service.DisplayName} ({service.ServiceName})");
-                }
-            }
         }
 
         private void lblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

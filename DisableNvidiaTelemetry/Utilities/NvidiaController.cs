@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.ServiceProcess;
+using DisableNvidiaTelemetry.Controls;
 using log4net.Core;
 using Microsoft.Win32.TaskScheduler;
 
@@ -11,9 +12,9 @@ namespace DisableNvidiaTelemetry.Utilities
 {
     internal class NvidiaController
     {
-        public static List<Task> GetTelemetryTasks(bool logging)
+        public static List<TelemetryTask> GetTelemetryTasks(bool logging)
         {
-            var tasks = new List<Task>();
+            var tasks = new List<TelemetryTask>();
 
             var taskNames = new[] {"NvTmMon_*", "NvTmRep_*", "NvTmRepOnLogon_*"};
 
@@ -35,16 +36,16 @@ namespace DisableNvidiaTelemetry.Utilities
                         Logging.GetLogger().Log(Level.Info, $"Task is: {(task.Enabled ? "Enabled" : "Disabled")}");
                     }
 
-                    tasks.Add(task);
+                    tasks.Add(new TelemetryTask(task));
                 }
             }
 
             return tasks;
         }
 
-        public static List<ServiceController> GetTelemetryServices(bool logging)
+        public static List<TelemetryService> GetTelemetryServices(bool logging)
         {
-            var services = new List<ServiceController>();
+            var services = new List<TelemetryService>();
 
             var serviceNames = new[] {"NvTelemetryContainer"};
 
@@ -57,7 +58,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     // throw error if service as not found
                     var running = service.Status == ServiceControllerStatus.Running;
 
-                    services.Add(service);
+                    services.Add(new TelemetryService(service));
 
                     if (logging)
                     {

@@ -1,17 +1,20 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 #endregion
 
 namespace DisableNvidiaTelemetry.Controls
 {
-    public partial class TelemetryControl : UserControl
+    internal partial class TelemetryControl : UserControl
     {
+        private readonly List<ITelemetry> _telemetryItems = new List<ITelemetry>();
         private bool _suppressEvents;
-        private int _totalActions;
 
         public TelemetryControl(string labelText)
         {
@@ -19,40 +22,46 @@ namespace DisableNvidiaTelemetry.Controls
             chkDisableTelemetry.Text = labelText;
         }
 
+        public ReadOnlyCollection<ITelemetry> TelemetryItems => _telemetryItems.AsReadOnly();
+
         public CheckState CheckState
         {
             get => chkDisableTelemetry.CheckState;
             set => chkDisableTelemetry.CheckState = value;
         }
 
-        public int DisabledCount { set; get; }
-
-        public bool IsEmpty => _totalActions == 0;
-
-        public bool AllDisabled => DisabledCount == _totalActions;
-
-        public event EventHandler CheckStateChanged;
-
-        public void AddSubAction(string item, bool isEnabled)
+        public void AddTelemetryItem(ITelemetry telemetry, string displayText)
         {
-            _totalActions++;
-            progressBar1.Maximum = _totalActions;
+            _telemetryItems.Add(telemetry);
 
-            var lbl = new Label {AutoSize = true, Text = item, ForeColor = isEnabled ? SystemColors.ControlText : SystemColors.ControlDark, Location = new Point(0, lblStatus.Height * (_totalActions - 1))};
+            progressBar1.Maximum = _telemetryItems.Count;
+
+            var lbl = new Label
+            {
+                AutoSize = true,
+                Text = displayText,
+                ForeColor = telemetry.IsRunning() ? SystemColors.ControlText : SystemColors.ControlDark,
+                Location = new Point(0, lblStatus.Height * (_telemetryItems.Count - 1))
+            };
             panel1.Controls.Add(lbl);
 
             UpdateStatus();
         }
 
+        public event EventHandler CheckStateChanged;
+
         private void UpdateStatus()
         {
-            progressBar1.Value = DisabledCount;
+            var disabledCount = _telemetryItems.Count(x => !x.IsRunning());
+
+            progressBar1.Value = disabledCount;
 
             if (lblStatus.Visible == false)
                 lblStatus.Visible = true;
 
-            lblStatus.Text = AllDisabled ? "All disabled" : $"{DisabledCount} of {_totalActions} disabled";
-            chkDisableTelemetry.CheckState = AllDisabled ? CheckState.Checked : CheckState.Unchecked;
+            var allDisabled = disabledCount == _telemetryItems.Count;
+            lblStatus.Text = allDisabled ? "All disabled" : $"{disabledCount} of {_telemetryItems.Count} disabled";
+            chkDisableTelemetry.CheckState = allDisabled ? CheckState.Checked : CheckState.Unchecked;
         }
 
         private void chkDisableTelemetry_CheckStateChanged(object sender, EventArgs e)
@@ -67,8 +76,7 @@ namespace DisableNvidiaTelemetry.Controls
         {
             _suppressEvents = true;
 
-            DisabledCount = 0;
-            _totalActions = 0;
+            _telemetryItems.Clear();
             progressBar1.Value = 0;
             panel1.Controls.Clear();
             chkDisableTelemetry.CheckState = CheckState.Unchecked;

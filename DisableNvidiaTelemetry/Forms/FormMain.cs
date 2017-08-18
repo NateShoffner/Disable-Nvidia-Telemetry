@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceProcess;
 using System.Windows.Forms;
 using DisableNvidiaTelemetry.Controls;
@@ -102,27 +103,17 @@ namespace DisableNvidiaTelemetry.Forms
             _servicesControl.Reset();
         }
 
-        private void AppendLog(string message)
-        {
-            Logging.GetLogger().Log(log4net.Core.Level.Info, message);
-        }
-
         private void RefreshTelemetryTasks(bool logging)
         {
             var tasks = NvidiaController.GetTelemetryTasks(logging);
 
             foreach (var task in tasks)
             {
-                if (!task.Enabled)
-                {
-                    _tasksControl.DisabledCount++;
-                }
-
-                _tasksControl.AddSubAction($"Task: {task.Path}", task.Enabled);
+                _tasksControl.AddTelemetryItem(task, $"Task: {task.Task.Path}");
             }
 
-            _tasksControl.Enabled = !_tasksControl.IsEmpty;
-            _telemetryTasks = tasks;
+            _tasksControl.Enabled = _tasksControl.TelemetryItems.Count != 0;
+            _telemetryTasks = tasks.Select(t => t.Task).ToList();
         }
 
         private void RefreshTelemetryServices(bool logging)
@@ -131,17 +122,11 @@ namespace DisableNvidiaTelemetry.Forms
 
             foreach (var service in services)
             {
-                var running = service.Status == ServiceControllerStatus.Running;
-                if (!running)
-                {
-                    _servicesControl.DisabledCount++;
-                }
-
-                _servicesControl.AddSubAction($"Service: {service.DisplayName} ({service.ServiceName})", running);
+                _servicesControl.AddTelemetryItem(service, $"Service: {service.Service.DisplayName}");
             }
 
-            _servicesControl.Enabled = !_servicesControl.IsEmpty;
-            _telemetryServices = services;
+            _servicesControl.Enabled = _servicesControl.TelemetryItems.Count != 0;
+            _telemetryServices = services.Select(s => s.Service).ToList();
         }
 
         private void lblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

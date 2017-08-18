@@ -19,7 +19,7 @@ namespace DisableNvidiaTelemetry.Utilities
         private const int ERROR_INSUFFICIENT_BUFFER = 122;
 
         [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern Boolean ChangeServiceConfig(
+        public static extern bool ChangeServiceConfig(
             IntPtr hService,
             uint nServiceType,
             uint nStartType,
@@ -33,10 +33,10 @@ namespace DisableNvidiaTelemetry.Utilities
             string lpDisplayName);
 
         [DllImport("advapi32.dll", EntryPoint = "QueryServiceConfigW", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool QueryServiceConfig(SafeHandle hService, IntPtr lpServiceConfig, int cbBufSize, out int pcbBytesNeeded);
+        private static extern bool QueryServiceConfig(SafeHandle hService, IntPtr lpServiceConfig, int cbBufSize, out int pcbBytesNeeded);
 
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, uint dwDesiredAccess);
+        private static extern IntPtr OpenService(IntPtr hSCManager, string lpServiceName, uint dwDesiredAccess);
 
         [DllImport("advapi32.dll", EntryPoint = "OpenSCManagerW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr OpenSCManager(string machineName, string databaseName, uint dwAccess);
@@ -81,20 +81,20 @@ namespace DisableNvidiaTelemetry.Utilities
 
         internal static ServiceStartMode GetServiceStartMode(ServiceController svc)
         {
-            int neededBytes = 0;
+            var neededBytes = 0;
 
-            bool result = QueryServiceConfig(svc.ServiceHandle, IntPtr.Zero, 0, out neededBytes);
-            int win32err = Marshal.GetLastWin32Error();
+            var result = QueryServiceConfig(svc.ServiceHandle, IntPtr.Zero, 0, out neededBytes);
+            var win32err = Marshal.GetLastWin32Error();
             if (win32err == ERROR_INSUFFICIENT_BUFFER) //122
             {
-                IntPtr ptr = IntPtr.Zero;
+                var ptr = IntPtr.Zero;
                 try
                 {
                     ptr = Marshal.AllocCoTaskMem(neededBytes);
                     result = QueryServiceConfig(svc.ServiceHandle, ptr, neededBytes, out neededBytes);
                     if (result)
                     {
-                        QUERY_SERVICE_CONFIG config = (QUERY_SERVICE_CONFIG) Marshal.PtrToStructure(ptr, typeof(QUERY_SERVICE_CONFIG));
+                        var config = (QUERY_SERVICE_CONFIG) Marshal.PtrToStructure(ptr, typeof(QUERY_SERVICE_CONFIG));
                         return config.dwStartType;
                     }
                     else
@@ -108,24 +108,21 @@ namespace DisableNvidiaTelemetry.Utilities
                     Marshal.FreeCoTaskMem(ptr);
                 }
             }
-            else
-            {
-                throw new Win32Exception(win32err, "QueryServiceConfig failed");
-            }
+            throw new Win32Exception(win32err, "QueryServiceConfig failed");
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        struct QUERY_SERVICE_CONFIG
+        private struct QUERY_SERVICE_CONFIG
         {
-            [MarshalAs(UnmanagedType.U4)] internal readonly ServiceType dwServiceType;
+            [MarshalAs(UnmanagedType.U4)] private readonly ServiceType dwServiceType;
             [MarshalAs(UnmanagedType.U4)] internal readonly ServiceStartMode dwStartType;
-            internal readonly int dwErrorControl;
-            [MarshalAs(UnmanagedType.LPWStr)] internal readonly string lpBinaryPathName;
-            [MarshalAs(UnmanagedType.LPWStr)] internal readonly string lpLoadOrderGroup;
-            internal readonly int dwTagId;
-            [MarshalAs(UnmanagedType.LPWStr)] internal readonly string lpDependencies;
-            [MarshalAs(UnmanagedType.LPWStr)] internal readonly string lpServiceStartName;
-            [MarshalAs(UnmanagedType.LPWStr)] internal readonly string lpDisplayName;
+            private readonly int dwErrorControl;
+            [MarshalAs(UnmanagedType.LPWStr)] private readonly string lpBinaryPathName;
+            [MarshalAs(UnmanagedType.LPWStr)] private readonly string lpLoadOrderGroup;
+            private readonly int dwTagId;
+            [MarshalAs(UnmanagedType.LPWStr)] private readonly string lpDependencies;
+            [MarshalAs(UnmanagedType.LPWStr)] private readonly string lpServiceStartName;
+            [MarshalAs(UnmanagedType.LPWStr)] private readonly string lpDisplayName;
         }
     }
 }

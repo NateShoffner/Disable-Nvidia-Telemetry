@@ -58,18 +58,15 @@ namespace DisableNvidiaTelemetry
             }
 
             if (!IsAdministrator())
-            {
                 MessageBox.Show("Please run the program as administrator to continue.", "Administrator Required", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
 
             if (!silentMode)
-            {
                 Application.Run(new FormMain());
-            }
         }
+
         private static bool IsAdministrator()
         {
-            return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent())
                 .IsInRole(WindowsBuiltInRole.Administrator);
         }
 

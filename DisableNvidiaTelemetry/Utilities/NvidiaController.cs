@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.ServiceProcess;
-using DisableNvidiaTelemetry.Controls;
 using log4net.Core;
 using Microsoft.Win32.TaskScheduler;
 
@@ -12,6 +11,10 @@ namespace DisableNvidiaTelemetry.Utilities
 {
     internal class NvidiaController
     {
+        /// <summary>
+        ///     Returns known telemetry tasks.
+        /// </summary>
+        /// <param name="logging">Determines whether logging should be done.</param>
         public static List<TelemetryTask> GetTelemetryTasks(bool logging)
         {
             var tasks = new List<TelemetryTask>();
@@ -43,6 +46,10 @@ namespace DisableNvidiaTelemetry.Utilities
             return tasks;
         }
 
+        /// <summary>
+        ///     Returns known telemetry services.
+        /// </summary>
+        /// <param name="logging">Determines whether logging should be done.</param>
         public static List<TelemetryService> GetTelemetryServices(bool logging)
         {
             var services = new List<TelemetryService>();
@@ -77,6 +84,10 @@ namespace DisableNvidiaTelemetry.Utilities
             return services;
         }
 
+        /// <summary>
+        ///     Disables the provided telemetry services if they are currently running.
+        /// </summary>
+        /// <param name="services">The services to disable.</param>
         public static void DisableTelemetryServices(List<ServiceController> services)
         {
             foreach (var service in services)
@@ -112,6 +123,11 @@ namespace DisableNvidiaTelemetry.Utilities
             }
         }
 
+
+        /// <summary>
+        ///     Disables the provided tasks if they are currently enabled.
+        /// </summary>
+        /// <param name="tasks">The tasks to disable.</param>
         public static void DisableTelemetryTasks(List<Task> tasks)
         {
             foreach (var task in tasks)
@@ -132,6 +148,10 @@ namespace DisableNvidiaTelemetry.Utilities
             }
         }
 
+        /// <summary>
+        ///     Enables the provided services.
+        /// </summary>
+        /// <param name="services">The services to enable.</param>
         public static void EnableTelemetryServices(List<ServiceController> services)
         {
             foreach (var service in services)
@@ -168,6 +188,10 @@ namespace DisableNvidiaTelemetry.Utilities
             }
         }
 
+        /// <summary>
+        ///     Enables the provided tasks.
+        /// </summary>
+        /// <param name="tasks">The tasks to enable.</param>
         public static void EnableTelemetryTasks(List<Task> tasks)
         {
             foreach (var task in tasks)

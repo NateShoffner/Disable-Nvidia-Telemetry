@@ -34,6 +34,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.pbGithub = new System.Windows.Forms.PictureBox();
             this.lblCopyright = new System.Windows.Forms.LinkLabel();
             this.lblVersion = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -46,15 +47,15 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.pbGithub = new System.Windows.Forms.PictureBox();
+            this.lblGithub = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).BeginInit();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -108,6 +109,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.lblGithub);
             this.tabPage3.Controls.Add(this.pbGithub);
             this.tabPage3.Controls.Add(this.lblCopyright);
             this.tabPage3.Controls.Add(this.lblVersion);
@@ -121,6 +123,19 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "About";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // pbGithub
+            // 
+            this.pbGithub.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbGithub.Image = global::DisableNvidiaTelemetry.Properties.Resources.GitHub_Mark_64px;
+            this.pbGithub.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbGithub.Location = new System.Drawing.Point(474, 6);
+            this.pbGithub.Name = "pbGithub";
+            this.pbGithub.Size = new System.Drawing.Size(64, 64);
+            this.pbGithub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbGithub.TabIndex = 78;
+            this.pbGithub.TabStop = false;
+            this.pbGithub.Click += new System.EventHandler(this.pbGithub_Click);
             // 
             // lblCopyright
             // 
@@ -272,18 +287,22 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
-            // pbGithub
+            // lblGithub
             // 
-            this.pbGithub.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbGithub.Image = global::DisableNvidiaTelemetry.Properties.Resources.GitHub_Mark_64px;
-            this.pbGithub.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.pbGithub.Location = new System.Drawing.Point(483, 6);
-            this.pbGithub.Name = "pbGithub";
-            this.pbGithub.Size = new System.Drawing.Size(64, 64);
-            this.pbGithub.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbGithub.TabIndex = 78;
-            this.pbGithub.TabStop = false;
-            this.pbGithub.Click += new System.EventHandler(this.pbGithub_Click);
+            this.lblGithub.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.lblGithub.AutoSize = true;
+            this.lblGithub.BackColor = System.Drawing.Color.Transparent;
+            this.lblGithub.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblGithub.LinkArea = new System.Windows.Forms.LinkArea(0, 14);
+            this.lblGithub.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblGithub.Location = new System.Drawing.Point(464, 73);
+            this.lblGithub.Name = "lblGithub";
+            this.lblGithub.Size = new System.Drawing.Size(81, 13);
+            this.lblGithub.TabIndex = 79;
+            this.lblGithub.TabStop = true;
+            this.lblGithub.Text = "View on GitHub";
+            this.lblGithub.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lblGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGithub_LinkClicked);
             // 
             // FormMain
             // 
@@ -306,13 +325,13 @@
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).EndInit();
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -337,6 +356,7 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.PictureBox pbGithub;
+        private System.Windows.Forms.LinkLabel lblGithub;
     }
 }
 

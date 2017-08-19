@@ -138,5 +138,9 @@ namespace DisableNvidiaTelemetry.Forms
         {
             Process.Start("https://github.com/NateShoffner/Disable-Nvidia-Telemetry");
         }
+        private void lblGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/NateShoffner/Disable-Nvidia-Telemetry");
+        }
     }
 }

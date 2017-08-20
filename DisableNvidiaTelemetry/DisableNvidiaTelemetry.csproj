@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="binoculars.ico" />
+    <None Include="Resources\btn_donate_92x26.png" />
     <None Include="Resources\GitHub-Mark-64px.png" />
     <None Include="Resources\binoculars-64.png" />
   </ItemGroup>

@@ -34,9 +34,10 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.cbTaskTrigger = new System.Windows.Forms.ComboBox();
             this.btnUpdatecheck = new System.Windows.Forms.Button();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
-            this.chkStartupTask = new System.Windows.Forms.CheckBox();
+            this.chkBackgroundTask = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
@@ -117,9 +118,10 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.cbTaskTrigger);
             this.tabPage6.Controls.Add(this.btnUpdatecheck);
             this.tabPage6.Controls.Add(this.chkUpdates);
-            this.tabPage6.Controls.Add(this.chkStartupTask);
+            this.tabPage6.Controls.Add(this.chkBackgroundTask);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
@@ -127,6 +129,20 @@
             this.tabPage6.TabIndex = 3;
             this.tabPage6.Text = "Settings";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // cbTaskTrigger
+            // 
+            this.cbTaskTrigger.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTaskTrigger.Enabled = false;
+            this.cbTaskTrigger.FormattingEnabled = true;
+            this.cbTaskTrigger.Items.AddRange(new object[] {
+            "Every Day",
+            "After Windows Startup"});
+            this.cbTaskTrigger.Location = new System.Drawing.Point(358, 13);
+            this.cbTaskTrigger.Name = "cbTaskTrigger";
+            this.cbTaskTrigger.Size = new System.Drawing.Size(166, 21);
+            this.cbTaskTrigger.TabIndex = 5;
+            this.cbTaskTrigger.SelectedIndexChanged += new System.EventHandler(this.cbTaskTrigger_SelectedIndexChanged);
             // 
             // btnUpdatecheck
             // 
@@ -149,16 +165,16 @@
             this.chkUpdates.UseVisualStyleBackColor = true;
             this.chkUpdates.CheckedChanged += new System.EventHandler(this.chkUpdates_CheckedChanged);
             // 
-            // chkStartupTask
+            // chkBackgroundTask
             // 
-            this.chkStartupTask.AutoSize = true;
-            this.chkStartupTask.Location = new System.Drawing.Point(6, 15);
-            this.chkStartupTask.Name = "chkStartupTask";
-            this.chkStartupTask.Size = new System.Drawing.Size(330, 17);
-            this.chkStartupTask.TabIndex = 1;
-            this.chkStartupTask.Text = "Disable Nvidia telemetry services and tasks on Windows startup.";
-            this.chkStartupTask.UseVisualStyleBackColor = true;
-            this.chkStartupTask.CheckedChanged += new System.EventHandler(this.chkStartupTask_CheckedChanged);
+            this.chkBackgroundTask.AutoSize = true;
+            this.chkBackgroundTask.Location = new System.Drawing.Point(6, 15);
+            this.chkBackgroundTask.Name = "chkBackgroundTask";
+            this.chkBackgroundTask.Size = new System.Drawing.Size(346, 17);
+            this.chkBackgroundTask.TabIndex = 1;
+            this.chkBackgroundTask.Text = "Run in background and disable Nvidia telemetry services and tasks:";
+            this.chkBackgroundTask.UseVisualStyleBackColor = true;
+            this.chkBackgroundTask.CheckedChanged += new System.EventHandler(this.chkBackroundTask_CheckedChanged);
             // 
             // tabPage3
             // 
@@ -431,9 +447,10 @@
         private System.Windows.Forms.LinkLabel lblGithub;
         private System.Windows.Forms.PictureBox pbDonate;
         private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.CheckBox chkStartupTask;
+        private System.Windows.Forms.CheckBox chkBackgroundTask;
         private System.Windows.Forms.CheckBox chkUpdates;
         private System.Windows.Forms.Button btnUpdatecheck;
+        private System.Windows.Forms.ComboBox cbTaskTrigger;
     }
 }
 

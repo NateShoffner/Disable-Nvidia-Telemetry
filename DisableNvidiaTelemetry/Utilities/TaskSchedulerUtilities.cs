@@ -1,11 +1,18 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Security.Principal;
 using Microsoft.Win32.TaskScheduler;
 
 namespace DisableNvidiaTelemetry.Utilities
 {
-    internal class BootTaskUtilities
+    internal class TaskSchedulerUtilities
     {
+        public enum TaskTrigger
+        {
+            WindowsLogin = 0,
+            Daily = 1
+        }
+
         private const string TaskName = "Disable Nvidia Telemetry";
 
         public static Task GetTask()
@@ -13,7 +20,7 @@ namespace DisableNvidiaTelemetry.Utilities
             return TaskService.Instance.FindTask(TaskName);
         }
 
-        public static void Create()
+        public static void Create(TaskTrigger trigger)
         {
             var user = WindowsIdentity.GetCurrent().Name;
 
@@ -24,7 +31,22 @@ namespace DisableNvidiaTelemetry.Utilities
                 td.Principal.UserId = user;
                 td.Principal.LogonType = TaskLogonType.InteractiveToken;
                 td.Principal.RunLevel = TaskRunLevel.Highest;
-                td.Triggers.Add(new LogonTrigger());
+                if (trigger == TaskTrigger.WindowsLogin)
+                    td.Triggers.Add(new LogonTrigger());
+                if (trigger == TaskTrigger.Daily)
+                {
+                    var now = DateTime.Today;
+                    var startDateTime = new DateTime(now.Year, now.Month, now.Day, 12, 0, 0);
+                    var dt = new DailyTrigger
+                    {
+                        StartBoundary = startDateTime,
+                        Enabled = true,
+                        DaysInterval = 1,
+                        Repetition = {Interval = TimeSpan.FromHours(24)}
+                    };
+
+                    td.Triggers.Add(dt);
+                }
                 td.Actions.Add(new ExecAction(Assembly.GetExecutingAssembly().Location, Program.StartupParamSilent));
                 ts.RootFolder.RegisterTaskDefinition(TaskName, td);
             }

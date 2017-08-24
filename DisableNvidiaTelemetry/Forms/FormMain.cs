@@ -50,9 +50,10 @@ namespace DisableNvidiaTelemetry.Forms
             LogExtensions.LogEvent += OnLogEvent;
             UpdaterUtilities.UpdateResponse += UpdaterUtilities_UpdateResponse;
 
-            CheckStartupTask();
+            CheckBackgroundTask();
 
             chkUpdates.Checked = Settings.Default.StartupUpdate;
+            cbTaskTrigger.SelectedIndex = Settings.Default.BackgroundTaskTrigger;
 
             if (Settings.Default.StartupUpdate)
             {
@@ -98,16 +99,11 @@ namespace DisableNvidiaTelemetry.Forms
             btnUpdatecheck.Enabled = true;
         }
 
-        private void CheckStartupTask()
+        private void CheckBackgroundTask()
         {
-            if (BootTaskUtilities.GetTask() == null)
-            {
-                BootTaskUtilities.Create();
-            }
-
             _ignoreTaskSetting = true;
 
-            chkStartupTask.Checked = BootTaskUtilities.GetTask() != null;
+            chkBackgroundTask.Checked = TaskSchedulerUtilities.GetTask() != null;
 
             _ignoreTaskSetting = false;
         }
@@ -222,15 +218,17 @@ namespace DisableNvidiaTelemetry.Forms
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=nate.shoffner@gmail.com&lc=US&item_name=Disable%20Nvidia%20Telemetry&currency_code=USD&bn=PP%2dDonationsBF");
         }
 
-        private void chkStartupTask_CheckedChanged(object sender, EventArgs e)
+        private void chkBackroundTask_CheckedChanged(object sender, EventArgs e)
         {
+            cbTaskTrigger.Enabled = chkBackgroundTask.Checked;
+
             if (_ignoreTaskSetting)
                 return;
 
-            if (chkStartupTask.Checked)
-                BootTaskUtilities.Create();
+            if (chkBackgroundTask.Checked)
+                TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger)Settings.Default.BackgroundTaskTrigger);
             else
-                BootTaskUtilities.Remove();
+                TaskSchedulerUtilities.Remove();
         }
 
         private void btnUpdatecheck_Click(object sender, EventArgs e)
@@ -242,6 +240,12 @@ namespace DisableNvidiaTelemetry.Forms
         private void chkUpdates_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.StartupUpdate = chkUpdates.Checked;
+            Settings.Default.Save();
+        }
+
+        private void cbTaskTrigger_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.BackgroundTaskTrigger = cbTaskTrigger.SelectedIndex;
             Settings.Default.Save();
         }
     }

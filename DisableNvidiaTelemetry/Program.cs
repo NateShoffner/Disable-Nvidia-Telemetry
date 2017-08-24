@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using DisableNvidiaTelemetry.Forms;
+using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
 using log4net.Core;
 
@@ -59,11 +60,11 @@ namespace DisableNvidiaTelemetry
                 }
 
                 if (args.Contains(StartupParamRegisterTask))
-                    if (BootTaskUtilities.GetTask() == null)
-                        BootTaskUtilities.Create();
+                    if (TaskSchedulerUtilities.GetTask() == null)
+                        TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger)Settings.Default.BackgroundTaskTrigger);
 
                 if (args.Contains(StartupParamUnregisterTask))
-                    BootTaskUtilities.Remove();
+                    TaskSchedulerUtilities.Remove();
             }
 
             if (!IsAdministrator())

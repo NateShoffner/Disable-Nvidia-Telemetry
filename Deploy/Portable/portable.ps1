@@ -1,7 +1,7 @@
 $temp_directory = "$env:APPVEYOR_BUILD_FOLDER\Deploy\Portable\~TEMP"
 New-Item "$temp_directory" -type directory
 
-$zip_archive = "$env:APPVEYOR_BUILD_FOLDER\Deploy\Portable\DisableNvidiaTelemetry $env:APPVEYOR_BUILD_VERSION Portable.exe"
+$zip_archive = "$env:APPVEYOR_BUILD_FOLDER\Deploy\Portable\Disable Nvidia Telemetry $env:APPVEYOR_BUILD_VERSION Portable.exe"
 
 # build using portable configuration
 & msbuild.exe "$env:APPVEYOR_BUILD_FOLDER\DisableNvidiaTelemetry.sln" /p:Configuration=Portable

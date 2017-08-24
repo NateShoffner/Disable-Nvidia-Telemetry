@@ -1,0 +1,26 @@
+version: 1.1.0.{build}
+os: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+install:
+  - choco install nsis -y --ignore-checksums
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}-$(APPVEYOR_REPO_COMMIT)"
+before_build:
+  - ps: nuget restore
+build:
+  project: DisableNvidiaTelemetry.sln
+after_build:
+  - ps: >-
+      .\Deploy\Installer\nsis.ps1
+  - ps: >-
+      .\Deploy\Portable\portable.ps1
+artifacts:
+  - path: "Disable Nvidia Telemetry*Setup.exe" # use wildcards otherwise 'Disable Nvidia Telemetry' subdirectory will be zipped as well
+    name: installer
+  - path: "Disable Nvidia Telemetry*Portable.exe"
+    name: portable

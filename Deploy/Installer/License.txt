@@ -1,0 +1,8 @@
+Copyright (C) 2017 Nate Shoffner
+
+This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software. 
+
+Redistribution of this software is allowed, but the origin of this software must not be misrepresented; you must not claim that you wrote the original software.
+
+E-mail: nate.shoffner@gmail.com
+Homepage: https://nateshoffner.com

@@ -20,7 +20,7 @@ after_build:
   - ps: >-
       .\Deploy\Portable\portable.ps1
 artifacts:
-  - path: "Disable Nvidia Telemetry*Setup.exe" # use wildcards otherwise 'Disable Nvidia Telemetry' subdirectory will be zipped as well
+  - path: "*Setup.exe"
     name: installer
-  - path: "Disable Nvidia Telemetry*Portable.exe"
+  - path: "*Portable.exe"
     name: portable

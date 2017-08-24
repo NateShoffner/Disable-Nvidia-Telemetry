@@ -34,6 +34,9 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.btnUpdatecheck = new System.Windows.Forms.Button();
+            this.chkUpdates = new System.Windows.Forms.CheckBox();
+            this.chkStartupTask = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
@@ -50,7 +53,6 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.chkStartupTask = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -115,6 +117,8 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.btnUpdatecheck);
+            this.tabPage6.Controls.Add(this.chkUpdates);
             this.tabPage6.Controls.Add(this.chkStartupTask);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
@@ -123,6 +127,38 @@
             this.tabPage6.TabIndex = 3;
             this.tabPage6.Text = "Settings";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdatecheck
+            // 
+            this.btnUpdatecheck.Location = new System.Drawing.Point(6, 61);
+            this.btnUpdatecheck.Name = "btnUpdatecheck";
+            this.btnUpdatecheck.Size = new System.Drawing.Size(127, 23);
+            this.btnUpdatecheck.TabIndex = 4;
+            this.btnUpdatecheck.Text = "Check for Updates";
+            this.btnUpdatecheck.UseVisualStyleBackColor = true;
+            this.btnUpdatecheck.Click += new System.EventHandler(this.btnUpdatecheck_Click);
+            // 
+            // chkUpdates
+            // 
+            this.chkUpdates.AutoSize = true;
+            this.chkUpdates.Location = new System.Drawing.Point(6, 38);
+            this.chkUpdates.Name = "chkUpdates";
+            this.chkUpdates.Size = new System.Drawing.Size(232, 17);
+            this.chkUpdates.TabIndex = 2;
+            this.chkUpdates.Text = "Check for updates when program is opened";
+            this.chkUpdates.UseVisualStyleBackColor = true;
+            this.chkUpdates.CheckedChanged += new System.EventHandler(this.chkUpdates_CheckedChanged);
+            // 
+            // chkStartupTask
+            // 
+            this.chkStartupTask.AutoSize = true;
+            this.chkStartupTask.Location = new System.Drawing.Point(6, 15);
+            this.chkStartupTask.Name = "chkStartupTask";
+            this.chkStartupTask.Size = new System.Drawing.Size(330, 17);
+            this.chkStartupTask.TabIndex = 1;
+            this.chkStartupTask.Text = "Disable Nvidia telemetry services and tasks on Windows startup.";
+            this.chkStartupTask.UseVisualStyleBackColor = true;
+            this.chkStartupTask.CheckedChanged += new System.EventHandler(this.chkStartupTask_CheckedChanged);
             // 
             // tabPage3
             // 
@@ -337,17 +373,6 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
-            // chkStartupTask
-            // 
-            this.chkStartupTask.AutoSize = true;
-            this.chkStartupTask.Location = new System.Drawing.Point(6, 15);
-            this.chkStartupTask.Name = "chkStartupTask";
-            this.chkStartupTask.Size = new System.Drawing.Size(330, 17);
-            this.chkStartupTask.TabIndex = 1;
-            this.chkStartupTask.Text = "Disable Nvidia telemetry services and tasks on Windows startup.";
-            this.chkStartupTask.UseVisualStyleBackColor = true;
-            this.chkStartupTask.CheckedChanged += new System.EventHandler(this.chkStartupTask_CheckedChanged);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,6 +432,8 @@
         private System.Windows.Forms.PictureBox pbDonate;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.CheckBox chkStartupTask;
+        private System.Windows.Forms.CheckBox chkUpdates;
+        private System.Windows.Forms.Button btnUpdatecheck;
     }
 }
 

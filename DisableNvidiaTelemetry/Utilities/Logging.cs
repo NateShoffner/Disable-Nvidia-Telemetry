@@ -11,7 +11,7 @@ namespace DisableNvidiaTelemetry.Utilities
     {
         public static event EventHandler<LogEventArgs> LogEvent;
 
-        public static void Log(this ILog log, Level level, string message, Exception ex = null, bool suppressEvents = false)
+        public static void Log(this ILog log, Level level, object message, Exception ex = null, bool suppressEvents = false)
         {
             if (level == Level.Debug)
                 log.Debug(message, ex);

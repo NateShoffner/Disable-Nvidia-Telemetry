@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
@@ -9,6 +10,7 @@ using System.Windows.Forms;
 using DisableNvidiaTelemetry.Controls;
 using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
+using log4net.Core;
 using Microsoft.Win32.TaskScheduler;
 
 #endregion
@@ -26,6 +28,14 @@ namespace DisableNvidiaTelemetry.Forms
         {
             InitializeComponent();
 
+            // set custom settings provider here since it seems to break VS designer
+            var provider = new PortableSettingsProvider();
+            Settings.Default.Providers.Add(provider);
+            foreach (SettingsProperty property in Settings.Default.Properties)
+            {
+                property.Provider = provider;
+            }
+
             _tasksControl = new TelemetryControl("Telemetry Tasks") {Dock = DockStyle.Top};
             _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
             tabPage1.Controls.Add(_tasksControl);
@@ -36,14 +46,62 @@ namespace DisableNvidiaTelemetry.Forms
             txtLicense.Text = Resources.ApplicationLicense;
 
             LogExtensions.LogEvent += OnLogEvent;
+            UpdaterUtilities.UpdateResponse += UpdaterUtilities_UpdateResponse;
 
             CheckStartupTask();
+
+            chkUpdates.Checked = Settings.Default.StartupUpdate;
+
+            if (Settings.Default.StartupUpdate)
+            {
+                btnUpdatecheck.Enabled = false;
+                UpdaterUtilities.UpdateCheck(false);
+            }
+        }
+
+        private void UpdaterUtilities_UpdateResponse(object sender, UpdaterUtilities.UpdateResponseEventArgs e)
+        {
+            var showDialog = (bool)e.UserToken;
+
+            if (e.Error == null)
+            {
+                var current = new Version(Application.ProductVersion);
+
+                if (e.LatestVersion > current)
+                {
+                    var result = MessageBox.Show("A new update is available, would you like to download it?", "Update Available", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        Process.Start(e.Url.ToString());
+                    }
+                }
+
+                else if (showDialog)
+                {
+                    MessageBox.Show("There are no updates available.", "No Updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+
+            else
+            {
+                Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
+
+                if (showDialog)
+                {
+                    MessageBox.Show("There was an error while checking for updates.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            btnUpdatecheck.Enabled = true;
         }
 
         private void CheckStartupTask()
         {
             if (BootTaskUtilities.GetTask() == null)
+            {
                 BootTaskUtilities.Create();
+            }
         }
 
         private void OnLogEvent(object sender, LogExtensions.LogEventArgs e)
@@ -162,6 +220,18 @@ namespace DisableNvidiaTelemetry.Forms
                 BootTaskUtilities.Create();
             else
                 BootTaskUtilities.Remove();
+        }
+
+        private void btnUpdatecheck_Click(object sender, EventArgs e)
+        {
+            btnUpdatecheck.Enabled = false;
+            UpdaterUtilities.UpdateCheck(true);
+        }
+
+        private void chkUpdates_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.StartupUpdate = chkUpdates.Checked;
+            Settings.Default.Save();
         }
     }
 }

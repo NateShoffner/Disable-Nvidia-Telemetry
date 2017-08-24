@@ -22,5 +22,17 @@ namespace DisableNvidiaTelemetry.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool StartupUpdate {
+            get {
+                return ((bool)(this["StartupUpdate"]));
+            }
+            set {
+                this["StartupUpdate"] = value;
+            }
+        }
     }
 }

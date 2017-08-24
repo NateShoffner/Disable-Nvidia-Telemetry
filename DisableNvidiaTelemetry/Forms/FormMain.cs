@@ -24,6 +24,8 @@ namespace DisableNvidiaTelemetry.Forms
         private List<ServiceController> _telemetryServices = new List<ServiceController>();
         private List<Task> _telemetryTasks = new List<Task>();
 
+        private bool _ignoreTaskSetting;
+
         public FormMain()
         {
             InitializeComponent();
@@ -102,6 +104,12 @@ namespace DisableNvidiaTelemetry.Forms
             {
                 BootTaskUtilities.Create();
             }
+
+            _ignoreTaskSetting = true;
+
+            chkStartupTask.Checked = BootTaskUtilities.GetTask() != null;
+
+            _ignoreTaskSetting = false;
         }
 
         private void OnLogEvent(object sender, LogExtensions.LogEventArgs e)
@@ -216,6 +224,9 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void chkStartupTask_CheckedChanged(object sender, EventArgs e)
         {
+            if (_ignoreTaskSetting)
+                return;
+
             if (chkStartupTask.Checked)
                 BootTaskUtilities.Create();
             else

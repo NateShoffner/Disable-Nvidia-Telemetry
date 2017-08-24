@@ -28,15 +28,15 @@ namespace DisableNvidiaTelemetry.Utilities
                 if (task == null)
                 {
                     if (logging)
-                        Logging.GetLogger().Log(Level.Info, $"Failed to find task: {taskName}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find task: {taskName}");
                 }
 
                 else
                 {
                     if (logging)
                     {
-                        Logging.GetLogger().Log(Level.Info, $"Found Task: {task.Name}");
-                        Logging.GetLogger().Log(Level.Info, $"Task is: {(task.Enabled ? "Enabled" : "Disabled")}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Found Task: {task.Name}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Task is: {(task.Enabled ? "Enabled" : "Disabled")}");
                     }
 
                     tasks.Add(new TelemetryTask(task));
@@ -49,7 +49,7 @@ namespace DisableNvidiaTelemetry.Utilities
         /// <summary>
         ///     Returns known telemetry services.
         /// </summary>
-        /// <param name="logging">Determines whether logging should be done.</param>
+        /// <param name="logging">Determines whether logging should be performed.</param>
         public static List<TelemetryService> GetTelemetryServices(bool logging)
         {
             var services = new List<TelemetryService>();
@@ -69,15 +69,15 @@ namespace DisableNvidiaTelemetry.Utilities
 
                     if (logging)
                     {
-                        Logging.GetLogger().Log(Level.Info, $"Found Service: {service.DisplayName} ({service.ServiceName})");
-                        Logging.GetLogger().Log(Level.Info, $"Service is: {(running ? "Enabled" : "Disabled")}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Found Service: {service.DisplayName} ({service.ServiceName})");
+                        Logging.GetFileLogger().Log(Level.Info, $"Service is: {(running ? "Enabled" : "Disabled")}");
                     }
                 }
 
                 catch
                 {
                     if (logging)
-                        Logging.GetLogger().Log(Level.Info, $"Failed to find service: {serviceName}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find service: {serviceName}");
                 }
             }
 
@@ -88,7 +88,9 @@ namespace DisableNvidiaTelemetry.Utilities
         ///     Disables the provided telemetry services if they are currently running.
         /// </summary>
         /// <param name="services">The services to disable.</param>
-        public static void DisableTelemetryServices(List<ServiceController> services)
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        /// <param name="eventLog">Determines whether event logging should be performed.</param>
+        public static void DisableTelemetryServices(List<ServiceController> services, bool logging, bool eventLog)
         {
             foreach (var service in services)
             {
@@ -98,13 +100,19 @@ namespace DisableNvidiaTelemetry.Utilities
                     {
                         service.Stop();
                         service.WaitForStatus(ServiceControllerStatus.Stopped);
-                        Logging.GetLogger().Log(Level.Info, $"Disabled service: {service.DisplayName} ({service.ServiceName})");
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Disabled service: {service.DisplayName} ({service.ServiceName})");
+
+                        if (eventLog)
+                            Logging.GetEventLogger().Log(Level.Info, $"Disabled service: {service.DisplayName} ({service.ServiceName})");
                     }
                 }
 
                 catch
                 {
-                    Logging.GetLogger().Log(Level.Info, $"Failed to disable service: {service.DisplayName} ({service.ServiceName})");
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable service: {service.DisplayName} ({service.ServiceName})");
                 }
 
                 try
@@ -112,13 +120,18 @@ namespace DisableNvidiaTelemetry.Utilities
                     if (ServiceHelper.GetServiceStartMode(service) != ServiceStartMode.Disabled)
                     {
                         ServiceHelper.ChangeStartMode(service, ServiceStartMode.Disabled);
-                        Logging.GetLogger().Log(Level.Info, $"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
+
+                        if (eventLog)
+                            Logging.GetEventLogger().Log(Level.Info, $"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
                     }
                 }
 
                 catch
                 {
-                    Logging.GetLogger().Log(Level.Info, $"Failed to disable service startup: {service.DisplayName} ({service.ServiceName})");
+                    Logging.GetFileLogger().Log(Level.Info, $"Failed to disable service startup: {service.DisplayName} ({service.ServiceName})");
                 }
             }
         }
@@ -128,7 +141,9 @@ namespace DisableNvidiaTelemetry.Utilities
         ///     Disables the provided tasks if they are currently enabled.
         /// </summary>
         /// <param name="tasks">The tasks to disable.</param>
-        public static void DisableTelemetryTasks(List<Task> tasks)
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        /// <param name="eventLog">Determines whether event logging should be performed.</param>
+        public static void DisableTelemetryTasks(List<Task> tasks, bool logging, bool eventLog)
         {
             foreach (var task in tasks)
             {
@@ -137,13 +152,19 @@ namespace DisableNvidiaTelemetry.Utilities
                     if (task.Enabled)
                     {
                         task.Enabled = false;
-                        Logging.GetLogger().Log(Level.Info, $"Disabled task: {task.Path}");
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Disabled task: {task.Path}");
+
+                        if (eventLog)
+                            Logging.GetEventLogger().Log(Level.Info, $"Disabled task: {task.Path}");
                     }
                 }
 
                 catch
                 {
-                    Logging.GetLogger().Log(Level.Info, $"Failed to disable task: {task.Path}");
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable task: {task.Path}");
                 }
             }
         }
@@ -152,7 +173,8 @@ namespace DisableNvidiaTelemetry.Utilities
         ///     Enables the provided services.
         /// </summary>
         /// <param name="services">The services to enable.</param>
-        public static void EnableTelemetryServices(List<ServiceController> services)
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        public static void EnableTelemetryServices(List<ServiceController> services, bool logging)
         {
             foreach (var service in services)
             {
@@ -162,13 +184,15 @@ namespace DisableNvidiaTelemetry.Utilities
                     {
                         ServiceHelper.ChangeStartMode(service, ServiceStartMode.Automatic);
 
-                        Logging.GetLogger().Log(Level.Info, $"Enabled automatic service startup: {service.DisplayName} ({service.ServiceName})");
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Enabled automatic service startup: {service.DisplayName} ({service.ServiceName})");
                     }
                 }
 
                 catch
                 {
-                    Logging.GetLogger().Log(Level.Info, $"Failed to enable automatic service startup: {service.DisplayName} ({service.ServiceName})");
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to enable automatic service startup: {service.DisplayName} ({service.ServiceName})");
                 }
 
                 try
@@ -177,13 +201,16 @@ namespace DisableNvidiaTelemetry.Utilities
                     {
                         service.Start();
                         service.WaitForStatus(ServiceControllerStatus.Running);
-                        Logging.GetLogger().Log(Level.Info, $"Enabled service: {service.DisplayName} ({service.ServiceName})");
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Enabled service: {service.DisplayName} ({service.ServiceName})");
                     }
                 }
 
                 catch
                 {
-                    Logging.GetLogger().Log(Level.Info, $"Failed to start service: {service.DisplayName} ({service.ServiceName})");
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to start service: {service.DisplayName} ({service.ServiceName})");
                 }
             }
         }
@@ -192,7 +219,8 @@ namespace DisableNvidiaTelemetry.Utilities
         ///     Enables the provided tasks.
         /// </summary>
         /// <param name="tasks">The tasks to enable.</param>
-        public static void EnableTelemetryTasks(List<Task> tasks)
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        public static void EnableTelemetryTasks(List<Task> tasks, bool logging)
         {
             foreach (var task in tasks)
             {
@@ -202,13 +230,16 @@ namespace DisableNvidiaTelemetry.Utilities
                         if (!task.Enabled)
                         {
                             task.Enabled = true;
-                            Logging.GetLogger().Log(Level.Info, $"Enabled task: {task.Path}");
+
+                            if (logging)
+                                Logging.GetFileLogger().Log(Level.Info, $"Enabled task: {task.Path}");
                         }
                     }
 
                     catch
                     {
-                        Logging.GetLogger().Log(Level.Info, $"Failed to enable task: {task.Path}");
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Failed to enable task: {task.Path}");
                     }
             }
         }

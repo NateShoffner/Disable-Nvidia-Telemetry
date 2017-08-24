@@ -33,7 +33,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
             this.pbGithub = new System.Windows.Forms.PictureBox();
             this.lblCopyright = new System.Windows.Forms.LinkLabel();
@@ -48,16 +50,17 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.pbDonate = new System.Windows.Forms.PictureBox();
+            this.chkStartupTask = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).BeginInit();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -67,6 +70,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
@@ -109,6 +113,17 @@
             this.textBox1.Size = new System.Drawing.Size(547, 210);
             this.textBox1.TabIndex = 0;
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.chkStartupTask);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(553, 216);
+            this.tabPage6.TabIndex = 3;
+            this.tabPage6.Text = "Settings";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.pbDonate);
@@ -126,6 +141,19 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "About";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // pbDonate
+            // 
+            this.pbDonate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbDonate.Image = global::DisableNvidiaTelemetry.Properties.Resources.btn_donate_92x26;
+            this.pbDonate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbDonate.Location = new System.Drawing.Point(348, 60);
+            this.pbDonate.Name = "pbDonate";
+            this.pbDonate.Size = new System.Drawing.Size(92, 26);
+            this.pbDonate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pbDonate.TabIndex = 80;
+            this.pbDonate.TabStop = false;
+            this.pbDonate.Click += new System.EventHandler(this.pbDonate_Click);
             // 
             // lblGithub
             // 
@@ -214,6 +242,7 @@
             // 
             // txtLicense
             // 
+            this.txtLicense.BackColor = System.Drawing.SystemColors.Window;
             this.txtLicense.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtLicense.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLicense.Location = new System.Drawing.Point(3, 3);
@@ -237,6 +266,7 @@
             // 
             // textBox2
             // 
+            this.textBox2.BackColor = System.Drawing.SystemColors.Window;
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox2.Location = new System.Drawing.Point(3, 3);
@@ -307,18 +337,16 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
-            // pbDonate
+            // chkStartupTask
             // 
-            this.pbDonate.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbDonate.Image = global::DisableNvidiaTelemetry.Properties.Resources.btn_donate_92x26;
-            this.pbDonate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.pbDonate.Location = new System.Drawing.Point(376, 25);
-            this.pbDonate.Name = "pbDonate";
-            this.pbDonate.Size = new System.Drawing.Size(92, 26);
-            this.pbDonate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pbDonate.TabIndex = 80;
-            this.pbDonate.TabStop = false;
-            this.pbDonate.Click += new System.EventHandler(this.pbDonate_Click);
+            this.chkStartupTask.AutoSize = true;
+            this.chkStartupTask.Location = new System.Drawing.Point(6, 15);
+            this.chkStartupTask.Name = "chkStartupTask";
+            this.chkStartupTask.Size = new System.Drawing.Size(330, 17);
+            this.chkStartupTask.TabIndex = 1;
+            this.chkStartupTask.Text = "Disable Nvidia telemetry services and tasks on Windows startup.";
+            this.chkStartupTask.UseVisualStyleBackColor = true;
+            this.chkStartupTask.CheckedChanged += new System.EventHandler(this.chkStartupTask_CheckedChanged);
             // 
             // FormMain
             // 
@@ -339,8 +367,11 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).EndInit();
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
@@ -348,7 +379,6 @@
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -375,6 +405,8 @@
         private System.Windows.Forms.PictureBox pbGithub;
         private System.Windows.Forms.LinkLabel lblGithub;
         private System.Windows.Forms.PictureBox pbDonate;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.CheckBox chkStartupTask;
     }
 }
 

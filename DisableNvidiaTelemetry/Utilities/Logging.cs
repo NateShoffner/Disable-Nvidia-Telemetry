@@ -1,13 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using log4net;
-using log4net.Appender;
 using log4net.Config;
 using log4net.Core;
-using log4net.Repository.Hierarchy;
 
 namespace DisableNvidiaTelemetry.Utilities
 {
@@ -15,29 +11,33 @@ namespace DisableNvidiaTelemetry.Utilities
     {
         public static event EventHandler<LogEventArgs> LogEvent;
 
-        public static void Log(this ILog log, Level level, string message, Exception ex = null)
+        public static void Log(this ILog log, Level level, string message, Exception ex = null, bool suppressEvents = false)
         {
             if (level == Level.Debug)
                 log.Debug(message, ex);
             else if (level == Level.Error)
                 log.Error(message);
             else if (level == Level.Info)
-                log.Info(message, ex);
+                log.Info(message);
             else if (level == Level.Warn)
                 log.Warn(message, ex);
             else
                 throw new ArgumentException("Log level not implemented", "level");
 
-            LogEvent?.Invoke(log, new LogEventArgs(message, ex));
+            if (!suppressEvents)
+                LogEvent?.Invoke(log, new LogEventArgs(log, message, ex));
         }
 
         public class LogEventArgs : EventArgs
         {
-            public LogEventArgs(object message, Exception exception = null)
+            public LogEventArgs(ILog log, object message, Exception exception = null)
             {
+                Log = log;
                 Message = message;
                 Exception = exception;
             }
+
+            public ILog Log { get; }
 
             public object Message { get; }
 
@@ -47,45 +47,28 @@ namespace DisableNvidiaTelemetry.Utilities
 
     internal class Logging
     {
-        private static ILog _logger;
-        private static string _logDirectory;
-        private static bool _configured;
+        private static ILog _fileLogger;
+        private static ILog _eventLogger;
 
-        public static void SetLogDirectory(string directory)
+        public static void Initialize(string logDirectory)
         {
-            _logDirectory = directory;
+            GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
+            GlobalContext.Properties["LogDirectory"] = logDirectory;
+
+            XmlConfigurator.Configure();
+
+            if (!Directory.Exists(logDirectory))
+                Directory.CreateDirectory(logDirectory);
         }
 
-        public static void Initialize()
+        public static ILog GetFileLogger()
         {
-            if (!_configured)
-            {
-                GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
-                GlobalContext.Properties["LogDirectory"] = _logDirectory;
-
-                XmlConfigurator.Configure();
-
-                if (!Directory.Exists(_logDirectory))
-                    Directory.CreateDirectory(_logDirectory);
-
-                _configured = true;
-            }
+            return _fileLogger ?? (_fileLogger = LogManager.GetLogger("FileLogger"));
         }
 
-        public static ILog GetLogger()
+        public static ILog GetEventLogger()
         {
-            Initialize();
-
-            return _logger ?? (_logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType));
-        }
-
-        public static string GetLogFile()
-        {
-            Initialize();
-
-            return ((Hierarchy) LogManager.GetRepository())
-                .Root.Appenders.OfType<FileAppender>()
-                .FirstOrDefault().File;
+            return _eventLogger ?? (_eventLogger = LogManager.GetLogger("EventLogger"));
         }
     }
 }

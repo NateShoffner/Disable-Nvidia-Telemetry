@@ -36,11 +36,20 @@ namespace DisableNvidiaTelemetry.Forms
             txtLicense.Text = Resources.ApplicationLicense;
 
             LogExtensions.LogEvent += OnLogEvent;
+
+            CheckStartupTask();
+        }
+
+        private void CheckStartupTask()
+        {
+            if (BootTaskUtilities.GetTask() == null)
+                BootTaskUtilities.Create();
         }
 
         private void OnLogEvent(object sender, LogExtensions.LogEventArgs e)
         {
-            textBox1.AppendText($"[{DateTime.Now:T}] {e.Message}{Environment.NewLine}");
+            if (e.Log.Equals(Logging.GetFileLogger()))
+                textBox1.AppendText($"[{DateTime.Now:T}] {e.Message}{Environment.NewLine}");
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -66,10 +75,10 @@ namespace DisableNvidiaTelemetry.Forms
         private void btnApply_Click(object sender, EventArgs e)
         {
             if (_servicesControl.CheckState == CheckState.Checked)
-                NvidiaController.DisableTelemetryServices(_telemetryServices);
+                NvidiaController.DisableTelemetryServices(_telemetryServices, true, true);
 
             if (_tasksControl.CheckState == CheckState.Checked)
-                NvidiaController.DisableTelemetryTasks(_telemetryTasks);
+                NvidiaController.DisableTelemetryTasks(_telemetryTasks, true, true);
 
             RefreshControls();
 
@@ -81,8 +90,8 @@ namespace DisableNvidiaTelemetry.Forms
         {
             RefreshControls();
 
-            NvidiaController.EnableTelemetryServices(_telemetryServices);
-            NvidiaController.EnableTelemetryTasks(_telemetryTasks);
+            NvidiaController.EnableTelemetryServices(_telemetryServices, true);
+            NvidiaController.EnableTelemetryTasks(_telemetryTasks, true);
 
             RefreshTelemetryServices(false);
             RefreshTelemetryTasks(false);
@@ -92,9 +101,7 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnRefresh.Visible = tabControl1.SelectedIndex <= 1;
-            btnDefaults.Visible = tabControl1.SelectedIndex <= 1;
-            btnApply.Visible = tabControl1.SelectedIndex <= 1;
+            btnRefresh.Visible = btnDefaults.Visible = btnApply.Visible = tabControl1.SelectedTab == tabPage1;
         }
 
         private void RefreshControls()
@@ -147,6 +154,14 @@ namespace DisableNvidiaTelemetry.Forms
         private void pbDonate_Click(object sender, EventArgs e)
         {
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=nate.shoffner@gmail.com&lc=US&item_name=Disable%20Nvidia%20Telemetry&currency_code=USD&bn=PP%2dDonationsBF");
+        }
+
+        private void chkStartupTask_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkStartupTask.Checked)
+                BootTaskUtilities.Create();
+            else
+                BootTaskUtilities.Remove();
         }
     }
 }

@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Windows.Forms;
 using DisableNvidiaTelemetry.Controls;
 using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
+using ExtendedVersion;
 using log4net.Core;
 using Microsoft.Win32.TaskScheduler;
 
@@ -21,10 +23,10 @@ namespace DisableNvidiaTelemetry.Forms
     {
         private readonly TelemetryControl _servicesControl;
         private readonly TelemetryControl _tasksControl;
-        private List<ServiceController> _telemetryServices = new List<ServiceController>();
-        private List<Task> _telemetryTasks = new List<Task>();
 
         private bool _ignoreTaskSetting;
+        private List<ServiceController> _telemetryServices = new List<ServiceController>();
+        private List<Task> _telemetryTasks = new List<Task>();
 
         public FormMain()
         {
@@ -60,11 +62,15 @@ namespace DisableNvidiaTelemetry.Forms
                 btnUpdatecheck.Enabled = false;
                 UpdaterUtilities.UpdateCheck(false);
             }
+
+            var version = GetVersion();
+            lblVersion.Text = $"{"Version"} {version.ToString(ExtendedVersionFormatFlags.BuildString | ExtendedVersionFormatFlags.CommitShort | ExtendedVersionFormatFlags.Truncated)}";
+            lblVersion.LinkArea = version.Commit != null ? new LinkArea(lblVersion.Text.Length - version.Commit.ToShorthandString().Length, version.Commit.ToShorthandString().Length) : new LinkArea(0, 0);
         }
 
         private void UpdaterUtilities_UpdateResponse(object sender, UpdaterUtilities.UpdateResponseEventArgs e)
         {
-            var showDialog = (bool)e.UserToken;
+            var showDialog = (bool) e.UserToken;
 
             if (e.Error == null)
             {
@@ -75,9 +81,7 @@ namespace DisableNvidiaTelemetry.Forms
                     var result = MessageBox.Show("A new update is available, would you like to download it?", "Update Available", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                     if (result == DialogResult.Yes)
-                    {
                         Process.Start(e.Url.ToString());
-                    }
                 }
 
                 else if (showDialog)
@@ -91,9 +95,7 @@ namespace DisableNvidiaTelemetry.Forms
                 Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
 
                 if (showDialog)
-                {
                     MessageBox.Show("There was an error while checking for updates.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
 
             btnUpdatecheck.Enabled = true;
@@ -226,7 +228,7 @@ namespace DisableNvidiaTelemetry.Forms
                 return;
 
             if (chkBackgroundTask.Checked)
-                TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger)Settings.Default.BackgroundTaskTrigger);
+                TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger) Settings.Default.BackgroundTaskTrigger);
             else
                 TaskSchedulerUtilities.Remove();
         }
@@ -247,6 +249,21 @@ namespace DisableNvidiaTelemetry.Forms
         {
             Settings.Default.BackgroundTaskTrigger = cbTaskTrigger.SelectedIndex;
             Settings.Default.Save();
+        }
+
+        private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(string.Format("https://github.com/GetTabster/Tabster/commit/{0}", GetVersion().Commit));
+        }
+
+        private static ExtendedVersion.ExtendedVersion GetVersion()
+        {
+            var attribute =
+                (AssemblyInformationalVersionAttribute) Assembly.GetExecutingAssembly()
+                    .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).FirstOrDefault();
+            var version = attribute != null ? new ExtendedVersion.ExtendedVersion(attribute.InformationalVersion) : new ExtendedVersion.ExtendedVersion(Application.ProductVersion);
+
+            return version;
         }
     }
 }

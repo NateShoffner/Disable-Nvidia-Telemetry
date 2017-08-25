@@ -42,8 +42,6 @@
             this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
             this.pbGithub = new System.Windows.Forms.PictureBox();
-            this.lblCopyright = new System.Windows.Forms.LinkLabel();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtLicense = new System.Windows.Forms.TextBox();
@@ -54,6 +52,8 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
+            this.lblCopyright = new System.Windows.Forms.LinkLabel();
+            this.lblVersion = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -178,11 +178,11 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.lblVersion);
             this.tabPage3.Controls.Add(this.pbDonate);
             this.tabPage3.Controls.Add(this.lblGithub);
             this.tabPage3.Controls.Add(this.pbGithub);
             this.tabPage3.Controls.Add(this.lblCopyright);
-            this.tabPage3.Controls.Add(this.lblVersion);
             this.tabPage3.Controls.Add(this.tabControl2);
             this.tabPage3.Controls.Add(this.pictureBox1);
             this.tabPage3.Controls.Add(this.lblName);
@@ -236,37 +236,6 @@
             this.pbGithub.TabIndex = 78;
             this.pbGithub.TabStop = false;
             this.pbGithub.Click += new System.EventHandler(this.pbGithub_Click);
-            // 
-            // lblCopyright
-            // 
-            this.lblCopyright.ActiveLinkColor = System.Drawing.Color.Blue;
-            this.lblCopyright.AutoSize = true;
-            this.lblCopyright.BackColor = System.Drawing.Color.Transparent;
-            this.lblCopyright.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblCopyright.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
-            this.lblCopyright.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.lblCopyright.Location = new System.Drawing.Point(82, 56);
-            this.lblCopyright.Name = "lblCopyright";
-            this.lblCopyright.Size = new System.Drawing.Size(165, 17);
-            this.lblCopyright.TabIndex = 77;
-            this.lblCopyright.TabStop = true;
-            this.lblCopyright.Text = "Copyright © Nate Shoffner 2017";
-            this.lblCopyright.UseCompatibleTextRendering = true;
-            this.lblCopyright.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.lblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblCopyright_LinkClicked);
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-            this.lblVersion.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblVersion.Location = new System.Drawing.Point(82, 38);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(28, 13);
-            this.lblVersion.TabIndex = 75;
-            this.lblVersion.Text = "v1.0";
             // 
             // tabControl2
             // 
@@ -389,6 +358,41 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
+            // lblCopyright
+            // 
+            this.lblCopyright.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.lblCopyright.AutoSize = true;
+            this.lblCopyright.BackColor = System.Drawing.Color.Transparent;
+            this.lblCopyright.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblCopyright.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
+            this.lblCopyright.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblCopyright.Location = new System.Drawing.Point(82, 56);
+            this.lblCopyright.Name = "lblCopyright";
+            this.lblCopyright.Size = new System.Drawing.Size(165, 17);
+            this.lblCopyright.TabIndex = 77;
+            this.lblCopyright.TabStop = true;
+            this.lblCopyright.Text = "Copyright © Nate Shoffner 2017";
+            this.lblCopyright.UseCompatibleTextRendering = true;
+            this.lblCopyright.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblCopyright_LinkClicked);
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblVersion.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
+            this.lblVersion.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblVersion.Location = new System.Drawing.Point(82, 37);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(26, 17);
+            this.lblVersion.TabIndex = 81;
+            this.lblVersion.Text = "v1.0";
+            this.lblVersion.UseCompatibleTextRendering = true;
+            this.lblVersion.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lblVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVersion_LinkClicked);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,8 +443,6 @@
         private System.Windows.Forms.TextBox txtLicense;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Label lblVersion;
-        private System.Windows.Forms.LinkLabel lblCopyright;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.PictureBox pbGithub;
@@ -451,6 +453,8 @@
         private System.Windows.Forms.CheckBox chkUpdates;
         private System.Windows.Forms.Button btnUpdatecheck;
         private System.Windows.Forms.ComboBox cbTaskTrigger;
+        private System.Windows.Forms.LinkLabel lblVersion;
+        private System.Windows.Forms.LinkLabel lblCopyright;
     }
 }
 

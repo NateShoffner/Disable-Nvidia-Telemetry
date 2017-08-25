@@ -121,7 +121,15 @@ namespace DisableNvidiaTelemetry
         // Gets current executable path in order to determine where to read and write the config file
         public virtual string GetAppPath()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+#if PORTABLE
+            return Directory.GetCurrentDirectory();
+#else
+            var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Disable Nvidia Telemetry");
+            if (!Directory.Exists(appData))
+                Directory.CreateDirectory(appData);
+
+            return appData;
+#endif
         }
 
         // Retrieve settings from the configuration file

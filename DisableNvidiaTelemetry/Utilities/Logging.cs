@@ -16,7 +16,10 @@ namespace DisableNvidiaTelemetry.Utilities
             if (level == Level.Debug)
                 log.Debug(message, ex);
             else if (level == Level.Error)
-                log.Error(message);
+                if (ex == null)
+                    log.Error(message);
+                else
+                    log.Error(message, ex);
             else if (level == Level.Info)
                 log.Info(message);
             else if (level == Level.Warn)

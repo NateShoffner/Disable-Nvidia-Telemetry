@@ -74,7 +74,7 @@ namespace DisableNvidiaTelemetry.Forms
 
             if (e.Error == null)
             {
-                var current = new Version(Application.ProductVersion);
+                var current = GetVersion().ToVersion();
 
                 if (e.LatestVersion > current)
                 {
@@ -253,7 +253,7 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(string.Format("https://github.com/NateShofner/Disable-Nvidia-Telemetry/commit/{0}", GetVersion().Commit));
+            Process.Start($"https://github.com/NateShofner/Disable-Nvidia-Telemetry/commit/{GetVersion().Commit}");
         }
 
         private static ExtendedVersion.ExtendedVersion GetVersion()

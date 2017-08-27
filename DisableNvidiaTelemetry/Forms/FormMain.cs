@@ -253,7 +253,7 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start($"https://github.com/NateShofner/Disable-Nvidia-Telemetry/commit/{GetVersion().Commit}");
+            Process.Start($"https://github.com/NateShoffner/Disable-Nvidia-Telemetry/commit/{GetVersion().Commit}");
         }
 
         private static ExtendedVersion.ExtendedVersion GetVersion()

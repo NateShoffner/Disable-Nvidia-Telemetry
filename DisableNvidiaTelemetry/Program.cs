@@ -34,9 +34,9 @@ namespace DisableNvidiaTelemetry
                 Directory.CreateDirectory(appData);
 
             var logDirectory = Path.Combine(appData, "Logs");
+#endif
             if (!Directory.Exists(logDirectory))
                 Directory.CreateDirectory(logDirectory);
-#endif
 
             Logging.Initialize(logDirectory);
 

@@ -52,13 +52,13 @@ namespace DisableNvidiaTelemetry.Utilities
 
         public static void Initialize(string logDirectory)
         {
+            if (!Directory.Exists(logDirectory))
+                Directory.CreateDirectory(logDirectory);
+
             GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
             GlobalContext.Properties["LogDirectory"] = logDirectory;
 
             XmlConfigurator.Configure();
-
-            if (!Directory.Exists(logDirectory))
-                Directory.CreateDirectory(logDirectory);
         }
 
         public static ILog GetFileLogger()

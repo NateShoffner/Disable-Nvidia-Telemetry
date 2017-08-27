@@ -10,7 +10,7 @@ $output_directory = "$env:APPVEYOR_BUILD_FOLDER\DisableNvidiaTelemetry\bin\Porta
 
 # copy files
 Get-ChildItem -Path "$output_directory" | % {
-    Copy-Item $_.fullname "$temp_directory" -Force -Exclude @("*.xml", "*.pdb", "*.manifest", "*.application", "*.vshost.*", "*.config", "JetBrains.Annotations.dll") 
+    Copy-Item $_.fullname "$temp_directory" -Force -Exclude @("*.xml", "*.pdb", "*.manifest", "*.application", "*.vshost.*", "JetBrains.Annotations.dll") 
 }
 
 # zip contents in self-extracting archive

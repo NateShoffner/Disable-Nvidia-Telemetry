@@ -53,15 +53,46 @@ namespace DisableNvidiaTelemetry.Utilities
         private static ILog _fileLogger;
         private static ILog _eventLogger;
 
-        public static void Initialize(string logDirectory)
+        private static string _logDirectory;
+        private static bool _enabled;
+        private static bool _configured = false;
+
+        public static bool Enabled
         {
-            if (!Directory.Exists(logDirectory))
-                Directory.CreateDirectory(logDirectory);
+            get => _enabled;
+            set
+            {
+                if (value)
+                {
+                    if (!_configured)
+                    {
+                        if (!Directory.Exists(_logDirectory))
+                            Directory.CreateDirectory(_logDirectory);
 
-            GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
-            GlobalContext.Properties["LogDirectory"] = logDirectory;
+                        GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
+                        GlobalContext.Properties["LogDirectory"] = _logDirectory;
 
-            XmlConfigurator.Configure();
+                        XmlConfigurator.Configure();
+
+                        _configured = true;
+                    }
+
+                    LogManager.GetRepository().Threshold = Level.All;
+                }
+
+                else
+                {
+                    LogManager.GetRepository().Threshold = Level.Off;
+                }
+
+
+                _enabled = value;
+            }
+        }
+
+        public static void Prepare(string logDirectory)
+        {
+            _logDirectory = logDirectory;
         }
 
         public static ILog GetFileLogger()

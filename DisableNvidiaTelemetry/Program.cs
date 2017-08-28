@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -26,8 +27,13 @@ namespace DisableNvidiaTelemetry
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            InitializeSettings();
+
 #if PORTABLE
             var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+
+            Settings.Default.FileLogging = false;
+            Settings.Default.Save();
 #else
             var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Disable Nvidia Telemetry");
             if (!Directory.Exists(appData))
@@ -35,16 +41,15 @@ namespace DisableNvidiaTelemetry
 
             var logDirectory = Path.Combine(appData, "Logs");
 #endif
-            if (!Directory.Exists(logDirectory))
-                Directory.CreateDirectory(logDirectory);
 
-            Logging.Initialize(logDirectory);
+            Logging.Prepare(logDirectory);
+            Logging.Enabled = Settings.Default.FileLogging;
 
             // log all the errors
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
                 var ex = (Exception) e.ExceptionObject;
-                Logging.GetFileLogger().Error(ex);
+                Logging.GetFileLogger().Log(Level.Error, ex.Message, ex);
             };
 
             var silentMode = false;
@@ -91,6 +96,19 @@ namespace DisableNvidiaTelemetry
 
             var tasks = NvidiaController.GetTelemetryTasks(true);
             NvidiaController.DisableTelemetryTasks(tasks.Select(t => t.Task).ToList(), true, true);
+        }
+
+        /// <summary>
+        ///  Set custom settings provider here since it seems to break VS designer.
+        /// </summary>
+        private static void InitializeSettings()
+        {
+            var provider = new PortableSettingsProvider();
+            Settings.Default.Providers.Add(provider);
+            foreach (SettingsProperty property in Settings.Default.Properties)
+            {
+                property.Provider = provider;
+            }
         }
     }
 }

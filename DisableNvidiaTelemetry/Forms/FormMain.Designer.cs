@@ -39,9 +39,11 @@
             this.chkUpdates = new System.Windows.Forms.CheckBox();
             this.chkBackgroundTask = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.lblVersion = new System.Windows.Forms.LinkLabel();
             this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
             this.pbGithub = new System.Windows.Forms.PictureBox();
+            this.lblCopyright = new System.Windows.Forms.LinkLabel();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtLicense = new System.Windows.Forms.TextBox();
@@ -52,8 +54,7 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.lblCopyright = new System.Windows.Forms.LinkLabel();
-            this.lblVersion = new System.Windows.Forms.LinkLabel();
+            this.chkFileLogging = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -118,6 +119,7 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.chkFileLogging);
             this.tabPage6.Controls.Add(this.cbTaskTrigger);
             this.tabPage6.Controls.Add(this.btnUpdatecheck);
             this.tabPage6.Controls.Add(this.chkUpdates);
@@ -138,7 +140,7 @@
             this.cbTaskTrigger.Items.AddRange(new object[] {
             "Every Day",
             "After Windows Startup"});
-            this.cbTaskTrigger.Location = new System.Drawing.Point(358, 13);
+            this.cbTaskTrigger.Location = new System.Drawing.Point(358, 36);
             this.cbTaskTrigger.Name = "cbTaskTrigger";
             this.cbTaskTrigger.Size = new System.Drawing.Size(166, 21);
             this.cbTaskTrigger.TabIndex = 5;
@@ -146,7 +148,7 @@
             // 
             // btnUpdatecheck
             // 
-            this.btnUpdatecheck.Location = new System.Drawing.Point(6, 61);
+            this.btnUpdatecheck.Location = new System.Drawing.Point(6, 84);
             this.btnUpdatecheck.Name = "btnUpdatecheck";
             this.btnUpdatecheck.Size = new System.Drawing.Size(127, 23);
             this.btnUpdatecheck.TabIndex = 4;
@@ -157,7 +159,7 @@
             // chkUpdates
             // 
             this.chkUpdates.AutoSize = true;
-            this.chkUpdates.Location = new System.Drawing.Point(6, 38);
+            this.chkUpdates.Location = new System.Drawing.Point(6, 61);
             this.chkUpdates.Name = "chkUpdates";
             this.chkUpdates.Size = new System.Drawing.Size(232, 17);
             this.chkUpdates.TabIndex = 2;
@@ -168,7 +170,7 @@
             // chkBackgroundTask
             // 
             this.chkBackgroundTask.AutoSize = true;
-            this.chkBackgroundTask.Location = new System.Drawing.Point(6, 15);
+            this.chkBackgroundTask.Location = new System.Drawing.Point(6, 38);
             this.chkBackgroundTask.Name = "chkBackgroundTask";
             this.chkBackgroundTask.Size = new System.Drawing.Size(346, 17);
             this.chkBackgroundTask.TabIndex = 1;
@@ -193,6 +195,23 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "About";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblVersion.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
+            this.lblVersion.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblVersion.Location = new System.Drawing.Point(82, 37);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(26, 17);
+            this.lblVersion.TabIndex = 81;
+            this.lblVersion.Text = "v1.0";
+            this.lblVersion.UseCompatibleTextRendering = true;
+            this.lblVersion.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lblVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVersion_LinkClicked);
             // 
             // pbDonate
             // 
@@ -236,6 +255,24 @@
             this.pbGithub.TabIndex = 78;
             this.pbGithub.TabStop = false;
             this.pbGithub.Click += new System.EventHandler(this.pbGithub_Click);
+            // 
+            // lblCopyright
+            // 
+            this.lblCopyright.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.lblCopyright.AutoSize = true;
+            this.lblCopyright.BackColor = System.Drawing.Color.Transparent;
+            this.lblCopyright.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.lblCopyright.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
+            this.lblCopyright.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.lblCopyright.Location = new System.Drawing.Point(82, 56);
+            this.lblCopyright.Name = "lblCopyright";
+            this.lblCopyright.Size = new System.Drawing.Size(165, 17);
+            this.lblCopyright.TabIndex = 77;
+            this.lblCopyright.TabStop = true;
+            this.lblCopyright.Text = "Copyright © Nate Shoffner 2017";
+            this.lblCopyright.UseCompatibleTextRendering = true;
+            this.lblCopyright.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.lblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblCopyright_LinkClicked);
             // 
             // tabControl2
             // 
@@ -358,40 +395,16 @@
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
             // 
-            // lblCopyright
+            // chkFileLogging
             // 
-            this.lblCopyright.ActiveLinkColor = System.Drawing.Color.Blue;
-            this.lblCopyright.AutoSize = true;
-            this.lblCopyright.BackColor = System.Drawing.Color.Transparent;
-            this.lblCopyright.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblCopyright.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
-            this.lblCopyright.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.lblCopyright.Location = new System.Drawing.Point(82, 56);
-            this.lblCopyright.Name = "lblCopyright";
-            this.lblCopyright.Size = new System.Drawing.Size(165, 17);
-            this.lblCopyright.TabIndex = 77;
-            this.lblCopyright.TabStop = true;
-            this.lblCopyright.Text = "Copyright © Nate Shoffner 2017";
-            this.lblCopyright.UseCompatibleTextRendering = true;
-            this.lblCopyright.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.lblCopyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblCopyright_LinkClicked);
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.ActiveLinkColor = System.Drawing.Color.Blue;
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
-            this.lblVersion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblVersion.LinkArea = new System.Windows.Forms.LinkArea(12, 13);
-            this.lblVersion.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.lblVersion.Location = new System.Drawing.Point(82, 37);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(26, 17);
-            this.lblVersion.TabIndex = 81;
-            this.lblVersion.Text = "v1.0";
-            this.lblVersion.UseCompatibleTextRendering = true;
-            this.lblVersion.VisitedLinkColor = System.Drawing.Color.Blue;
-            this.lblVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblVersion_LinkClicked);
+            this.chkFileLogging.AutoSize = true;
+            this.chkFileLogging.Location = new System.Drawing.Point(6, 15);
+            this.chkFileLogging.Name = "chkFileLogging";
+            this.chkFileLogging.Size = new System.Drawing.Size(96, 17);
+            this.chkFileLogging.TabIndex = 6;
+            this.chkFileLogging.Text = "Enable logging";
+            this.chkFileLogging.UseVisualStyleBackColor = true;
+            this.chkFileLogging.CheckedChanged += new System.EventHandler(this.chkFileLogging_CheckedChanged);
             // 
             // FormMain
             // 
@@ -455,6 +468,7 @@
         private System.Windows.Forms.ComboBox cbTaskTrigger;
         private System.Windows.Forms.LinkLabel lblVersion;
         private System.Windows.Forms.LinkLabel lblCopyright;
+        private System.Windows.Forms.CheckBox chkFileLogging;
     }
 }
 

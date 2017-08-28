@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -32,14 +31,6 @@ namespace DisableNvidiaTelemetry.Forms
         {
             InitializeComponent();
 
-            // set custom settings provider here since it seems to break VS designer
-            var provider = new PortableSettingsProvider();
-            Settings.Default.Providers.Add(provider);
-            foreach (SettingsProperty property in Settings.Default.Properties)
-            {
-                property.Provider = provider;
-            }
-
             _tasksControl = new TelemetryControl("Telemetry Tasks") {Dock = DockStyle.Top};
             _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
             tabPage1.Controls.Add(_tasksControl);
@@ -54,6 +45,7 @@ namespace DisableNvidiaTelemetry.Forms
 
             CheckBackgroundTask();
 
+            chkFileLogging.Checked = Settings.Default.FileLogging;
             chkUpdates.Checked = Settings.Default.StartupUpdate;
             cbTaskTrigger.SelectedIndex = Settings.Default.BackgroundTaskTrigger;
 
@@ -264,6 +256,13 @@ namespace DisableNvidiaTelemetry.Forms
             var version = attribute != null ? new ExtendedVersion.ExtendedVersion(attribute.InformationalVersion) : new ExtendedVersion.ExtendedVersion(Application.ProductVersion);
 
             return version;
+        }
+
+        private void chkFileLogging_CheckedChanged(object sender, EventArgs e)
+        {
+            Logging.Enabled = chkFileLogging.Checked;
+            Settings.Default.FileLogging = chkFileLogging.Checked;
+            Settings.Default.Save();
         }
     }
 }

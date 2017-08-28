@@ -46,5 +46,17 @@ namespace DisableNvidiaTelemetry.Properties {
                 this["BackgroundTaskTrigger"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FileLogging {
+            get {
+                return ((bool)(this["FileLogging"]));
+            }
+            set {
+                this["FileLogging"] = value;
+            }
+        }
     }
 }

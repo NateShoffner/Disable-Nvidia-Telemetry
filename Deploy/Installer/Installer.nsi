@@ -68,6 +68,7 @@ Section
   
   File "License.txt"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.exe"
+  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.config"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\log4net.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Microsoft.Win32.TaskScheduler.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Newtonsoft.Json.dll"  

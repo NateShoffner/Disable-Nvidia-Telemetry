@@ -31,8 +31,7 @@ namespace DisableNvidiaTelemetry
 
 #if PORTABLE
             var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
-
-            Settings.Default.FileLogging = false;
+            Settings.Default.FileLogging = false; 
             Settings.Default.Save();
 #else
             var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Disable Nvidia Telemetry");
@@ -65,11 +64,18 @@ namespace DisableNvidiaTelemetry
                 }
 
                 if (args.Contains(StartupParamRegisterTask))
+                {
+                    silentMode = true;
+
                     if (TaskSchedulerUtilities.GetTask() == null)
-                        TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger)Settings.Default.BackgroundTaskTrigger);
+                        TaskSchedulerUtilities.Create((TaskSchedulerUtilities.TaskTrigger) Settings.Default.BackgroundTaskTrigger);
+                }
 
                 if (args.Contains(StartupParamUnregisterTask))
+                {
+                    silentMode = true;
                     TaskSchedulerUtilities.Remove();
+                }
             }
 
             if (!IsAdministrator())
@@ -99,7 +105,7 @@ namespace DisableNvidiaTelemetry
         }
 
         /// <summary>
-        ///  Set custom settings provider here since it seems to break VS designer.
+        ///     Set custom settings provider here since it seems to break VS designer.
         /// </summary>
         private static void InitializeSettings()
         {

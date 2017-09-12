@@ -8,9 +8,9 @@ Disable Nvidia Telemetry is a utility that allows you to disable the telemetry s
 
  ### Download ###
 
- [v1.1 Installer](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/download/1.1/Disable.Nvidia.Telemetry.1.1.0.8.Setup.exe)
+ [v1.1 Installer](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/download/1.1/Disable.Nvidia.Telemetry.1.1.0.16.Setup.exe)
  
- [v1.1 Portable](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/download/1.1/Disable.Nvidia.Telemetry.1.1.0.8.Portable.exe)
+ [v1.1 Portable](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/download/1.1/Disable.Nvidia.Telemetry.1.1.0.16.Portable.exe)
 
 
 ![](http://i.imgur.com/0w5eIdN.png)

@@ -19,7 +19,6 @@
 ;--------------------------------
 ;General
 
-  ;Name and file
   Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
   OutFile "${PRODUCT_NAME} ${PRODUCT_VERSION} Setup.exe"
 
@@ -68,7 +67,7 @@ Section
   
   File "License.txt"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.exe"
-  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.config"
+  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.exe.config"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\log4net.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Microsoft.Win32.TaskScheduler.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Newtonsoft.Json.dll"  
@@ -88,8 +87,11 @@ SectionEnd
 
 Section "Uninstall"
 
-  Delete "$INSTDIR\LICENSE"
+  ExecWait "$INSTDIR\Disable Nvidia Telemetry.exe -unregistertask" $0
+
+  Delete "$INSTDIR\License.txt"
   Delete "$INSTDIR\Disable Nvidia Telemetry.exe"
+  Delete "$INSTDIR\\Disable Nvidia Telemetry.exe.config"
   Delete "$INSTDIR\log4net.dll"
   Delete "$INSTDIR\Microsoft.Win32.TaskScheduler.dll"
   Delete "$INSTDIR\Newtonsoft.Json.dll"

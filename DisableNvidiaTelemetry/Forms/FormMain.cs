@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
@@ -31,12 +32,12 @@ namespace DisableNvidiaTelemetry.Forms
         {
             InitializeComponent();
 
-            _tasksControl = new TelemetryControl("Telemetry Tasks") {Dock = DockStyle.Top};
-            _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
-            tabPage1.Controls.Add(_tasksControl);
-            _servicesControl = new TelemetryControl("Telemetry Services") {Dock = DockStyle.Top};
+            _servicesControl = new TelemetryControl("Telemetry Services") { Location = new Point(0, 0) };
             _servicesControl.CheckStateChanged += telemControl_CheckStateChanged;
             tabPage1.Controls.Add(_servicesControl);
+            _tasksControl = new TelemetryControl("Telemetry Tasks") { Location = new Point(0, _servicesControl.Height + 5) };
+            _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
+            tabPage1.Controls.Add(_tasksControl);
 
             txtLicense.Text = Resources.ApplicationLicense;
 
@@ -125,16 +126,26 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void telemControl_CheckStateChanged(object sender, EventArgs e)
         {
-            btnApply.Enabled = _tasksControl.CheckState == CheckState.Checked || _servicesControl.CheckState == CheckState.Checked;
+            btnApply.Enabled = _tasksControl.SelectedItems.Count > 0 || _servicesControl.SelectedItems.Count > 0;
         }
 
         private void btnApply_Click(object sender, EventArgs e)
         {
-            if (_servicesControl.CheckState == CheckState.Checked)
-                NvidiaController.DisableTelemetryServices(_telemetryServices, true, true);
+            var selectedServices = _servicesControl.SelectedItems;
 
-            if (_tasksControl.CheckState == CheckState.Checked)
-                NvidiaController.DisableTelemetryTasks(_telemetryTasks, true, true);
+            var disabledServices = (from t in selectedServices where !t.Enabled select (TelemetryService)t.Telemetry).Select(s => s.Service).ToList();
+            var enabledServices = (from t in selectedServices where t.Enabled select (TelemetryService)t.Telemetry).Select(s => s.Service).ToList();
+
+            NvidiaController.DisableTelemetryServices(disabledServices, true, true);
+            NvidiaController.EnableTelemetryServices(enabledServices, true);
+
+            var selectedTasks = _tasksControl.SelectedItems;
+
+            var disabledTasks = (from t in selectedTasks where !t.Enabled select (TelemetryTask)t.Telemetry).Select(s => s.Task).ToList();
+            var enabledTasks = (from t in selectedTasks where t.Enabled select (TelemetryTask)t.Telemetry).Select(s => s.Task).ToList();
+
+            NvidiaController.DisableTelemetryTasks(disabledTasks, true, true);
+            NvidiaController.EnableTelemetryTasks(enabledTasks, true);
 
             RefreshControls();
 

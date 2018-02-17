@@ -34,6 +34,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.chkFileLogging = new System.Windows.Forms.CheckBox();
             this.cbTaskTrigger = new System.Windows.Forms.ComboBox();
             this.btnUpdatecheck = new System.Windows.Forms.Button();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
@@ -54,7 +55,6 @@
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
-            this.chkFileLogging = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -85,6 +85,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.AutoScroll = true;
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -131,6 +132,17 @@
             this.tabPage6.TabIndex = 3;
             this.tabPage6.Text = "Settings";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // chkFileLogging
+            // 
+            this.chkFileLogging.AutoSize = true;
+            this.chkFileLogging.Location = new System.Drawing.Point(6, 15);
+            this.chkFileLogging.Name = "chkFileLogging";
+            this.chkFileLogging.Size = new System.Drawing.Size(96, 17);
+            this.chkFileLogging.TabIndex = 6;
+            this.chkFileLogging.Text = "Enable logging";
+            this.chkFileLogging.UseVisualStyleBackColor = true;
+            this.chkFileLogging.CheckedChanged += new System.EventHandler(this.chkFileLogging_CheckedChanged);
             // 
             // cbTaskTrigger
             // 
@@ -376,35 +388,24 @@
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Enabled = false;
-            this.btnApply.Location = new System.Drawing.Point(407, 272);
+            this.btnApply.Location = new System.Drawing.Point(456, 272);
             this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(166, 23);
+            this.btnApply.Size = new System.Drawing.Size(117, 23);
             this.btnApply.TabIndex = 3;
-            this.btnApply.Text = "Disable Selected Telemetry";
+            this.btnApply.Text = "Apply";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
             // btnDefaults
             // 
             this.btnDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDefaults.Location = new System.Drawing.Point(280, 272);
+            this.btnDefaults.Location = new System.Drawing.Point(329, 272);
             this.btnDefaults.Name = "btnDefaults";
             this.btnDefaults.Size = new System.Drawing.Size(121, 23);
             this.btnDefaults.TabIndex = 2;
             this.btnDefaults.Text = "Restore Defaults";
             this.btnDefaults.UseVisualStyleBackColor = true;
             this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
-            // 
-            // chkFileLogging
-            // 
-            this.chkFileLogging.AutoSize = true;
-            this.chkFileLogging.Location = new System.Drawing.Point(6, 15);
-            this.chkFileLogging.Name = "chkFileLogging";
-            this.chkFileLogging.Size = new System.Drawing.Size(96, 17);
-            this.chkFileLogging.TabIndex = 6;
-            this.chkFileLogging.Text = "Enable logging";
-            this.chkFileLogging.UseVisualStyleBackColor = true;
-            this.chkFileLogging.CheckedChanged += new System.EventHandler(this.chkFileLogging_CheckedChanged);
             // 
             // FormMain
             // 

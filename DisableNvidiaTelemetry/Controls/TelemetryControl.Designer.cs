@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.chkDisableTelemetry = new System.Windows.Forms.CheckBox();
+            this.chkDisableAll = new System.Windows.Forms.CheckBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblStatus = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // chkDisableTelemetry
+            // chkDisableAll
             // 
-            this.chkDisableTelemetry.AutoSize = true;
-            this.chkDisableTelemetry.Location = new System.Drawing.Point(4, 4);
-            this.chkDisableTelemetry.Name = "chkDisableTelemetry";
-            this.chkDisableTelemetry.Size = new System.Drawing.Size(80, 17);
-            this.chkDisableTelemetry.TabIndex = 0;
-            this.chkDisableTelemetry.Text = "checkBox1";
-            this.chkDisableTelemetry.UseVisualStyleBackColor = true;
-            this.chkDisableTelemetry.CheckStateChanged += new System.EventHandler(this.chkDisableTelemetry_CheckStateChanged);
+            this.chkDisableAll.AutoSize = true;
+            this.chkDisableAll.Location = new System.Drawing.Point(4, 4);
+            this.chkDisableAll.Name = "chkDisableAll";
+            this.chkDisableAll.Size = new System.Drawing.Size(80, 17);
+            this.chkDisableAll.TabIndex = 0;
+            this.chkDisableAll.Text = "checkBox1";
+            this.chkDisableAll.UseVisualStyleBackColor = true;
+            this.chkDisableAll.CheckStateChanged += new System.EventHandler(this.chkDisableAll_CheckStateChanged);
             // 
             // progressBar1
             // 
             this.progressBar1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(4, 63);
+            this.progressBar1.Location = new System.Drawing.Point(4, 55);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(539, 18);
             this.progressBar1.Step = 1;
@@ -73,7 +73,7 @@
             this.panel1.AutoSize = true;
             this.panel1.Location = new System.Drawing.Point(4, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(539, 30);
+            this.panel1.Size = new System.Drawing.Size(539, 22);
             this.panel1.TabIndex = 7;
             // 
             // TelemetryControl
@@ -84,9 +84,9 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.chkDisableTelemetry);
+            this.Controls.Add(this.chkDisableAll);
             this.Name = "TelemetryControl";
-            this.Size = new System.Drawing.Size(547, 84);
+            this.Size = new System.Drawing.Size(547, 76);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,7 +94,7 @@
 
         #endregion
 
-        private System.Windows.Forms.CheckBox chkDisableTelemetry;
+        private System.Windows.Forms.CheckBox chkDisableAll;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Panel panel1;

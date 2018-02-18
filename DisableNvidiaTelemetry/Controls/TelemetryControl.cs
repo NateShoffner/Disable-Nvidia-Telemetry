@@ -13,27 +13,14 @@ namespace DisableNvidiaTelemetry.Controls
 {
     internal partial class TelemetryControl : UserControl
     {
-        private readonly List<ITelemetry> _telemetryItems = new List<ITelemetry>();
         private readonly List<CheckBox> _telemetryCheckBoxes = new List<CheckBox>();
+        private readonly List<ITelemetry> _telemetryItems = new List<ITelemetry>();
         private bool _suppressEvents;
 
         public TelemetryControl(string labelText)
         {
             InitializeComponent();
             chkDisableAll.Text = labelText;
-        }
-
-        public class TelemetrySelection
-        {
-            public ITelemetry Telemetry { get; }
-
-            public bool Enabled { get; }
-
-            public TelemetrySelection(ITelemetry telemetry, bool enabled)
-            {
-                Telemetry = telemetry;
-                Enabled = enabled;
-            }
         }
 
         public ReadOnlyCollection<ITelemetry> TelemetryItems => _telemetryItems.AsReadOnly();
@@ -63,11 +50,11 @@ namespace DisableNvidiaTelemetry.Controls
             {
                 AutoSize = true,
                 Text = displayText,
-                ForeColor = telemetry.IsRunning() ? SystemColors.ControlText : SystemColors.ControlDark
+                ForeColor = telemetry.IsActive() ? SystemColors.ControlText : SystemColors.ControlDark
             };
 
             cb.Location = new Point(15, cb.Height * (_telemetryItems.Count - 1));
-            cb.Checked = !telemetry.IsRunning();
+            cb.Checked = !telemetry.IsActive();
             _telemetryCheckBoxes.Add(cb);
             panel1.Controls.Add(cb);
 
@@ -93,7 +80,7 @@ namespace DisableNvidiaTelemetry.Controls
 
         private void UpdateStatus()
         {
-            var disabledCount = _telemetryItems.Count(x => !x.IsRunning());
+            var disabledCount = _telemetryItems.Count(x => !x.IsActive());
 
             progressBar1.Value = disabledCount;
 
@@ -136,6 +123,19 @@ namespace DisableNvidiaTelemetry.Controls
             chkDisableAll.CheckState = CheckState.Unchecked;
 
             _suppressEvents = false;
+        }
+
+        public class TelemetrySelection
+        {
+            public TelemetrySelection(ITelemetry telemetry, bool enabled)
+            {
+                Telemetry = telemetry;
+                Enabled = enabled;
+            }
+
+            public ITelemetry Telemetry { get; }
+
+            public bool Enabled { get; }
         }
     }
 }

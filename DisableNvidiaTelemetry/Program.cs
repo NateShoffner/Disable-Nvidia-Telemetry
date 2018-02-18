@@ -102,6 +102,11 @@ namespace DisableNvidiaTelemetry
 
             var tasks = NvidiaController.GetTelemetryTasks(true);
             NvidiaController.DisableTelemetryTasks(tasks.Select(t => t.Task).ToList(), true, true);
+
+            Logging.GetFileLogger().Log(Level.Info, "Silently disabling telemetry registery.");
+
+            var keys = NvidiaController.GetTelemetryRegistryEntires(true);
+            NvidiaController.DisableTelemetryRegistryEntries(keys, true, true);
         }
 
         /// <summary>

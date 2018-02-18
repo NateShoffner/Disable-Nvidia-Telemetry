@@ -79,7 +79,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(561, 242);
+            this.tabControl1.Size = new System.Drawing.Size(561, 321);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -89,7 +89,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(553, 216);
+            this.tabPage1.Size = new System.Drawing.Size(553, 260);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Telemetry";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -100,7 +100,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(553, 216);
+            this.tabPage2.Size = new System.Drawing.Size(553, 260);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Event Log";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -115,7 +115,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(547, 210);
+            this.textBox1.Size = new System.Drawing.Size(547, 254);
             this.textBox1.TabIndex = 0;
             // 
             // tabPage6
@@ -128,7 +128,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(553, 216);
+            this.tabPage6.Size = new System.Drawing.Size(553, 260);
             this.tabPage6.TabIndex = 3;
             this.tabPage6.Text = "Settings";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -203,7 +203,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(553, 216);
+            this.tabPage3.Size = new System.Drawing.Size(553, 295);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "About";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -296,7 +296,7 @@
             this.tabControl2.Location = new System.Drawing.Point(6, 76);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(541, 134);
+            this.tabControl2.Size = new System.Drawing.Size(541, 213);
             this.tabControl2.TabIndex = 74;
             // 
             // tabPage4
@@ -305,7 +305,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(533, 108);
+            this.tabPage4.Size = new System.Drawing.Size(533, 187);
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "License";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -320,7 +320,7 @@
             this.txtLicense.Name = "txtLicense";
             this.txtLicense.ReadOnly = true;
             this.txtLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLicense.Size = new System.Drawing.Size(527, 102);
+            this.txtLicense.Size = new System.Drawing.Size(527, 181);
             this.txtLicense.TabIndex = 62;
             // 
             // tabPage5
@@ -361,7 +361,6 @@
             // 
             // lblName
             // 
-            this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblName.AutoSize = true;
             this.lblName.BackColor = System.Drawing.Color.Transparent;
             this.lblName.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
@@ -376,7 +375,7 @@
             // btnRefresh
             // 
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRefresh.Location = new System.Drawing.Point(12, 272);
+            this.btnRefresh.Location = new System.Drawing.Point(12, 351);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 1;
@@ -388,7 +387,7 @@
             // 
             this.btnApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnApply.Enabled = false;
-            this.btnApply.Location = new System.Drawing.Point(456, 272);
+            this.btnApply.Location = new System.Drawing.Point(456, 351);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(117, 23);
             this.btnApply.TabIndex = 3;
@@ -399,7 +398,7 @@
             // btnDefaults
             // 
             this.btnDefaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDefaults.Location = new System.Drawing.Point(329, 272);
+            this.btnDefaults.Location = new System.Drawing.Point(329, 351);
             this.btnDefaults.Name = "btnDefaults";
             this.btnDefaults.Size = new System.Drawing.Size(121, 23);
             this.btnDefaults.TabIndex = 2;
@@ -411,7 +410,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(585, 307);
+            this.ClientSize = new System.Drawing.Size(585, 386);
             this.Controls.Add(this.btnDefaults);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnRefresh);

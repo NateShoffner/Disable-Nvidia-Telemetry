@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.ServiceProcess;
+using System.Text;
 using System.Windows.Forms;
 using DisableNvidiaTelemetry.Controls;
 using DisableNvidiaTelemetry.Properties;
@@ -21,10 +21,12 @@ namespace DisableNvidiaTelemetry.Forms
 {
     public partial class FormMain : Form
     {
+        private readonly TelemetryControl _registryControl;
         private readonly TelemetryControl _servicesControl;
         private readonly TelemetryControl _tasksControl;
 
         private bool _ignoreTaskSetting;
+        private List<TelemetryRegistryKey> _telemetryKeys = new List<TelemetryRegistryKey>();
         private List<ServiceController> _telemetryServices = new List<ServiceController>();
         private List<Task> _telemetryTasks = new List<Task>();
 
@@ -32,12 +34,18 @@ namespace DisableNvidiaTelemetry.Forms
         {
             InitializeComponent();
 
-            _servicesControl = new TelemetryControl("Telemetry Services") { Location = new Point(0, 0) };
+            _servicesControl = new TelemetryControl("Telemetry Services") {Dock = DockStyle.Top};
             _servicesControl.CheckStateChanged += telemControl_CheckStateChanged;
-            tabPage1.Controls.Add(_servicesControl);
-            _tasksControl = new TelemetryControl("Telemetry Tasks") { Location = new Point(0, _servicesControl.Height + 5) };
+
+            _tasksControl = new TelemetryControl("Telemetry Tasks") {Dock = DockStyle.Top};
             _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
+
+            _registryControl = new TelemetryControl("Telemetry Registry Entries") {Dock = DockStyle.Top};
+            _registryControl.CheckStateChanged += telemControl_CheckStateChanged;
+
+            tabPage1.Controls.Add(_registryControl);
             tabPage1.Controls.Add(_tasksControl);
+            tabPage1.Controls.Add(_servicesControl);
 
             txtLicense.Text = Resources.ApplicationLicense;
 
@@ -113,6 +121,7 @@ namespace DisableNvidiaTelemetry.Forms
         {
             RefreshTelemetryServices(true);
             RefreshTelemetryTasks(true);
+            RefreshTelemetryRegistry(true);
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -122,6 +131,7 @@ namespace DisableNvidiaTelemetry.Forms
 
             RefreshTelemetryServices(true);
             RefreshTelemetryTasks(true);
+            RefreshTelemetryRegistry(true);
         }
 
         private void telemControl_CheckStateChanged(object sender, EventArgs e)
@@ -133,24 +143,33 @@ namespace DisableNvidiaTelemetry.Forms
         {
             var selectedServices = _servicesControl.SelectedItems;
 
-            var disabledServices = (from t in selectedServices where !t.Enabled select (TelemetryService)t.Telemetry).Select(s => s.Service).ToList();
-            var enabledServices = (from t in selectedServices where t.Enabled select (TelemetryService)t.Telemetry).Select(s => s.Service).ToList();
+            var disabledServices = (from t in selectedServices where !t.Enabled select (TelemetryService) t.Telemetry).Select(s => s.Service).ToList();
+            var enabledServices = (from t in selectedServices where t.Enabled select (TelemetryService) t.Telemetry).Select(s => s.Service).ToList();
 
             NvidiaController.DisableTelemetryServices(disabledServices, true, true);
             NvidiaController.EnableTelemetryServices(enabledServices, true);
 
             var selectedTasks = _tasksControl.SelectedItems;
 
-            var disabledTasks = (from t in selectedTasks where !t.Enabled select (TelemetryTask)t.Telemetry).Select(s => s.Task).ToList();
-            var enabledTasks = (from t in selectedTasks where t.Enabled select (TelemetryTask)t.Telemetry).Select(s => s.Task).ToList();
+            var disabledTasks = (from t in selectedTasks where !t.Enabled select (TelemetryTask) t.Telemetry).Select(s => s.Task).ToList();
+            var enabledTasks = (from t in selectedTasks where t.Enabled select (TelemetryTask) t.Telemetry).Select(s => s.Task).ToList();
 
             NvidiaController.DisableTelemetryTasks(disabledTasks, true, true);
             NvidiaController.EnableTelemetryTasks(enabledTasks, true);
+
+            var selectedKeys = _registryControl.SelectedItems;
+
+            var disabledKeys = (from t in selectedKeys where !t.Enabled select (TelemetryRegistryKey) t.Telemetry).ToList();
+            var enabledKeys = (from t in selectedKeys where t.Enabled select (TelemetryRegistryKey) t.Telemetry).ToList();
+
+            NvidiaController.DisableTelemetryRegistryEntries(disabledKeys, true, true);
+            NvidiaController.EnableTelemetryRegistryEntries(enabledKeys, true);
 
             RefreshControls();
 
             RefreshTelemetryServices(false);
             RefreshTelemetryTasks(false);
+            RefreshTelemetryRegistry(false);
         }
 
         private void btnDefaults_Click(object sender, EventArgs e)
@@ -159,9 +178,11 @@ namespace DisableNvidiaTelemetry.Forms
 
             NvidiaController.EnableTelemetryServices(_telemetryServices, true);
             NvidiaController.EnableTelemetryTasks(_telemetryTasks, true);
+            NvidiaController.EnableTelemetryRegistryEntries(_telemetryKeys, true);
 
             RefreshTelemetryServices(false);
             RefreshTelemetryTasks(false);
+            RefreshTelemetryRegistry(false);
 
             btnApply.Enabled = false;
         }
@@ -175,6 +196,7 @@ namespace DisableNvidiaTelemetry.Forms
         {
             _tasksControl.Reset();
             _servicesControl.Reset();
+            _registryControl.Reset();
         }
 
         private void RefreshTelemetryTasks(bool logging)
@@ -201,6 +223,31 @@ namespace DisableNvidiaTelemetry.Forms
 
             _servicesControl.Enabled = _servicesControl.TelemetryItems.Count != 0;
             _telemetryServices = services.Select(s => s.Service).ToList();
+        }
+
+        private void RefreshTelemetryRegistry(bool logging)
+        {
+            var entries = NvidiaController.GetTelemetryRegistryEntires(logging);
+
+            foreach (var entry in entries)
+            {
+                var sb = new StringBuilder();
+
+                sb.AppendLine(entry.Name);
+
+                foreach (var vd in entry.ValueData)
+                {
+                    sb.Append("@=\"");
+                    sb.Append(vd.Key);
+                    sb.Append("\"");
+                    sb.AppendLine();
+                }
+
+                _registryControl.AddTelemetryItem(entry, sb.ToString());
+            }
+
+            _registryControl.Enabled = _registryControl.TelemetryItems.Count != 0;
+            _telemetryKeys = entries.ToList();
         }
 
         private void lblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

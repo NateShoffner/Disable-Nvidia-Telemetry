@@ -1,8 +1,10 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.ServiceProcess;
 using log4net.Core;
+using Microsoft.Win32;
 using Microsoft.Win32.TaskScheduler;
 
 #endregion
@@ -82,6 +84,56 @@ namespace DisableNvidiaTelemetry.Utilities
             }
 
             return services;
+        }
+
+        /// <summary>
+        ///     Returns known telemetry registry keys.
+        /// </summary>
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        /// <returns></returns>
+        public static List<TelemetryRegistryKey> GetTelemetryRegistryEntires(bool logging)
+        {
+            var entries = new List<TelemetryRegistryKey>
+            {
+                new TelemetryRegistryKey(Registry.CurrentUser, @"SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client",
+                    new Dictionary<string, TelemetryRegistryKey.RegistryValuePair>
+                    {
+                        {"OptInOrOutPreference", new TelemetryRegistryKey.RegistryValuePair("1", "0")}
+                    })
+            };
+
+            foreach (var entry in entries)
+            {
+                try
+                {
+                    var key = entry.SubKey;
+
+                    if (logging)
+                    {
+                        var values = entry.GetValues();
+
+                        var count = 0;
+
+                        if (values != null)
+                            foreach (var kv in values)
+                            {
+                                if (kv.Value != null)
+                                    count++;
+                            }
+
+                        Logging.GetFileLogger().Log(Level.Info, $"Found registry key: {key}");
+                        Logging.GetFileLogger().Log(Level.Info, $"Found {count}/{values.Values.Count} expected value(s)");
+                    }
+                }
+
+                catch
+                {
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find registry key: {entry.Name}");
+                }
+            }
+
+            return entries;
         }
 
         /// <summary>
@@ -170,6 +222,38 @@ namespace DisableNvidiaTelemetry.Utilities
         }
 
         /// <summary>
+        ///     Disables the provideed registry keys if they are currently enabled.
+        /// </summary>
+        /// <param name="keys">The registry keys in which to disable.</param>
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        /// <param name="eventLog">Determines whether event logging should be performed.</param>
+        public static void DisableTelemetryRegistryEntries(List<TelemetryRegistryKey> keys, bool logging, bool eventLog)
+        {
+            foreach (var key in keys)
+            {
+                try
+                {
+                    if (key.IsActive())
+                    {
+                        key.Enabled = false;
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Disabled key: {key.Name}");
+
+                        if (eventLog)
+                            Logging.GetEventLogger().Log(Level.Info, $"Disabled key: {key.Name}");
+                    }
+                }
+
+                catch
+                {
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable registry key: {key.Name}");
+                }
+            }
+        }
+
+        /// <summary>
         ///     Enables the provided services.
         /// </summary>
         /// <param name="services">The services to enable.</param>
@@ -241,6 +325,34 @@ namespace DisableNvidiaTelemetry.Utilities
                         if (logging)
                             Logging.GetFileLogger().Log(Level.Info, $"Failed to enable task: {task.Path}");
                     }
+            }
+        }
+
+        /// <summary>
+        ///     Enables the provides registry keys and their respective value(s).
+        /// </summary>
+        /// <param name="keys">The registry keys in which to enable.</param>
+        /// <param name="logging">Determines whether logging should be performed.</param>
+        public static void EnableTelemetryRegistryEntries(List<TelemetryRegistryKey> keys, bool logging)
+        {
+            foreach (var key in keys)
+            {
+                try
+                {
+                    if (!key.IsActive())
+                    {
+                        key.Enabled = true;
+
+                        if (logging)
+                            Logging.GetFileLogger().Log(Level.Info, $"Enabled key: {key.Name}");
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"Failed to enable registry key: {key.Name}");
+                }
             }
         }
     }

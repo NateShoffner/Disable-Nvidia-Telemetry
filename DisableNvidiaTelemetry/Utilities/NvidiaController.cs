@@ -110,11 +110,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
+                var modified = false;
+
                 // set service startup to disabled
                 if (ServiceHelper.GetServiceStartMode(telemetryService.Service) != ServiceStartMode.Disabled)
+                {
                     ServiceHelper.ChangeStartMode(telemetryService.Service, ServiceStartMode.Disabled);
+                    modified = true;
+                }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
             }
 
             catch (Exception ex)
@@ -132,13 +137,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
+                var modified = false;
+
                 if (telemetryService.Service.Status == ServiceControllerStatus.Running)
                 {
                     telemetryService.Service.Stop();
                     telemetryService.Service.WaitForStatus(ServiceControllerStatus.Stopped);
+                    modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
             }
 
             catch (Exception ex)
@@ -156,10 +164,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
-                if (telemetryTask.Task.Enabled)
-                    telemetryTask.Task.Enabled = false;
+                var modified = false;
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask);
+                if (telemetryTask.Task.Enabled)
+                {
+                    telemetryTask.Task.Enabled = false;
+                    modified = true;
+                }
+
+
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask){Modified = modified};
             }
 
             catch (Exception ex)
@@ -177,10 +191,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
-                if (telemetryRegistryKey.IsActive())
-                    telemetryRegistryKey.Enabled = false;
+                var modified = false;
 
-                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey);
+                if (telemetryRegistryKey.IsActive())
+                {
+                    telemetryRegistryKey.Enabled = false;
+                    modified = true;
+                }
+
+
+                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey){Modified = modified};
             }
 
             catch (Exception ex)
@@ -198,11 +218,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
+                var modified = false;
+
                 // set service startup to automatic
                 if (ServiceHelper.GetServiceStartMode(telemetryService.Service) != ServiceStartMode.Automatic)
+                {
                     ServiceHelper.ChangeStartMode(telemetryService.Service, ServiceStartMode.Automatic);
+                    modified = true;
+                }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
             }
 
             catch (Exception ex)
@@ -220,13 +245,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
+                var modified = false;
+
                 if (telemetryService.Service.Status != ServiceControllerStatus.Running)
                 {
                     telemetryService.Service.Start();
                     telemetryService.Service.WaitForStatus(ServiceControllerStatus.Running);
+                    modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
             }
 
             catch (Exception ex)
@@ -243,10 +271,16 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
-                if (telemetryTask.Task != null && !telemetryTask.Task.Enabled)
-                    telemetryTask.Task.Enabled = true;
+                var modified = false;
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask);
+                if (telemetryTask.Task != null && !telemetryTask.Task.Enabled)
+                {
+                    telemetryTask.Task.Enabled = true;
+                    modified = true;
+                }
+
+
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask){Modified = modified};
             }
 
             catch (Exception ex)
@@ -264,10 +298,15 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             try
             {
-                if (!key.IsActive())
-                    key.Enabled = true;
+                var modified = false;
 
-                return new NvidiaControllerResult<TelemetryRegistryKey>(key);
+                if (!key.IsActive())
+                {
+                    key.Enabled = true;
+                    modified = true;
+                }
+
+                return new NvidiaControllerResult<TelemetryRegistryKey>(key) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -283,6 +322,8 @@ namespace DisableNvidiaTelemetry.Utilities
                 Item = item;
                 Error = error;
             }
+
+            public bool Modified { get; set; }
 
             public Exception Error { get; }
 

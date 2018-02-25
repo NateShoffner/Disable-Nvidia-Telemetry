@@ -112,17 +112,17 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApplicationLicense" xml:space="preserve">
     <value>This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software. 
 
 Redistribution of this software is allowed, but the origin of this software must not be misrepresented; you must not claim that you wrote the original software.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="binoculars_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\binoculars-64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -131,5 +131,161 @@ Redistribution of this software is allowed, but the origin of this software must
   </data>
   <data name="btn_donate_92x26" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\btn_donate_92x26.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GithubUrl" xml:space="preserve">
+    <value>https://github.com/NateShoffner/Disable-Nvidia-Telemetry</value>
+  </data>
+  <data name="Homepage" xml:space="preserve">
+    <value>https://nateshoffner.com</value>
+  </data>
+  <data name="PaypalUrl" xml:space="preserve">
+    <value>https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=nate.shoffner@gmail.com&amp;lc=US&amp;item_name=Disable%20Nvidia%20Telemetry&amp;currency_code=USD&amp;bn=PP%2dDonationsBF</value>
+  </data>
+  <data name="Telemetry_serivces" xml:space="preserve">
+    <value>Telemetry Services</value>
+  </data>
+  <data name="Telemetry_tasks" xml:space="preserve">
+    <value>Telemetry Tasks</value>
+  </data>
+  <data name="Update_available" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
+  <data name="Update_available_message" xml:space="preserve">
+    <value>A new update is available, would you like to download it?</value>
+  </data>
+  <data name="No_Upades" xml:space="preserve">
+    <value>No Updates</value>
+  </data>
+  <data name="No_updates_available_message" xml:space="preserve">
+    <value>There are no updates available.</value>
+  </data>
+  <data name="Update_error_messsage" xml:space="preserve">
+    <value>There was an error while checking for updates.</value>
+  </data>
+  <data name="Update_error" xml:space="preserve">
+    <value>Update Error</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Failed_to_disable_registry_item" xml:space="preserve">
+    <value>Failed to disable registry item</value>
+  </data>
+  <data name="Failed_to_disable_task" xml:space="preserve">
+    <value>Failed to disable task</value>
+  </data>
+  <data name="Failed_to_enable_registry_item" xml:space="preserve">
+    <value>Failed to enable registry item</value>
+  </data>
+  <data name="Failed_to_enable_task" xml:space="preserve">
+    <value>Failed to enable task</value>
+  </data>
+  <data name="Failed_to_find_registry_item" xml:space="preserve">
+    <value>Failed to find registry item</value>
+  </data>
+  <data name="Failed_to_find_service" xml:space="preserve">
+    <value>Failed to find service</value>
+  </data>
+  <data name="Failed_to_find_task" xml:space="preserve">
+    <value>Failed to find task</value>
+  </data>
+  <data name="Failed_to_start_service" xml:space="preserve">
+    <value>Failed to start service</value>
+  </data>
+  <data name="Failed_to_stop_service" xml:space="preserve">
+    <value>Failed to stop service</value>
+  </data>
+  <data name="Found_registry_item" xml:space="preserve">
+    <value>Found registry item</value>
+  </data>
+  <data name="Found_service" xml:space="preserve">
+    <value>Found service</value>
+  </data>
+  <data name="Found_task" xml:space="preserve">
+    <value>Found task</value>
+  </data>
+  <data name="Registry_item_disabled" xml:space="preserve">
+    <value>Registry item disabled</value>
+  </data>
+  <data name="Registry_item_enabled" xml:space="preserve">
+    <value>Registry item enabled</value>
+  </data>
+  <data name="Registry_item_is" xml:space="preserve">
+    <value>Registry item is</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="Service_is" xml:space="preserve">
+    <value>Service is</value>
+  </data>
+  <data name="Service_started" xml:space="preserve">
+    <value>Service started</value>
+  </data>
+  <data name="Automatic" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="Automatic_service_startup_disabled" xml:space="preserve">
+    <value>Automatic service startup disabled</value>
+  </data>
+  <data name="Automatic_service_startup_enabled" xml:space="preserve">
+    <value>Automatic service startup enabled</value>
+  </data>
+  <data name="Automatic_service_startup_failed" xml:space="preserve">
+    <value>Automatic service startup failed</value>
+  </data>
+  <data name="Disable_service_startup_failed" xml:space="preserve">
+    <value>Disable service startup failed</value>
+  </data>
+  <data name="Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="Service_startup_mode" xml:space="preserve">
+    <value>Service startup mode</value>
+  </data>
+  <data name="Service_stopped" xml:space="preserve">
+    <value>Service stopped</value>
+  </data>
+  <data name="Task" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Task_disabled" xml:space="preserve">
+    <value>Task disabled</value>
+  </data>
+  <data name="Task_enabled" xml:space="preserve">
+    <value>Task enabled</value>
+  </data>
+  <data name="Task_is" xml:space="preserve">
+    <value>Task is</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="AdministratorRequired" xml:space="preserve">
+    <value>Administrator Required</value>
+  </data>
+  <data name="Please_run_the_program_as_administrator_to_continue" xml:space="preserve">
+    <value>Please run the program as administrator to continue.</value>
+  </data>
+  <data name="All_Disabled" xml:space="preserve">
+    <value>All Disabled</value>
+  </data>
+  <data name="Disable_Nvidia_Telemetry" xml:space="preserve">
+    <value>Disable Nvidia Telemetry</value>
+  </data>
+  <data name="Silently_disabling_telemetry_registry_items" xml:space="preserve">
+    <value>Silently disabling telemetry registry items</value>
+  </data>
+  <data name="Silently_disabling_telemetry_services" xml:space="preserve">
+    <value>Silently disabling telemetry services</value>
+  </data>
+  <data name="Silently_disabling_telemetry_tasks" xml:space="preserve">
+    <value>Silently disabling telemetry tasks</value>
+  </data>
+  <data name="Telemetry_registry_items" xml:space="preserve">
+    <value>Telemetry Registry Items</value>
   </data>
 </root>

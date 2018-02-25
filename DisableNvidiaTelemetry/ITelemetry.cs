@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.ServiceProcess;
 using Microsoft.Win32;
 using Microsoft.Win32.TaskScheduler;
@@ -89,13 +90,7 @@ namespace DisableNvidiaTelemetry
             if (subKey == null)
                 return false;
 
-            foreach (var vd in ValueData)
-            {
-                if (subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled)
-                    return true;
-            }
-
-            return false;
+            return ValueData.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
         }
 
         #endregion

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Properties;
 
 #endregion
 
@@ -88,7 +89,7 @@ namespace DisableNvidiaTelemetry.Controls
                 lblStatus.Visible = true;
 
             var allDisabled = disabledCount == _telemetryItems.Count;
-            lblStatus.Text = allDisabled ? "All disabled" : $"{disabledCount} of {_telemetryItems.Count} disabled";
+            lblStatus.Text = allDisabled ? Resources.All_Disabled : $"{disabledCount} / {_telemetryItems.Count} {Resources.Disabled}";
             chkDisableAll.CheckState = allDisabled ? CheckState.Checked : CheckState.Unchecked;
         }
 

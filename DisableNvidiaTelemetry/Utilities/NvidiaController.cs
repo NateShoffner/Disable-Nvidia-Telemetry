@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceProcess;
-using log4net.Core;
 using Microsoft.Win32;
 using Microsoft.Win32.TaskScheduler;
 
@@ -14,86 +13,65 @@ namespace DisableNvidiaTelemetry.Utilities
     internal class NvidiaController
     {
         /// <summary>
-        ///     Returns known telemetry tasks.
+        ///     Returns an enumerable collection of telemetry tasks.
         /// </summary>
-        /// <param name="logging">Determines whether logging should be done.</param>
-        public static List<TelemetryTask> GetTelemetryTasks(bool logging)
+        public static IEnumerable<NvidiaControllerResult<TelemetryTask>> EnumerateTelemetryTasks()
         {
-            var tasks = new List<TelemetryTask>();
-
             var taskNames = new[] {"NvTmMon_*", "NvTmRep_*", "NvTmRepOnLogon_*"};
 
             foreach (var taskName in taskNames)
             {
+                TelemetryTask telemetryTask = null;
+                Exception error = null;
+
                 var task = TaskService.Instance.FindTask(taskName);
 
-                if (task == null)
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find task: {taskName}");
-                }
+                if (task != null)
+                    telemetryTask = new TelemetryTask(task);
 
                 else
-                {
-                    if (logging)
-                    {
-                        Logging.GetFileLogger().Log(Level.Info, $"Found Task: {task.Name}");
-                        Logging.GetFileLogger().Log(Level.Info, $"Task is: {(task.Enabled ? "Enabled" : "Disabled")}");
-                    }
+                    error = new TaskNotFoundException($"Failed to find task: {taskName}");
 
-                    tasks.Add(new TelemetryTask(task));
-                }
+                yield return new NvidiaControllerResult<TelemetryTask>(telemetryTask, error) {Name = taskName};
             }
-
-            return tasks;
         }
 
         /// <summary>
-        ///     Returns known telemetry services.
+        ///     Returns an enumerable collection of telemetry services.
         /// </summary>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        public static List<TelemetryService> GetTelemetryServices(bool logging)
+        public static IEnumerable<NvidiaControllerResult<TelemetryService>> EnumerateTelemetryServices()
         {
-            var services = new List<TelemetryService>();
-
             var serviceNames = new[] {"NvTelemetryContainer"};
 
             foreach (var serviceName in serviceNames)
             {
-                var service = new ServiceController(serviceName);
+                var sc = new ServiceController(serviceName);
+
+                TelemetryService service = null;
+                Exception error = null;
 
                 try
                 {
-                    // throw error if service as not found
-                    var running = service.Status == ServiceControllerStatus.Running;
-
-                    services.Add(new TelemetryService(service));
-
-                    if (logging)
-                    {
-                        Logging.GetFileLogger().Log(Level.Info, $"Found Service: {service.DisplayName} ({service.ServiceName})");
-                        Logging.GetFileLogger().Log(Level.Info, $"Service is: {(running ? "Enabled" : "Disabled")}");
-                    }
+                    // throw error if service is not found
+                    var running = sc.Status == ServiceControllerStatus.Running;
+                    service = new TelemetryService(sc);
                 }
 
-                catch
+                catch (Exception ex)
                 {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find service: {serviceName}");
+                    error = ex;
                 }
-            }
 
-            return services;
+                yield return new NvidiaControllerResult<TelemetryService>(service, error) {Name = serviceName};
+            }
         }
 
         /// <summary>
-        ///     Returns known telemetry registry keys.
+        ///     Returns an enumerable collection of telemetry registry items.
         /// </summary>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        /// <returns></returns>
-        public static List<TelemetryRegistryKey> GetTelemetryRegistryEntires(bool logging)
+        public static IEnumerable<NvidiaControllerResult<TelemetryRegistryKey>> EnumerateTelemetryRegistryItems()
         {
-            var entries = new List<TelemetryRegistryKey>
+            var keys = new List<TelemetryRegistryKey>
             {
                 new TelemetryRegistryKey(Registry.CurrentUser, @"SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client",
                     new Dictionary<string, TelemetryRegistryKey.RegistryValuePair>
@@ -102,257 +80,225 @@ namespace DisableNvidiaTelemetry.Utilities
                     })
             };
 
-            foreach (var entry in entries)
-            {
-                try
-                {
-                    var key = entry.SubKey;
-
-                    if (logging)
-                    {
-                        var values = entry.GetValues();
-
-                        var count = 0;
-
-                        if (values != null)
-                            foreach (var kv in values)
-                            {
-                                if (kv.Value != null)
-                                    count++;
-                            }
-
-                        Logging.GetFileLogger().Log(Level.Info, $"Found registry key: {key}");
-                        Logging.GetFileLogger().Log(Level.Info, $"Found {count}/{values.Values.Count} expected value(s)");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to find registry key: {entry.Name}");
-                }
-            }
-
-            return entries;
-        }
-
-        /// <summary>
-        ///     Disables the provided telemetry services if they are currently running.
-        /// </summary>
-        /// <param name="services">The services to disable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        /// <param name="eventLog">Determines whether event logging should be performed.</param>
-        public static void DisableTelemetryServices(List<ServiceController> services, bool logging, bool eventLog)
-        {
-            foreach (var service in services)
-            {
-                try
-                {
-                    if (service.Status == ServiceControllerStatus.Running)
-                    {
-                        service.Stop();
-                        service.WaitForStatus(ServiceControllerStatus.Stopped);
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Disabled service: {service.DisplayName} ({service.ServiceName})");
-
-                        if (eventLog)
-                            Logging.GetEventLogger().Log(Level.Info, $"Disabled service: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable service: {service.DisplayName} ({service.ServiceName})");
-                }
-
-                try
-                {
-                    if (ServiceHelper.GetServiceStartMode(service) != ServiceStartMode.Disabled)
-                    {
-                        ServiceHelper.ChangeStartMode(service, ServiceStartMode.Disabled);
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
-
-                        if (eventLog)
-                            Logging.GetEventLogger().Log(Level.Info, $"Disabled service startup: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    Logging.GetFileLogger().Log(Level.Info, $"Failed to disable service startup: {service.DisplayName} ({service.ServiceName})");
-                }
-            }
-        }
-
-
-        /// <summary>
-        ///     Disables the provided tasks if they are currently enabled.
-        /// </summary>
-        /// <param name="tasks">The tasks to disable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        /// <param name="eventLog">Determines whether event logging should be performed.</param>
-        public static void DisableTelemetryTasks(List<Task> tasks, bool logging, bool eventLog)
-        {
-            foreach (var task in tasks)
-            {
-                try
-                {
-                    if (task.Enabled)
-                    {
-                        task.Enabled = false;
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Disabled task: {task.Path}");
-
-                        if (eventLog)
-                            Logging.GetEventLogger().Log(Level.Info, $"Disabled task: {task.Path}");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable task: {task.Path}");
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Disables the provideed registry keys if they are currently enabled.
-        /// </summary>
-        /// <param name="keys">The registry keys in which to disable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        /// <param name="eventLog">Determines whether event logging should be performed.</param>
-        public static void DisableTelemetryRegistryEntries(List<TelemetryRegistryKey> keys, bool logging, bool eventLog)
-        {
             foreach (var key in keys)
             {
-                try
-                {
-                    if (key.IsActive())
-                    {
-                        key.Enabled = false;
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Disabled key: {key.Name}");
-
-                        if (eventLog)
-                            Logging.GetEventLogger().Log(Level.Info, $"Disabled key: {key.Name}");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to disable registry key: {key.Name}");
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Enables the provided services.
-        /// </summary>
-        /// <param name="services">The services to enable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        public static void EnableTelemetryServices(List<ServiceController> services, bool logging)
-        {
-            foreach (var service in services)
-            {
-                try
-                {
-                    if (ServiceHelper.GetServiceStartMode(service) != ServiceStartMode.Automatic)
-                    {
-                        ServiceHelper.ChangeStartMode(service, ServiceStartMode.Automatic);
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Enabled automatic service startup: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to enable automatic service startup: {service.DisplayName} ({service.ServiceName})");
-                }
+                TelemetryRegistryKey telemetryRegistryKey = null;
+                Exception error = null;
 
                 try
                 {
-                    if (service.Status != ServiceControllerStatus.Running)
-                    {
-                        service.Start();
-                        service.WaitForStatus(ServiceControllerStatus.Running);
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Enabled service: {service.DisplayName} ({service.ServiceName})");
-                    }
-                }
-
-                catch
-                {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to start service: {service.DisplayName} ({service.ServiceName})");
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Enables the provided tasks.
-        /// </summary>
-        /// <param name="tasks">The tasks to enable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        public static void EnableTelemetryTasks(List<Task> tasks, bool logging)
-        {
-            foreach (var task in tasks)
-            {
-                if (task != null)
-                    try
-                    {
-                        if (!task.Enabled)
-                        {
-                            task.Enabled = true;
-
-                            if (logging)
-                                Logging.GetFileLogger().Log(Level.Info, $"Enabled task: {task.Path}");
-                        }
-                    }
-
-                    catch
-                    {
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Failed to enable task: {task.Path}");
-                    }
-            }
-        }
-
-        /// <summary>
-        ///     Enables the provides registry keys and their respective value(s).
-        /// </summary>
-        /// <param name="keys">The registry keys in which to enable.</param>
-        /// <param name="logging">Determines whether logging should be performed.</param>
-        public static void EnableTelemetryRegistryEntries(List<TelemetryRegistryKey> keys, bool logging)
-        {
-            foreach (var key in keys)
-            {
-                try
-                {
-                    if (!key.IsActive())
-                    {
-                        key.Enabled = true;
-
-                        if (logging)
-                            Logging.GetFileLogger().Log(Level.Info, $"Enabled key: {key.Name}");
-                    }
+                    // attempt to enter subkey
+                    var subKey = key.SubKey;
+                    telemetryRegistryKey = key;
                 }
 
                 catch (Exception ex)
                 {
-                    if (logging)
-                        Logging.GetFileLogger().Log(Level.Info, $"Failed to enable registry key: {key.Name}");
+                    error = ex;
                 }
+
+                yield return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, error) {Name = key.Name};
+            }
+        }
+
+        /// <summary>
+        ///     Disables automatic startup for the provided service.
+        /// </summary>
+        /// <param name="telemetryService">The service to disable automatic startup for.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryService> DisableTelemetryServiceStartup(TelemetryService telemetryService)
+        {
+            try
+            {
+                // set service startup to disabled
+                if (ServiceHelper.GetServiceStartMode(telemetryService.Service) != ServiceStartMode.Disabled)
+                    ServiceHelper.ChangeStartMode(telemetryService.Service, ServiceStartMode.Disabled);
+
+                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryService>(telemetryService, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Disables the provided service and waits for it to stop.
+        /// </summary>
+        /// <param name="telemetryService">The service to disable.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryService> DisableTelemetryService(TelemetryService telemetryService)
+        {
+            try
+            {
+                if (telemetryService.Service.Status == ServiceControllerStatus.Running)
+                {
+                    telemetryService.Service.Stop();
+                    telemetryService.Service.WaitForStatus(ServiceControllerStatus.Stopped);
+                }
+
+                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryService>(telemetryService, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Disables the provided task.
+        /// </summary>
+        /// <param name="telemetryTask">The task to disable.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryTask> DisableTelemetryTask(TelemetryTask telemetryTask)
+        {
+            try
+            {
+                if (telemetryTask.Task.Enabled)
+                    telemetryTask.Task.Enabled = false;
+
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Disables the provided registry keys and its respective value(s).
+        /// </summary>
+        /// <param name="telemetryRegistryKey">The registry key to disable.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryRegistryKey> DisableTelemetryRegistryItem(TelemetryRegistryKey telemetryRegistryKey)
+        {
+            try
+            {
+                if (telemetryRegistryKey.IsActive())
+                    telemetryRegistryKey.Enabled = false;
+
+                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Enables automatic startup for the provided service.
+        /// </summary>
+        /// <param name="telemetryService">The service to enable automatic startup for.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryService> EnableTelemetryServiceStartup(TelemetryService telemetryService)
+        {
+            try
+            {
+                // set service startup to automatic
+                if (ServiceHelper.GetServiceStartMode(telemetryService.Service) != ServiceStartMode.Automatic)
+                    ServiceHelper.ChangeStartMode(telemetryService.Service, ServiceStartMode.Automatic);
+
+                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryService>(telemetryService, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Enables the provided service and waits for it to start.
+        /// </summary>
+        /// <param name="telemetryService">The service to enable.</param>
+        /// <returns></returns>
+        public static NvidiaControllerResult<TelemetryService> EnableTelemetryService(TelemetryService telemetryService)
+        {
+            try
+            {
+                if (telemetryService.Service.Status != ServiceControllerStatus.Running)
+                {
+                    telemetryService.Service.Start();
+                    telemetryService.Service.WaitForStatus(ServiceControllerStatus.Running);
+                }
+
+                return new NvidiaControllerResult<TelemetryService>(telemetryService);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryService>(telemetryService, ex);
+            }
+        }
+
+        /// <summary>
+        ///     Enables the provided task.
+        /// </summary>
+        /// <param name="telemetryTask">The task to enable.</param>
+        public static NvidiaControllerResult<TelemetryTask> EnableTelemetryTask(TelemetryTask telemetryTask)
+        {
+            try
+            {
+                if (telemetryTask.Task != null && !telemetryTask.Task.Enabled)
+                    telemetryTask.Task.Enabled = true;
+
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask, ex);
+            }
+        }
+
+
+        /// <summary>
+        ///     Enables the provided registry key and its respective value(s).
+        /// </summary>
+        /// <param name="key">The registry key in which to enable.</param>
+        public static NvidiaControllerResult<TelemetryRegistryKey> EnableTelemetryRegistryItem(TelemetryRegistryKey key)
+        {
+            try
+            {
+                if (!key.IsActive())
+                    key.Enabled = true;
+
+                return new NvidiaControllerResult<TelemetryRegistryKey>(key);
+            }
+
+            catch (Exception ex)
+            {
+                return new NvidiaControllerResult<TelemetryRegistryKey>(key, ex);
+            }
+        }
+
+        public class NvidiaControllerResult<T> where T : ITelemetry
+        {
+            public NvidiaControllerResult(T item, Exception error = null)
+            {
+                Item = item;
+                Error = error;
+            }
+
+            public Exception Error { get; }
+
+            public T Item { get; }
+
+            public string Name { get; set; }
+        }
+
+        public class TaskNotFoundException : Exception
+        {
+            public TaskNotFoundException()
+            {
+            }
+
+            public TaskNotFoundException(string message) : base(message)
+            {
             }
         }
     }

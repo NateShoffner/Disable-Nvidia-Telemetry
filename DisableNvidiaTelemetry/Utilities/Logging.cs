@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Properties;
 using log4net;
 using log4net.Config;
 using log4net.Core;
@@ -55,7 +56,7 @@ namespace DisableNvidiaTelemetry.Utilities
 
         private static string _logDirectory;
         private static bool _enabled;
-        private static bool _configured = false;
+        private static bool _configured;
 
         public static bool Enabled
         {
@@ -69,7 +70,7 @@ namespace DisableNvidiaTelemetry.Utilities
                         if (!Directory.Exists(_logDirectory))
                             Directory.CreateDirectory(_logDirectory);
 
-                        GlobalContext.Properties["HeaderInfo"] = $"Disable Nvidia Telemetry v{Application.ProductVersion}";
+                        GlobalContext.Properties["HeaderInfo"] = $"{Resources.Disable_Nvidia_Telemetry} v{Application.ProductVersion}";
                         GlobalContext.Properties["LogDirectory"] = _logDirectory;
 
                         XmlConfigurator.Configure();

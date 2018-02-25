@@ -34,7 +34,7 @@ namespace DisableNvidiaTelemetry
             Settings.Default.FileLogging = false; 
             Settings.Default.Save();
 #else
-            var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Disable Nvidia Telemetry");
+            var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Resources.Disable_Nvidia_Telemetry);
             if (!Directory.Exists(appData))
                 Directory.CreateDirectory(appData);
 
@@ -79,7 +79,7 @@ namespace DisableNvidiaTelemetry
             }
 
             if (!IsAdministrator())
-                MessageBox.Show("Please run the program as administrator to continue.", "Administrator Required", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Resources.Please_run_the_program_as_administrator_to_continue, Resources.AdministratorRequired, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if (!silentMode)
                 Application.Run(new FormMain());
@@ -93,20 +93,53 @@ namespace DisableNvidiaTelemetry
 
         private static void SilentlyDisableTelemetry()
         {
-            Logging.GetFileLogger().Log(Level.Info, "Silently disabling telemetry services.");
+            Logging.GetFileLogger().Log(Level.Info, Resources.Silently_disabling_telemetry_services);
 
-            var services = NvidiaController.GetTelemetryServices(true);
-            NvidiaController.DisableTelemetryServices(services.Select(s => s.Service).ToList(), true, true);
+            foreach (var serviceResult in NvidiaController.EnumerateTelemetryServices().ToList())
+            {
+                if (serviceResult.Error == null)
+                {
+                    var startupResult = NvidiaController.DisableTelemetryServiceStartup(serviceResult.Item);
+                    Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetEventLogger().Log(Level.Info, startupResult.Error != null ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
 
-            Logging.GetFileLogger().Log(Level.Info, "Silently disabling telemetry tasks.");
+                    var result = NvidiaController.DisableTelemetryService(serviceResult.Item);
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                }
+            }
 
-            var tasks = NvidiaController.GetTelemetryTasks(true);
-            NvidiaController.DisableTelemetryTasks(tasks.Select(t => t.Task).ToList(), true, true);
+            Logging.GetFileLogger().Log(Level.Info, Resources.Silently_disabling_telemetry_tasks);
 
-            Logging.GetFileLogger().Log(Level.Info, "Silently disabling telemetry registery.");
+            foreach (var taskResult in NvidiaController.EnumerateTelemetryTasks().ToList())
+            {
+                if (taskResult.Error == null)
+                {
+                    var result = NvidiaController.DisableTelemetryTask(taskResult.Item);
 
-            var keys = NvidiaController.GetTelemetryRegistryEntires(true);
-            NvidiaController.DisableTelemetryRegistryEntries(keys, true, true);
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}" : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}" : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
+                }
+
+                else
+                {
+                    Logging.GetFileLogger().Log(Level.Error, taskResult.Error);
+                    Logging.GetEventLogger().Log(Level.Error, taskResult.Error);
+                }
+            }
+
+            Logging.GetFileLogger().Log(Level.Info, Resources.Silently_disabling_telemetry_registry_items);
+
+            foreach (var registryResult in NvidiaController.EnumerateTelemetryRegistryItems().ToList())
+            {
+                if (registryResult.Error == null)
+                {
+                    var result = NvidiaController.DisableTelemetryRegistryItem(registryResult.Item);
+
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}" : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}" : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
+                }
+            }
         }
 
         /// <summary>

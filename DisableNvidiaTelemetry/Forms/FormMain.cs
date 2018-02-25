@@ -13,7 +13,6 @@ using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
 using ExtendedVersion;
 using log4net.Core;
-using Microsoft.Win32.TaskScheduler;
 
 #endregion
 
@@ -27,20 +26,20 @@ namespace DisableNvidiaTelemetry.Forms
 
         private bool _ignoreTaskSetting;
         private List<TelemetryRegistryKey> _telemetryKeys = new List<TelemetryRegistryKey>();
-        private List<ServiceController> _telemetryServices = new List<ServiceController>();
-        private List<Task> _telemetryTasks = new List<Task>();
+        private List<TelemetryService> _telemetryServices = new List<TelemetryService>();
+        private List<TelemetryTask> _telemetryTasks = new List<TelemetryTask>();
 
         public FormMain()
         {
             InitializeComponent();
 
-            _servicesControl = new TelemetryControl("Telemetry Services") {Dock = DockStyle.Top};
+            _servicesControl = new TelemetryControl(Resources.Telemetry_serivces) {Dock = DockStyle.Top};
             _servicesControl.CheckStateChanged += telemControl_CheckStateChanged;
 
-            _tasksControl = new TelemetryControl("Telemetry Tasks") {Dock = DockStyle.Top};
+            _tasksControl = new TelemetryControl(Resources.Telemetry_tasks) {Dock = DockStyle.Top};
             _tasksControl.CheckStateChanged += telemControl_CheckStateChanged;
 
-            _registryControl = new TelemetryControl("Telemetry Registry Entries") {Dock = DockStyle.Top};
+            _registryControl = new TelemetryControl(Resources.Telemetry_registry_items) {Dock = DockStyle.Top};
             _registryControl.CheckStateChanged += telemControl_CheckStateChanged;
 
             tabPage1.Controls.Add(_registryControl);
@@ -65,8 +64,10 @@ namespace DisableNvidiaTelemetry.Forms
             }
 
             var version = GetVersion();
-            lblVersion.Text = $"{"Version"} {version.ToString(ExtendedVersionFormatFlags.BuildString | ExtendedVersionFormatFlags.CommitShort | ExtendedVersionFormatFlags.Truncated)}";
-            lblVersion.LinkArea = version.Commit != null ? new LinkArea(lblVersion.Text.Length - version.Commit.ToShorthandString().Length, version.Commit.ToShorthandString().Length) : new LinkArea(0, 0);
+            lblVersion.Text = $"{Resources.Version} {version.ToString(ExtendedVersionFormatFlags.BuildString | ExtendedVersionFormatFlags.CommitShort | ExtendedVersionFormatFlags.Truncated)}";
+            lblVersion.LinkArea = version.Commit != null
+                ? new LinkArea(lblVersion.Text.Length - version.Commit.ToShorthandString().Length, version.Commit.ToShorthandString().Length)
+                : new LinkArea(0, 0);
         }
 
         private void UpdaterUtilities_UpdateResponse(object sender, UpdaterUtilities.UpdateResponseEventArgs e)
@@ -79,7 +80,7 @@ namespace DisableNvidiaTelemetry.Forms
 
                 if (e.LatestVersion > current)
                 {
-                    var result = MessageBox.Show("A new update is available, would you like to download it?", "Update Available", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    var result = MessageBox.Show(Resources.Update_available_message, Resources.Update_available, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                     if (result == DialogResult.Yes)
                         Process.Start(e.Url.ToString());
@@ -87,7 +88,7 @@ namespace DisableNvidiaTelemetry.Forms
 
                 else if (showDialog)
                 {
-                    MessageBox.Show("There are no updates available.", "No Updates", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Resources.No_updates_available_message, Resources.No_Upades, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
 
@@ -96,7 +97,7 @@ namespace DisableNvidiaTelemetry.Forms
                 Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
 
                 if (showDialog)
-                    MessageBox.Show("There was an error while checking for updates.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Resources.Update_error_messsage, Resources.Update_error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             btnUpdatecheck.Enabled = true;
@@ -119,9 +120,9 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            RefreshTelemetryServices(true);
-            RefreshTelemetryTasks(true);
-            RefreshTelemetryRegistry(true);
+            RefreshTelemetryServices();
+            RefreshTelemetryTasks();
+            RefreshTelemetryRegistry();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -129,60 +130,147 @@ namespace DisableNvidiaTelemetry.Forms
             RefreshControls();
             textBox1.Clear();
 
-            RefreshTelemetryServices(true);
-            RefreshTelemetryTasks(true);
-            RefreshTelemetryRegistry(true);
+            RefreshTelemetryServices();
+            RefreshTelemetryTasks();
+            RefreshTelemetryRegistry();
         }
 
         private void telemControl_CheckStateChanged(object sender, EventArgs e)
         {
-            btnApply.Enabled = _tasksControl.SelectedItems.Count > 0 || _servicesControl.SelectedItems.Count > 0;
+            btnApply.Enabled = _tasksControl.SelectedItems.Count > 0 || _servicesControl.SelectedItems.Count > 0 || _registryControl.SelectedItems.Count > 0;
         }
 
         private void btnApply_Click(object sender, EventArgs e)
         {
             var selectedServices = _servicesControl.SelectedItems;
+            var disabledServices = selectedServices.Where(t => !t.Enabled).Select(t => (TelemetryService) t.Telemetry);
+            var enabledServices = selectedServices.Where(t => t.Enabled).Select(t => (TelemetryService) t.Telemetry);
 
-            var disabledServices = (from t in selectedServices where !t.Enabled select (TelemetryService) t.Telemetry).Select(s => s.Service).ToList();
-            var enabledServices = (from t in selectedServices where t.Enabled select (TelemetryService) t.Telemetry).Select(s => s.Service).ToList();
+            foreach (var item in disabledServices)
+            {
+                var startupResult = NvidiaController.DisableTelemetryServiceStartup(item);
 
-            NvidiaController.DisableTelemetryServices(disabledServices, true, true);
-            NvidiaController.EnableTelemetryServices(enabledServices, true);
+                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
+                    ? $"{Resources.Disable_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Automatic_service_startup_disabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+
+                var result = NvidiaController.DisableTelemetryService(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_stop_service}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Service_stopped}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
+
+            foreach (var item in enabledServices)
+            {
+                var startupResult = NvidiaController.DisableTelemetryServiceStartup(item);
+
+                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
+                    ? $"{Resources.Automatic_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Automatic_service_startup_enabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+
+                var result = NvidiaController.EnableTelemetryService(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_start_service}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Service_started}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
 
             var selectedTasks = _tasksControl.SelectedItems;
+            var disabledTasks = selectedTasks.Where(t => !t.Enabled).Select(t => (TelemetryTask) t.Telemetry);
+            var enabledTasks = selectedTasks.Where(t => t.Enabled).Select(t => (TelemetryTask) t.Telemetry);
 
-            var disabledTasks = (from t in selectedTasks where !t.Enabled select (TelemetryTask) t.Telemetry).Select(s => s.Task).ToList();
-            var enabledTasks = (from t in selectedTasks where t.Enabled select (TelemetryTask) t.Telemetry).Select(s => s.Task).ToList();
+            foreach (var item in disabledTasks)
+            {
+                var result = NvidiaController.DisableTelemetryTask(item);
 
-            NvidiaController.DisableTelemetryTasks(disabledTasks, true, true);
-            NvidiaController.EnableTelemetryTasks(enabledTasks, true);
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}"
+                    : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
+            }
+
+            foreach (var item in enabledTasks)
+            {
+                var result = NvidiaController.EnableTelemetryTask(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
+                    : $"{Resources.Task_enabled}: {result.Item.Task.Path}");
+            }
 
             var selectedKeys = _registryControl.SelectedItems;
+            var disabledKeys = selectedKeys.Where(t => !t.Enabled).Select(t => (TelemetryRegistryKey) t.Telemetry);
+            var enabledKeys = selectedKeys.Where(t => t.Enabled).Select(t => (TelemetryRegistryKey) t.Telemetry);
 
-            var disabledKeys = (from t in selectedKeys where !t.Enabled select (TelemetryRegistryKey) t.Telemetry).ToList();
-            var enabledKeys = (from t in selectedKeys where t.Enabled select (TelemetryRegistryKey) t.Telemetry).ToList();
+            foreach (var item in disabledKeys)
+            {
+                var result = NvidiaController.DisableTelemetryRegistryItem(item);
 
-            NvidiaController.DisableTelemetryRegistryEntries(disabledKeys, true, true);
-            NvidiaController.EnableTelemetryRegistryEntries(enabledKeys, true);
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
+                    : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
+            }
+
+            foreach (var item in enabledKeys)
+            {
+                var result = NvidiaController.EnableTelemetryRegistryItem(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
+                    : $"{Resources.Registry_item_enabled}: {result.Item.Name}");
+            }
 
             RefreshControls();
 
-            RefreshTelemetryServices(false);
-            RefreshTelemetryTasks(false);
-            RefreshTelemetryRegistry(false);
+            RefreshTelemetryServices();
+            RefreshTelemetryTasks();
+            RefreshTelemetryRegistry();
         }
 
         private void btnDefaults_Click(object sender, EventArgs e)
         {
             RefreshControls();
 
-            NvidiaController.EnableTelemetryServices(_telemetryServices, true);
-            NvidiaController.EnableTelemetryTasks(_telemetryTasks, true);
-            NvidiaController.EnableTelemetryRegistryEntries(_telemetryKeys, true);
+            foreach (var item in _telemetryServices)
+            {
+                var result = NvidiaController.EnableTelemetryServiceStartup(item);
 
-            RefreshTelemetryServices(false);
-            RefreshTelemetryTasks(false);
-            RefreshTelemetryRegistry(false);
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Automatic_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Automatic_service_startup_enabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
+
+
+            foreach (var item in _telemetryServices)
+            {
+                var result = NvidiaController.EnableTelemetryService(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_start_service}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Resources.Service_started}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
+
+            foreach (var item in _telemetryTasks)
+            {
+                var result = NvidiaController.EnableTelemetryTask(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
+                    : $"{Resources.Task_enabled}: {result.Item.Task.Path}");
+            }
+
+            foreach (var item in _telemetryKeys)
+            {
+                var result = NvidiaController.EnableTelemetryRegistryItem(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
+                    : $"{Resources.Registry_item_enabled}: {result.Item.Name}");
+            }
+
+            RefreshTelemetryServices();
+            RefreshTelemetryTasks();
+            RefreshTelemetryRegistry();
 
             btnApply.Enabled = false;
         }
@@ -199,75 +287,133 @@ namespace DisableNvidiaTelemetry.Forms
             _registryControl.Reset();
         }
 
-        private void RefreshTelemetryTasks(bool logging)
+        private void RefreshTelemetryTasks()
         {
-            var tasks = NvidiaController.GetTelemetryTasks(logging);
+            var tasks = new List<TelemetryTask>();
 
-            foreach (var task in tasks)
+            foreach (var result in NvidiaController.EnumerateTelemetryTasks())
             {
-                _tasksControl.AddTelemetryItem(task, $"Task: {task.Task.Path}");
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_find_task}: {result.Name}"
+                    : $"{Resources.Found_task}: {result.Item.Task.Name}");
+
+                if (result.Error == null)
+                {
+                    var task = result.Item;
+
+                    Logging.GetFileLogger().Log(Level.Info, task.Task.Enabled
+                        ? $"{Resources.Task_is}: {Resources.Enabled}"
+                        : $"{Resources.Task_is}: {Resources.Disabled}");
+
+                    _tasksControl.AddTelemetryItem(task, $"{Resources.Task}: {task.Task.Path}");
+                    tasks.Add(task);
+                }
             }
 
             _tasksControl.Enabled = _tasksControl.TelemetryItems.Count != 0;
-            _telemetryTasks = tasks.Select(t => t.Task).ToList();
+            _telemetryTasks = tasks;
         }
 
-        private void RefreshTelemetryServices(bool logging)
+        private void RefreshTelemetryServices()
         {
-            var services = NvidiaController.GetTelemetryServices(logging);
+            var services = new List<TelemetryService>();
 
-            foreach (var service in services)
+            foreach (var result in NvidiaController.EnumerateTelemetryServices())
             {
-                _servicesControl.AddTelemetryItem(service, $"Service: {service.Service.DisplayName}");
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_find_service}: {result.Name}"
+                    : $"{Resources.Found_service}: {result.Item.Service.DisplayName} ({result.Item.Service.ServiceName})");
+
+                if (result.Error == null)
+                {
+                    var service = result.Item;
+                    var running = service.Service.Status == ServiceControllerStatus.Running;
+                    var startupMode = ServiceHelper.GetServiceStartMode(service.Service);
+
+                    var startupModeString = "";
+
+                    switch (startupMode)
+                    {
+                        case ServiceStartMode.Manual:
+                            startupModeString = Resources.Manual;
+                            break;
+                        case ServiceStartMode.Automatic:
+                            startupModeString = Resources.Automatic;
+                            break;
+                        case ServiceStartMode.Disabled:
+                            startupModeString = Resources.Disabled;
+                            break;
+                    }
+
+                    Logging.GetFileLogger().Log(Level.Info, running
+                        ? $"{Resources.Service_is}: {Resources.Enabled}"
+                        : $"{Resources.Service_is}: {Resources.Disabled}");
+                    Logging.GetFileLogger().Log(Level.Info, $"{Resources.Service_startup_mode}: {startupModeString}");
+
+                    _servicesControl.AddTelemetryItem(service, $"{Resources.Service}: {service.Service.DisplayName}");
+                    services.Add(service);
+                }
             }
 
             _servicesControl.Enabled = _servicesControl.TelemetryItems.Count != 0;
-            _telemetryServices = services.Select(s => s.Service).ToList();
+            _telemetryServices = services;
         }
 
-        private void RefreshTelemetryRegistry(bool logging)
+        private void RefreshTelemetryRegistry()
         {
-            var entries = NvidiaController.GetTelemetryRegistryEntires(logging);
+            var keys = new List<TelemetryRegistryKey>();
 
-            foreach (var entry in entries)
+            foreach (var result in NvidiaController.EnumerateTelemetryRegistryItems())
             {
-                var sb = new StringBuilder();
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Resources.Failed_to_find_registry_item}: {result.Name}"
+                    : $"{Resources.Found_registry_item}: {result.Item.Name}");
 
-                sb.AppendLine(entry.Name);
-
-                foreach (var vd in entry.ValueData)
+                if (result.Error == null)
                 {
-                    sb.Append("@=\"");
-                    sb.Append(vd.Key);
-                    sb.Append("\"");
-                    sb.AppendLine();
-                }
+                    Logging.GetFileLogger().Log(Level.Info, $"{Resources.Registry_item_is}: {Resources.Enabled}");
 
-                _registryControl.AddTelemetryItem(entry, sb.ToString());
+                    var key = result.Item;
+
+                    var sb = new StringBuilder();
+
+                    sb.AppendLine(key.Name);
+
+                    foreach (var vd in key.ValueData)
+                    {
+                        sb.Append("@=\"");
+                        sb.Append(vd.Key);
+                        sb.Append("\"");
+                        sb.AppendLine();
+                    }
+
+                    _registryControl.AddTelemetryItem(key, sb.ToString());
+                    keys.Add(key);
+                }
             }
 
             _registryControl.Enabled = _registryControl.TelemetryItems.Count != 0;
-            _telemetryKeys = entries.ToList();
+            _telemetryKeys = keys;
         }
 
         private void lblCopyright_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://nateshoffner.com");
+            Process.Start(Resources.Homepage);
         }
 
         private void pbGithub_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/NateShoffner/Disable-Nvidia-Telemetry");
+            Process.Start(Resources.GithubUrl);
         }
 
         private void lblGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/NateShoffner/Disable-Nvidia-Telemetry");
+            Process.Start(Resources.GithubUrl);
         }
 
         private void pbDonate_Click(object sender, EventArgs e)
         {
-            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=nate.shoffner@gmail.com&lc=US&item_name=Disable%20Nvidia%20Telemetry&currency_code=USD&bn=PP%2dDonationsBF");
+            Process.Start(Resources.PaypalUrl);
         }
 
         private void chkBackroundTask_CheckedChanged(object sender, EventArgs e)
@@ -303,7 +449,7 @@ namespace DisableNvidiaTelemetry.Forms
 
         private void lblVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start($"https://github.com/NateShoffner/Disable-Nvidia-Telemetry/commit/{GetVersion().Commit}");
+            Process.Start($"{Resources.GithubUrl}/commit/{GetVersion().Commit}");
         }
 
         private static ExtendedVersion.ExtendedVersion GetVersion()
@@ -311,7 +457,9 @@ namespace DisableNvidiaTelemetry.Forms
             var attribute =
                 (AssemblyInformationalVersionAttribute) Assembly.GetExecutingAssembly()
                     .GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false).FirstOrDefault();
-            var version = attribute != null ? new ExtendedVersion.ExtendedVersion(attribute.InformationalVersion) : new ExtendedVersion.ExtendedVersion(Application.ProductVersion);
+            var version = attribute != null
+                ? new ExtendedVersion.ExtendedVersion(attribute.InformationalVersion)
+                : new ExtendedVersion.ExtendedVersion(Application.ProductVersion);
 
             return version;
         }

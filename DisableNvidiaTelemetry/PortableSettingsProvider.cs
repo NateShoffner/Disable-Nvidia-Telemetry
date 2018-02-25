@@ -4,7 +4,6 @@ using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -144,7 +143,7 @@ namespace DisableNvidiaTelemetry
             // to our collection of return values.
             foreach (SettingsProperty sProp in settingsColl)
             {
-                var setVal = new SettingsPropertyValue(sProp) { IsDirty = false, SerializedValue = GetSetting(sProp) };
+                var setVal = new SettingsPropertyValue(sProp) {IsDirty = false, SerializedValue = GetSetting(sProp)};
                 retValues.Add(setVal);
             }
             return retValues;
@@ -197,7 +196,7 @@ namespace DisableNvidiaTelemetry
                         var settingType = setProp.PropertyType.ToString();
                         var xmlData = setProp.DefaultValue.ToString();
                         var xs = new XmlSerializer(typeof(string[]));
-                        var data = (string[])xs.Deserialize(new XmlTextReader(xmlData, XmlNodeType.Element, null));
+                        var data = (string[]) xs.Deserialize(new XmlTextReader(xmlData, XmlNodeType.Element, null));
 
                         switch (settingType)
                         {

@@ -30,16 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabTelemetry = new System.Windows.Forms.TabPage();
+            this.tabLog = new System.Windows.Forms.TabPage();
+            this.txtEventLog = new System.Windows.Forms.TextBox();
+            this.tabSettings = new System.Windows.Forms.TabPage();
             this.chkFileLogging = new System.Windows.Forms.CheckBox();
             this.cbTaskTrigger = new System.Windows.Forms.ComboBox();
             this.btnUpdatecheck = new System.Windows.Forms.Button();
             this.chkUpdates = new System.Windows.Forms.CheckBox();
             this.chkBackgroundTask = new System.Windows.Forms.CheckBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabAbout = new System.Windows.Forms.TabPage();
             this.lblVersion = new System.Windows.Forms.LinkLabel();
             this.pbDonate = new System.Windows.Forms.PictureBox();
             this.lblGithub = new System.Windows.Forms.LinkLabel();
@@ -56,9 +56,9 @@
             this.btnApply = new System.Windows.Forms.Button();
             this.btnDefaults = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabLog.SuspendLayout();
+            this.tabSettings.SuspendLayout();
+            this.tabAbout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).BeginInit();
             this.tabControl2.SuspendLayout();
@@ -72,10 +72,10 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabTelemetry);
+            this.tabControl1.Controls.Add(this.tabLog);
+            this.tabControl1.Controls.Add(this.tabSettings);
+            this.tabControl1.Controls.Add(this.tabAbout);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -83,55 +83,55 @@
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // tabPage1
+            // tabTelemetry
             // 
-            this.tabPage1.AutoScroll = true;
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(553, 260);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Telemetry";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabTelemetry.AutoScroll = true;
+            this.tabTelemetry.Location = new System.Drawing.Point(4, 22);
+            this.tabTelemetry.Name = "tabTelemetry";
+            this.tabTelemetry.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTelemetry.Size = new System.Drawing.Size(553, 295);
+            this.tabTelemetry.TabIndex = 0;
+            this.tabTelemetry.Text = "Telemetry";
+            this.tabTelemetry.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tabLog
             // 
-            this.tabPage2.Controls.Add(this.textBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(553, 260);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Event Log";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabLog.Controls.Add(this.txtEventLog);
+            this.tabLog.Location = new System.Drawing.Point(4, 22);
+            this.tabLog.Name = "tabLog";
+            this.tabLog.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLog.Size = new System.Drawing.Size(553, 295);
+            this.tabLog.TabIndex = 1;
+            this.tabLog.Text = "Event Log";
+            this.tabLog.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtEventLog
             // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(3, 3);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(547, 254);
-            this.textBox1.TabIndex = 0;
+            this.txtEventLog.BackColor = System.Drawing.SystemColors.Window;
+            this.txtEventLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtEventLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtEventLog.Location = new System.Drawing.Point(3, 3);
+            this.txtEventLog.Multiline = true;
+            this.txtEventLog.Name = "txtEventLog";
+            this.txtEventLog.ReadOnly = true;
+            this.txtEventLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtEventLog.Size = new System.Drawing.Size(547, 289);
+            this.txtEventLog.TabIndex = 0;
             // 
-            // tabPage6
+            // tabSettings
             // 
-            this.tabPage6.Controls.Add(this.chkFileLogging);
-            this.tabPage6.Controls.Add(this.cbTaskTrigger);
-            this.tabPage6.Controls.Add(this.btnUpdatecheck);
-            this.tabPage6.Controls.Add(this.chkUpdates);
-            this.tabPage6.Controls.Add(this.chkBackgroundTask);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(553, 260);
-            this.tabPage6.TabIndex = 3;
-            this.tabPage6.Text = "Settings";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.tabSettings.Controls.Add(this.chkFileLogging);
+            this.tabSettings.Controls.Add(this.cbTaskTrigger);
+            this.tabSettings.Controls.Add(this.btnUpdatecheck);
+            this.tabSettings.Controls.Add(this.chkUpdates);
+            this.tabSettings.Controls.Add(this.chkBackgroundTask);
+            this.tabSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabSettings.Name = "tabSettings";
+            this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSettings.Size = new System.Drawing.Size(553, 295);
+            this.tabSettings.TabIndex = 3;
+            this.tabSettings.Text = "Settings";
+            this.tabSettings.UseVisualStyleBackColor = true;
             // 
             // chkFileLogging
             // 
@@ -190,23 +190,23 @@
             this.chkBackgroundTask.UseVisualStyleBackColor = true;
             this.chkBackgroundTask.CheckedChanged += new System.EventHandler(this.chkBackroundTask_CheckedChanged);
             // 
-            // tabPage3
+            // tabAbout
             // 
-            this.tabPage3.Controls.Add(this.lblVersion);
-            this.tabPage3.Controls.Add(this.pbDonate);
-            this.tabPage3.Controls.Add(this.lblGithub);
-            this.tabPage3.Controls.Add(this.pbGithub);
-            this.tabPage3.Controls.Add(this.lblCopyright);
-            this.tabPage3.Controls.Add(this.tabControl2);
-            this.tabPage3.Controls.Add(this.pictureBox1);
-            this.tabPage3.Controls.Add(this.lblName);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(553, 295);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "About";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabAbout.Controls.Add(this.lblVersion);
+            this.tabAbout.Controls.Add(this.pbDonate);
+            this.tabAbout.Controls.Add(this.lblGithub);
+            this.tabAbout.Controls.Add(this.pbGithub);
+            this.tabAbout.Controls.Add(this.lblCopyright);
+            this.tabAbout.Controls.Add(this.tabControl2);
+            this.tabAbout.Controls.Add(this.pictureBox1);
+            this.tabAbout.Controls.Add(this.lblName);
+            this.tabAbout.Location = new System.Drawing.Point(4, 22);
+            this.tabAbout.Name = "tabAbout";
+            this.tabAbout.Padding = new System.Windows.Forms.Padding(3);
+            this.tabAbout.Size = new System.Drawing.Size(553, 295);
+            this.tabAbout.TabIndex = 2;
+            this.tabAbout.Text = "About";
+            this.tabAbout.UseVisualStyleBackColor = true;
             // 
             // lblVersion
             // 
@@ -329,7 +329,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(533, 108);
+            this.tabPage5.Size = new System.Drawing.Size(533, 187);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Credits";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -344,7 +344,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(527, 102);
+            this.textBox2.Size = new System.Drawing.Size(527, 181);
             this.textBox2.TabIndex = 63;
             this.textBox2.Text = "Icon made by freepik from www.flaticon.com ";
             // 
@@ -423,12 +423,12 @@
             this.Text = "Disable Nvidia Telemetry";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabLog.ResumeLayout(false);
+            this.tabLog.PerformLayout();
+            this.tabSettings.ResumeLayout(false);
+            this.tabSettings.PerformLayout();
+            this.tabAbout.ResumeLayout(false);
+            this.tabAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbDonate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbGithub)).EndInit();
             this.tabControl2.ResumeLayout(false);
@@ -444,13 +444,13 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TabPage tabTelemetry;
+        private System.Windows.Forms.TabPage tabLog;
+        private System.Windows.Forms.TextBox txtEventLog;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnDefaults;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabAbout;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TextBox txtLicense;
@@ -461,7 +461,7 @@
         private System.Windows.Forms.PictureBox pbGithub;
         private System.Windows.Forms.LinkLabel lblGithub;
         private System.Windows.Forms.PictureBox pbDonate;
-        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabSettings;
         private System.Windows.Forms.CheckBox chkBackgroundTask;
         private System.Windows.Forms.CheckBox chkUpdates;
         private System.Windows.Forms.Button btnUpdatecheck;

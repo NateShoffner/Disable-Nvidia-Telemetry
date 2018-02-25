@@ -42,9 +42,9 @@ namespace DisableNvidiaTelemetry.Forms
             _registryControl = new TelemetryControl(Resources.Telemetry_registry_items) {Dock = DockStyle.Top};
             _registryControl.CheckStateChanged += telemControl_CheckStateChanged;
 
-            tabPage1.Controls.Add(_registryControl);
-            tabPage1.Controls.Add(_tasksControl);
-            tabPage1.Controls.Add(_servicesControl);
+            tabTelemetry.Controls.Add(_registryControl);
+            tabTelemetry.Controls.Add(_tasksControl);
+            tabTelemetry.Controls.Add(_servicesControl);
 
             txtLicense.Text = Resources.ApplicationLicense;
 
@@ -115,24 +115,28 @@ namespace DisableNvidiaTelemetry.Forms
         private void OnLogEvent(object sender, LogExtensions.LogEventArgs e)
         {
             if (e.Log.Equals(Logging.GetFileLogger()))
-                textBox1.AppendText($"[{DateTime.Now:T}] {e.Message}{Environment.NewLine}");
+            {
+                txtEventLog.AppendText($"[{DateTime.Now:T}] {e.Message}{Environment.NewLine}");
+                txtEventLog.SelectionStart = txtEventLog.TextLength;
+                txtEventLog.ScrollToCaret();
+            }
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            RefreshTelemetryServices();
-            RefreshTelemetryTasks();
-            RefreshTelemetryRegistry();
+            RefreshTelemetryServices(true);
+            RefreshTelemetryTasks(true);
+            RefreshTelemetryRegistry(true);
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             RefreshControls();
-            textBox1.Clear();
+            txtEventLog.Clear();
 
-            RefreshTelemetryServices();
-            RefreshTelemetryTasks();
-            RefreshTelemetryRegistry();
+            RefreshTelemetryServices(true);
+            RefreshTelemetryTasks(true);
+            RefreshTelemetryRegistry(true);
         }
 
         private void telemControl_CheckStateChanged(object sender, EventArgs e)
@@ -222,9 +226,9 @@ namespace DisableNvidiaTelemetry.Forms
 
             RefreshControls();
 
-            RefreshTelemetryServices();
-            RefreshTelemetryTasks();
-            RefreshTelemetryRegistry();
+            RefreshTelemetryServices(false);
+            RefreshTelemetryTasks(false);
+            RefreshTelemetryRegistry(false);
         }
 
         private void btnDefaults_Click(object sender, EventArgs e)
@@ -239,7 +243,6 @@ namespace DisableNvidiaTelemetry.Forms
                     ? $"{Resources.Automatic_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
                     : $"{Resources.Automatic_service_startup_enabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
             }
-
 
             foreach (var item in _telemetryServices)
             {
@@ -268,16 +271,22 @@ namespace DisableNvidiaTelemetry.Forms
                     : $"{Resources.Registry_item_enabled}: {result.Item.Name}");
             }
 
-            RefreshTelemetryServices();
-            RefreshTelemetryTasks();
-            RefreshTelemetryRegistry();
+            RefreshTelemetryServices(false);
+            RefreshTelemetryTasks(false);
+            RefreshTelemetryRegistry(false);
 
             btnApply.Enabled = false;
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnRefresh.Visible = btnDefaults.Visible = btnApply.Visible = tabControl1.SelectedTab == tabPage1;
+            btnRefresh.Visible = btnDefaults.Visible = btnApply.Visible = tabControl1.SelectedTab == tabTelemetry;
+
+            if (tabControl1.SelectedTab == tabLog)
+            {
+                txtEventLog.SelectionStart = txtEventLog.TextLength;
+                txtEventLog.ScrollToCaret();
+            }
         }
 
         private void RefreshControls()
@@ -287,23 +296,29 @@ namespace DisableNvidiaTelemetry.Forms
             _registryControl.Reset();
         }
 
-        private void RefreshTelemetryTasks()
+        private void RefreshTelemetryTasks(bool logging)
         {
             var tasks = new List<TelemetryTask>();
 
             foreach (var result in NvidiaController.EnumerateTelemetryTasks())
             {
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                if (logging)
+                {
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
                     ? $"{Resources.Failed_to_find_task}: {result.Name}"
                     : $"{Resources.Found_task}: {result.Item.Task.Name}");
+                }
 
                 if (result.Error == null)
                 {
                     var task = result.Item;
 
-                    Logging.GetFileLogger().Log(Level.Info, task.Task.Enabled
+                    if (logging)
+                    {
+                        Logging.GetFileLogger().Log(Level.Info, task.Task.Enabled
                         ? $"{Resources.Task_is}: {Resources.Enabled}"
                         : $"{Resources.Task_is}: {Resources.Disabled}");
+                    }
 
                     _tasksControl.AddTelemetryItem(task, $"{Resources.Task}: {task.Task.Path}");
                     tasks.Add(task);
@@ -314,15 +329,18 @@ namespace DisableNvidiaTelemetry.Forms
             _telemetryTasks = tasks;
         }
 
-        private void RefreshTelemetryServices()
+        private void RefreshTelemetryServices(bool logging)
         {
             var services = new List<TelemetryService>();
 
             foreach (var result in NvidiaController.EnumerateTelemetryServices())
             {
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Resources.Failed_to_find_service}: {result.Name}"
-                    : $"{Resources.Found_service}: {result.Item.Service.DisplayName} ({result.Item.Service.ServiceName})");
+                if (logging)
+                {
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_find_service}: {result.Name}"
+                        : $"{Resources.Found_service}: {result.Item.Service.DisplayName} ({result.Item.Service.ServiceName})");
+                }
 
                 if (result.Error == null)
                 {
@@ -345,10 +363,14 @@ namespace DisableNvidiaTelemetry.Forms
                             break;
                     }
 
-                    Logging.GetFileLogger().Log(Level.Info, running
-                        ? $"{Resources.Service_is}: {Resources.Enabled}"
-                        : $"{Resources.Service_is}: {Resources.Disabled}");
-                    Logging.GetFileLogger().Log(Level.Info, $"{Resources.Service_startup_mode}: {startupModeString}");
+                    if (logging)
+                    {
+                        Logging.GetFileLogger().Log(Level.Info, running
+                            ? $"{Resources.Service_is}: {Resources.Enabled}"
+                            : $"{Resources.Service_is}: {Resources.Disabled}");
+
+                        Logging.GetFileLogger().Log(Level.Info, $"{Resources.Service_startup_mode}: {startupModeString}");
+                    }
 
                     _servicesControl.AddTelemetryItem(service, $"{Resources.Service}: {service.Service.DisplayName}");
                     services.Add(service);
@@ -359,19 +381,23 @@ namespace DisableNvidiaTelemetry.Forms
             _telemetryServices = services;
         }
 
-        private void RefreshTelemetryRegistry()
+        private void RefreshTelemetryRegistry(bool logging)
         {
             var keys = new List<TelemetryRegistryKey>();
 
             foreach (var result in NvidiaController.EnumerateTelemetryRegistryItems())
             {
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                if (logging)
+                {
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
                     ? $"{Resources.Failed_to_find_registry_item}: {result.Name}"
                     : $"{Resources.Found_registry_item}: {result.Item.Name}");
+                }
 
                 if (result.Error == null)
                 {
-                    Logging.GetFileLogger().Log(Level.Info, $"{Resources.Registry_item_is}: {Resources.Enabled}");
+                    if (logging)
+                        Logging.GetFileLogger().Log(Level.Info, $"{Resources.Registry_item_is}: {Resources.Enabled}");
 
                     var key = result.Item;
 

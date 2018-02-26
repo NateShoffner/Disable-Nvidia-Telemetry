@@ -318,6 +318,15 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging disabled on read-only device.
+        /// </summary>
+        internal static string Logging_disabled_on_read_only_device {
+            get {
+                return ResourceManager.GetString("Logging_disabled_on_read_only_device", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manual.
         /// </summary>
         internal static string Manual {

@@ -59,6 +59,12 @@ namespace DisableNvidiaTelemetry.Forms
             chkUpdates.Checked = Settings.Default.StartupUpdate;
             cbTaskTrigger.SelectedIndex = Settings.Default.BackgroundTaskTrigger;
 
+            if (Logging.IsReadOnly)
+            {
+                chkFileLogging.Enabled = false;
+                chkFileLogging.Text += $" ({Resources.Logging_disabled_on_read_only_device})";
+            }
+
             if (Settings.Default.StartupUpdate)
             {
                 btnUpdatecheck.Enabled = false;

@@ -288,4 +288,10 @@ Redistribution of this software is allowed, but the origin of this software must
   <data name="Telemetry_registry_items" xml:space="preserve">
     <value>Telemetry Registry Items</value>
   </data>
+  <data name="Task_scheduler_description" xml:space="preserve">
+    <value>Disables Nvidia telemetry services and tasks on startup.</value>
+  </data>
+  <data name="Task_scheduler_name" xml:space="preserve">
+    <value>Disable Nvidia Telemetry</value>
+  </data>
 </root>

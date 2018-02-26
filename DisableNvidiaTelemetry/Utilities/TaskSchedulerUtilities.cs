@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Security.Principal;
+using DisableNvidiaTelemetry.Properties;
 using Microsoft.Win32.TaskScheduler;
 
 namespace DisableNvidiaTelemetry.Utilities
@@ -13,11 +14,9 @@ namespace DisableNvidiaTelemetry.Utilities
             Daily = 1
         }
 
-        private const string TaskName = "Disable Nvidia Telemetry";
-
         public static Task GetTask()
         {
-            return TaskService.Instance.FindTask(TaskName);
+            return TaskService.Instance.FindTask(Resources.Disable_Nvidia_Telemetry);
         }
 
         public static void Create(TaskTrigger trigger)
@@ -27,7 +26,7 @@ namespace DisableNvidiaTelemetry.Utilities
             using (var ts = new TaskService())
             {
                 var td = ts.NewTask();
-                td.RegistrationInfo.Description = "Disables Nvidia telemetry services and tasks on startup.";
+                td.RegistrationInfo.Description = Resources.Task_scheduler_description;
                 td.Principal.UserId = user;
                 td.Principal.LogonType = TaskLogonType.InteractiveToken;
                 td.Principal.RunLevel = TaskRunLevel.Highest;
@@ -48,7 +47,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     td.Triggers.Add(dt);
                 }
                 td.Actions.Add(new ExecAction(Assembly.GetExecutingAssembly().Location, Program.StartupParamSilent));
-                ts.RootFolder.RegisterTaskDefinition(TaskName, td);
+                ts.RootFolder.RegisterTaskDefinition(Resources.Disable_Nvidia_Telemetry, td);
             }
         }
 
@@ -56,7 +55,7 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             using (var ts = new TaskService())
             {
-                ts.RootFolder.DeleteTask(TaskName, false);
+                ts.RootFolder.DeleteTask(Resources.Disable_Nvidia_Telemetry, false);
             }
         }
     }

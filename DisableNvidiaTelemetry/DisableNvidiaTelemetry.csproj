@@ -87,28 +87,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITelemetry.cs" />
-    <Compile Include="Forms\FormMain.cs">
+    <Compile Include="Controller\NvidiaControllerResult.cs" />
+    <Compile Include="Model\ITelemetry.cs" />
+    <Compile Include="View\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormMain.Designer.cs">
+    <Compile Include="View\FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\TaskNotFoundException.cs" />
+    <Compile Include="Model\TelemetryRegistryKey.cs" />
+    <Compile Include="Model\TelemetryService.cs" />
+    <Compile Include="Model\TelemetryTask.cs" />
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="Utilities\TaskSchedulerUtilities.cs" />
-    <Compile Include="Utilities\NvidiaController.cs" />
+    <Compile Include="Controller\NvidiaController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ServiceHelper.cs" />
-    <Compile Include="Controls\TelemetryControl.cs">
+    <Compile Include="View\TelemetryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\TelemetryControl.Designer.cs">
+    <Compile Include="View\TelemetryControl.Designer.cs">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Logging.cs" />
     <Compile Include="Utilities\UpdaterUtilities.cs" />
-    <EmbeddedResource Include="Forms\FormMain.resx">
+    <EmbeddedResource Include="View\FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -121,7 +126,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Controls\TelemetryControl.resx">
+    <EmbeddedResource Include="View\TelemetryControl.resx">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">

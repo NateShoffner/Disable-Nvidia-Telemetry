@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Controller;
 using DisableNvidiaTelemetry.Forms;
 using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
@@ -100,12 +101,20 @@ namespace DisableNvidiaTelemetry
                 if (serviceResult.Error == null)
                 {
                     var startupResult = NvidiaController.DisableTelemetryServiceStartup(serviceResult.Item);
-                    Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
-                    Logging.GetEventLogger().Log(Level.Info, startupResult.Error != null ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
+                        ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})"
+                        : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetEventLogger().Log(Level.Info, startupResult.Error != null
+                        ? $"{Resources.Disable_service_startup_failed}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})"
+                        : $"{Resources.Automatic_service_startup_disabled}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
 
                     var result = NvidiaController.DisableTelemetryService(serviceResult.Item);
-                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
-                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})" : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})"
+                        : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_stop_service}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})"
+                        : $"{Resources.Service_stopped}: {serviceResult.Item.Service.DisplayName} ({serviceResult.Item.Service.ServiceName})");
                 }
             }
 
@@ -117,8 +126,12 @@ namespace DisableNvidiaTelemetry
                 {
                     var result = NvidiaController.DisableTelemetryTask(taskResult.Item);
 
-                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}" : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
-                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}" : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}"
+                        : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_disable_task}: {result.Item.Task.Path}"
+                        : $"{Resources.Task_disabled}: {result.Item.Task.Path}");
                 }
 
                 else
@@ -136,8 +149,12 @@ namespace DisableNvidiaTelemetry
                 {
                     var result = NvidiaController.DisableTelemetryRegistryItem(registryResult.Item);
 
-                    Logging.GetFileLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}" : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
-                    Logging.GetEventLogger().Log(Level.Info, result.Error != null ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}" : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
+                    Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
+                        : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
+                    Logging.GetEventLogger().Log(Level.Info, result.Error != null
+                        ? $"{Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
+                        : $"{Resources.Registry_item_disabled}: {result.Item.Name}");
                 }
             }
         }

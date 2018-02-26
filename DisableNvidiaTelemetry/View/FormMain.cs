@@ -8,7 +8,9 @@ using System.Reflection;
 using System.ServiceProcess;
 using System.Text;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Controller;
 using DisableNvidiaTelemetry.Controls;
+using DisableNvidiaTelemetry.Model;
 using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
 using ExtendedVersion;
@@ -303,22 +305,18 @@ namespace DisableNvidiaTelemetry.Forms
             foreach (var result in NvidiaController.EnumerateTelemetryTasks())
             {
                 if (logging)
-                {
                     Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Resources.Failed_to_find_task}: {result.Name}"
-                    : $"{Resources.Found_task}: {result.Item.Task.Name}");
-                }
+                        ? $"{Resources.Failed_to_find_task}: {result.Name}"
+                        : $"{Resources.Found_task}: {result.Item.Task.Name}");
 
                 if (result.Error == null)
                 {
                     var task = result.Item;
 
                     if (logging)
-                    {
                         Logging.GetFileLogger().Log(Level.Info, task.Task.Enabled
-                        ? $"{Resources.Task_is}: {Resources.Enabled}"
-                        : $"{Resources.Task_is}: {Resources.Disabled}");
-                    }
+                            ? $"{Resources.Task_is}: {Resources.Enabled}"
+                            : $"{Resources.Task_is}: {Resources.Disabled}");
 
                     _tasksControl.AddTelemetryItem(task, $"{Resources.Task}: {task.Task.Path}");
                     tasks.Add(task);
@@ -336,11 +334,9 @@ namespace DisableNvidiaTelemetry.Forms
             foreach (var result in NvidiaController.EnumerateTelemetryServices())
             {
                 if (logging)
-                {
                     Logging.GetFileLogger().Log(Level.Info, result.Error != null
                         ? $"{Resources.Failed_to_find_service}: {result.Name}"
                         : $"{Resources.Found_service}: {result.Item.Service.DisplayName} ({result.Item.Service.ServiceName})");
-                }
 
                 if (result.Error == null)
                 {
@@ -388,11 +384,9 @@ namespace DisableNvidiaTelemetry.Forms
             foreach (var result in NvidiaController.EnumerateTelemetryRegistryItems())
             {
                 if (logging)
-                {
                     Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Resources.Failed_to_find_registry_item}: {result.Name}"
-                    : $"{Resources.Found_registry_item}: {result.Item.Name}");
-                }
+                        ? $"{Resources.Failed_to_find_registry_item}: {result.Name}"
+                        : $"{Resources.Found_registry_item}: {result.Item.Name}");
 
                 if (result.Error == null)
                 {

@@ -3,12 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceProcess;
+using DisableNvidiaTelemetry.Model;
+using DisableNvidiaTelemetry.Utilities;
 using Microsoft.Win32;
 using Microsoft.Win32.TaskScheduler;
 
 #endregion
 
-namespace DisableNvidiaTelemetry.Utilities
+namespace DisableNvidiaTelemetry.Controller
 {
     internal class NvidiaController
     {
@@ -119,7 +121,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -146,7 +148,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -173,7 +175,7 @@ namespace DisableNvidiaTelemetry.Utilities
                 }
 
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask){Modified = modified};
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -200,7 +202,7 @@ namespace DisableNvidiaTelemetry.Utilities
                 }
 
 
-                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey){Modified = modified};
+                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -227,7 +229,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -254,7 +256,7 @@ namespace DisableNvidiaTelemetry.Utilities
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService){Modified = modified};
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -280,7 +282,7 @@ namespace DisableNvidiaTelemetry.Utilities
                 }
 
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask){Modified = modified};
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -312,34 +314,6 @@ namespace DisableNvidiaTelemetry.Utilities
             catch (Exception ex)
             {
                 return new NvidiaControllerResult<TelemetryRegistryKey>(key, ex);
-            }
-        }
-
-        public class NvidiaControllerResult<T> where T : ITelemetry
-        {
-            public NvidiaControllerResult(T item, Exception error = null)
-            {
-                Item = item;
-                Error = error;
-            }
-
-            public bool Modified { get; set; }
-
-            public Exception Error { get; }
-
-            public T Item { get; }
-
-            public string Name { get; set; }
-        }
-
-        public class TaskNotFoundException : Exception
-        {
-            public TaskNotFoundException()
-            {
-            }
-
-            public TaskNotFoundException(string message) : base(message)
-            {
             }
         }
     }

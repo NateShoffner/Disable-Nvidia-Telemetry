@@ -1,54 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using System.ServiceProcess;
 using Microsoft.Win32;
-using Microsoft.Win32.TaskScheduler;
 
-namespace DisableNvidiaTelemetry
+namespace DisableNvidiaTelemetry.Model
 {
-    internal interface ITelemetry
-    {
-        bool IsActive();
-    }
-
-    internal class TelemetryTask : ITelemetry
-    {
-        public TelemetryTask(Task task)
-        {
-            Task = task;
-        }
-
-        public Task Task { get; }
-
-        #region Implementation of ITelemetry
-
-        public bool IsActive()
-        {
-            return Task != null && Task.Enabled;
-        }
-
-        #endregion
-    }
-
-    internal class TelemetryService : ITelemetry
-    {
-        public TelemetryService(ServiceController service)
-        {
-            Service = service;
-        }
-
-        public ServiceController Service { get; }
-
-        #region Implementation of ITelemetry
-
-        public bool IsActive()
-        {
-            return Service != null && Service.Status == ServiceControllerStatus.Running;
-        }
-
-        #endregion
-    }
-
     internal class TelemetryRegistryKey : ITelemetry
     {
         private readonly string _subKeyPath;
@@ -76,7 +31,9 @@ namespace DisableNvidiaTelemetry
 
                 foreach (var vd in ValueData)
                 {
-                    subKey.SetValue(vd.Key, value ? vd.Value.Enabled : vd.Value.Disabled);
+                    subKey.SetValue(vd.Key, value
+                        ? vd.Value.Enabled
+                        : vd.Value.Disabled);
                 }
             }
         }

@@ -250,7 +250,9 @@ namespace DisableNvidiaTelemetry
                 var newSetting = xmlDoc.CreateElement("setting");
                 newSetting.SetAttribute("name", setProp.Name);
 
-                newSetting.SetAttribute("serializeAs", setProp.Property.SerializeAs.ToString() == "String" ? "String" : "Xml");
+                newSetting.SetAttribute("serializeAs", setProp.Property.SerializeAs.ToString() == "String"
+                    ? "String"
+                    : "Xml");
 
                 // Append this node to the application settings node (<Appname.Properties.Settings>)
                 tmpNode.AppendChild(newSetting);

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DisableNvidiaTelemetry.Model;
 using DisableNvidiaTelemetry.Properties;
 
 #endregion
@@ -51,7 +52,9 @@ namespace DisableNvidiaTelemetry.Controls
             {
                 AutoSize = true,
                 Text = displayText,
-                ForeColor = telemetry.IsActive() ? SystemColors.ControlText : SystemColors.ControlDark
+                ForeColor = telemetry.IsActive()
+                    ? SystemColors.ControlText
+                    : SystemColors.ControlDark
             };
 
             cb.Location = new Point(15, cb.Height * (_telemetryItems.Count - 1));
@@ -69,7 +72,9 @@ namespace DisableNvidiaTelemetry.Controls
                 _suppressEvents = true;
                 chkDisableAll.Checked = count == _telemetryCheckBoxes.Count;
                 _suppressEvents = false;
-                cb.ForeColor = cb.Checked ? SystemColors.ControlDark : SystemColors.ControlText;
+                cb.ForeColor = cb.Checked
+                    ? SystemColors.ControlDark
+                    : SystemColors.ControlText;
 
                 CheckStateChanged?.Invoke(this, EventArgs.Empty);
             };
@@ -89,8 +94,12 @@ namespace DisableNvidiaTelemetry.Controls
                 lblStatus.Visible = true;
 
             var allDisabled = disabledCount == _telemetryItems.Count;
-            lblStatus.Text = allDisabled ? Resources.All_Disabled : $"{disabledCount} / {_telemetryItems.Count} {Resources.Disabled}";
-            chkDisableAll.CheckState = allDisabled ? CheckState.Checked : CheckState.Unchecked;
+            lblStatus.Text = allDisabled
+                ? Resources.All_Disabled
+                : $"{disabledCount} / {_telemetryItems.Count} {Resources.Disabled}";
+            chkDisableAll.CheckState = allDisabled
+                ? CheckState.Checked
+                : CheckState.Unchecked;
         }
 
         private void chkDisableAll_CheckStateChanged(object sender, EventArgs e)
@@ -104,7 +113,9 @@ namespace DisableNvidiaTelemetry.Controls
             {
                 _suppressEvents = true;
                 cb.Checked = chkDisableAll.Checked;
-                cb.ForeColor = cb.Checked ? SystemColors.ControlDark : SystemColors.ControlText;
+                cb.ForeColor = cb.Checked
+                    ? SystemColors.ControlDark
+                    : SystemColors.ControlText;
                 _suppressEvents = false;
             }
 

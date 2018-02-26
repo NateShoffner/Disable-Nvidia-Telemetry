@@ -498,6 +498,24 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disables Nvidia telemetry services and tasks on startup..
+        /// </summary>
+        internal static string Task_scheduler_description {
+            get {
+                return ResourceManager.GetString("Task_scheduler_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Nvidia Telemetry.
+        /// </summary>
+        internal static string Task_scheduler_name {
+            get {
+                return ResourceManager.GetString("Task_scheduler_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Telemetry Registry Items.
         /// </summary>
         internal static string Telemetry_registry_items {

@@ -14,6 +14,9 @@ namespace DisableNvidiaTelemetry.Utilities
 
         public static void Log(this ILog log, Level level, object message, Exception ex = null, bool suppressEvents = false)
         {
+            if (Logging.IsReadOnly)
+                return;
+
             if (level == Level.Debug)
                 log.Debug(message, ex);
             else if (level == Level.Error)
@@ -57,6 +60,24 @@ namespace DisableNvidiaTelemetry.Utilities
         private static string _logDirectory;
         private static bool _enabled;
         private static bool _configured;
+
+        private static bool? _isReadOnly;
+
+        public static bool IsReadOnly
+        {
+            get
+            {
+                if (!_isReadOnly.HasValue)
+                {
+                    var cwd = Path.GetDirectoryName(_logDirectory);
+
+                    var di = new DirectoryInfo(cwd);
+                    _isReadOnly = di.Attributes.HasFlag(FileAttributes.ReadOnly);
+                }
+
+                return _isReadOnly.Value;
+            }
+        }
 
         public static bool Enabled
         {

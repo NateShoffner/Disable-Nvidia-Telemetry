@@ -63,7 +63,7 @@ Section
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   
-  !insertmacro CheckNetFramework 35 ;
+  !insertmacro CheckNetFramework 45 ;
   
   File "License.txt"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Disable Nvidia Telemetry.exe"

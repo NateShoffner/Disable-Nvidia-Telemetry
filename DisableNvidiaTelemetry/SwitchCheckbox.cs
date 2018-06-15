@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using DisableNvidiaTelemetryWPF.Properties;
+using DisableNvidiaTelemetry.Properties;
 
-namespace DisableNvidiaTelemetryWPF
+namespace DisableNvidiaTelemetry
 {
     internal class SwitchCheckbox
     {

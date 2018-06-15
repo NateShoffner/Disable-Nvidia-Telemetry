@@ -46,7 +46,7 @@ namespace DisableNvidiaTelemetry.Utilities
 
                     td.Triggers.Add(dt);
                 }
-                td.Actions.Add(new ExecAction(Assembly.GetExecutingAssembly().Location, Program.StartupParamSilent));
+                td.Actions.Add(new ExecAction(Assembly.GetExecutingAssembly().Location, AppUtils.StartupParamSilent));
                 ts.RootFolder.RegisterTaskDefinition(Resources.Disable_Nvidia_Telemetry, td);
             }
         }

@@ -1,0 +1,17 @@
+﻿<Window x:Class="DisableNvidiaTelemetry.View.NotificationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        ResizeMode="NoResize" Height="150">
+    <Grid Style="{StaticResource GrayHoneycomb}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Name="lblMessage" Content="Message" HorizontalAlignment="Center" />
+        <Button Grid.Row="1" Content="OK" Height="20" Click="Ok_Click" MaxWidth="150" />
+    </Grid>
+
+</Window>

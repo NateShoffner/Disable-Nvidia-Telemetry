@@ -12,6 +12,11 @@ namespace DisableNvidiaTelemetry.Utilities
         {
             var releasesUrl = new Uri("https://api.github.com/repos/NateShoffner/Disable-Nvidia-Telemetry/releases");
 
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             using (var client = new WebClient {Proxy = null})
             {
                 client.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0.15063; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2950.0 Safari/537.36");

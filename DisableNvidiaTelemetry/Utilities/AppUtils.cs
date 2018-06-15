@@ -2,10 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using System.Security.Principal;
-using DisableNvidiaTelemetry;
-using DisableNvidiaTelemetryWPF.Properties;
+using DisableNvidiaTelemetry.Properties;
 
-namespace DisableNvidiaTelemetryWPF.Utilities
+namespace DisableNvidiaTelemetry.Utilities
 {
     public class AppUtils
     {

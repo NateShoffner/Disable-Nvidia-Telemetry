@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="DisableNvidiaTelemetry.View.TelemetryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DisableNvidiaTelemetry"
+             xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             mc:Ignorable="d"
+             d:DesignHeight="150" d:DesignWidth="550">
+    <Grid Margin="0, 0, 0, 0">
+
+
+        <Label Name="lblName" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 0, 0"
+               FontWeight="Bold" FontSize="12" />
+
+        <fa5:SvgAwesome Icon="Solid_Undo" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="right"
+                        Margin="0, 5, 140, 0" Foreground="#76B900" Cursor="Hand" Name="btnDefault" />
+
+        <Label Name="lblDefault" Content="Default" HorizontalAlignment="Right" VerticalAlignment="Top"
+               Margin="0, 0, 90, 0"
+               FontWeight="Bold" FontSize="12" Cursor="Hand" />
+
+
+        <fa5:SvgAwesome Icon="Solid_SyncAlt" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="right"
+                        Margin="0, 5, 60, 0" Foreground="#76B900" Cursor="Hand" Name="btnRefresh" />
+
+        <Label Name="lblRefresh" Content="Refresh" HorizontalAlignment="Right" VerticalAlignment="Top"
+               Margin="0, 0, 10, 0"
+               FontWeight="Bold" FontSize="12" Cursor="Hand" />
+
+        <StackPanel Name="containerPanel" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="15,30,5,15"
+                    local:MarginSetter.Margin="5" Grid.ColumnSpan="2" />
+    </Grid>
+</UserControl>

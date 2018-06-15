@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace DisableNvidiaTelemetryWPF
+namespace DisableNvidiaTelemetry
 {
     public class MarginSetter
     {

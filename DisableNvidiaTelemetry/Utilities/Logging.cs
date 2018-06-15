@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 using DisableNvidiaTelemetry.Properties;
 using log4net;
 using log4net.Config;
@@ -32,23 +31,20 @@ namespace DisableNvidiaTelemetry.Utilities
                 throw new ArgumentException("Log level not implemented", "level");
 
             if (!suppressEvents)
-                LogEvent?.Invoke(log, new LogEventArgs(log, message, ex));
+                LogEvent?.Invoke(log, new LogEventArgs(log, new Logging.LogEvent {Date = DateTime.Now, Message = message, Error = ex}));
         }
 
         public class LogEventArgs : EventArgs
         {
-            public LogEventArgs(ILog log, object message, Exception exception = null)
+            public LogEventArgs(ILog log, Logging.LogEvent @event)
             {
                 Log = log;
-                Message = message;
-                Exception = exception;
+                Event = @event;
             }
 
             public ILog Log { get; }
 
-            public object Message { get; }
-
-            public Exception Exception { get; }
+            public Logging.LogEvent Event { get; set; }
         }
     }
 
@@ -91,7 +87,7 @@ namespace DisableNvidiaTelemetry.Utilities
                         if (!Directory.Exists(_logDirectory))
                             Directory.CreateDirectory(_logDirectory);
 
-                        GlobalContext.Properties["HeaderInfo"] = $"{Resources.Disable_Nvidia_Telemetry} v{Application.ProductVersion}";
+                        GlobalContext.Properties["HeaderInfo"] = $"{Resources.Disable_Nvidia_Telemetry} v{AppUtils.GetVersion()}";
                         GlobalContext.Properties["LogDirectory"] = _logDirectory;
 
                         XmlConfigurator.Configure();
@@ -125,6 +121,15 @@ namespace DisableNvidiaTelemetry.Utilities
         public static ILog GetEventLogger()
         {
             return _eventLogger ?? (_eventLogger = LogManager.GetLogger("EventLogger"));
+        }
+
+        public class LogEvent
+        {
+            public DateTime Date { get; set; }
+
+            public object Message { get; set; }
+
+            public Exception Error { get; set; }
         }
     }
 }

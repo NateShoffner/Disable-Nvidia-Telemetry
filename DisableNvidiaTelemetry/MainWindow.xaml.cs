@@ -10,19 +10,20 @@ using System.Windows.Documents;
 using System.Windows.Navigation;
 using DisableNvidiaTelemetry.Controller;
 using DisableNvidiaTelemetry.Model;
+using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
-using DisableNvidiaTelemetryWPF.Properties;
-using DisableNvidiaTelemetryWPF.Utilities;
-using DisableNvidiaTelemetryWPF.View;
+using DisableNvidiaTelemetry.View;
 using ExtendedVersion;
 using log4net.Core;
 
-namespace DisableNvidiaTelemetryWPF
+namespace DisableNvidiaTelemetry
 {
     public partial class MainWindow : Window
     {
         private readonly List<Logging.LogEvent> _logEvents = new List<Logging.LogEvent>();
         private bool _ignoreTaskSetting;
+
+        private NotificationWindow _notificationWindow;
         private List<TelemetryRegistryKey> _telemetryKeys = new List<TelemetryRegistryKey>();
         private List<TelemetryService> _telemetryServices = new List<TelemetryService>();
         private List<TelemetryTask> _telemetryTasks = new List<TelemetryTask>();
@@ -59,6 +60,8 @@ namespace DisableNvidiaTelemetryWPF
             tbVersion.Inlines.Clear();
             tbVersion.Inlines.Add(new Run($"{Properties.Resources.Version} {version.ToString(ExtendedVersionFormatFlags.BuildString | ExtendedVersionFormatFlags.Truncated)} "));
 
+            Title += $" v{version.ToString(ExtendedVersionFormatFlags.BuildString | ExtendedVersionFormatFlags.Truncated)} ";
+
             if (version.Commit != null)
             {
                 var link = new Hyperlink(new Run(version.Commit.ToShorthandString()))
@@ -94,7 +97,7 @@ namespace DisableNvidiaTelemetryWPF
 
                 else if (showDialog)
                 {
-                    MessageBox.Show(Properties.Resources.No_updates_available_message, Properties.Resources.No_Upades, MessageBoxButton.OK, MessageBoxImage.Information);
+                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.No_updates_available_message);
                 }
             }
 
@@ -103,7 +106,7 @@ namespace DisableNvidiaTelemetryWPF
                 Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
 
                 if (showDialog)
-                    MessageBox.Show(Properties.Resources.Update_error_messsage, Properties.Resources.Update_error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Update_error_messsage);
             }
 
             btnUpdatecheck.IsEnabled = true;
@@ -255,23 +258,6 @@ namespace DisableNvidiaTelemetryWPF
             RefreshTelemetryRegistry(true);
         }
 
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshControls();
-            _logEvents.Clear();
-            lvLogs.Items.Refresh();
-
-            RefreshTelemetryServices(true);
-            RefreshTelemetryTasks(true);
-            RefreshTelemetryRegistry(true);
-        }
-
-        private void RefreshControls()
-        {
-            tcTasks.Reset();
-            tcServices.Reset();
-            tcRegistry.Reset();
-        }
 
         private void btnDonate_Click(object sender, RoutedEventArgs e)
         {
@@ -295,51 +281,6 @@ namespace DisableNvidiaTelemetryWPF
         {
             btnUpdatecheck.IsEnabled = false;
             UpdaterUtilities.UpdateCheck(true);
-        }
-
-        private void btnRestoreDefaults_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshControls();
-
-            foreach (var item in _telemetryServices)
-            {
-                var result = NvidiaController.EnableTelemetryServiceStartup(item);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Automatic_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
-                    : $"{Properties.Resources.Automatic_service_startup_enabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
-            }
-
-            foreach (var item in _telemetryServices)
-            {
-                var result = NvidiaController.EnableTelemetryService(item);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_start_service}: {item.Service.DisplayName} ({item.Service.ServiceName})"
-                    : $"{Properties.Resources.Service_started}: {item.Service.DisplayName} ({item.Service.ServiceName})");
-            }
-
-            foreach (var item in _telemetryTasks)
-            {
-                var result = NvidiaController.EnableTelemetryTask(item);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
-                    : $"{Properties.Resources.Task_enabled}: {result.Item.Task.Path}");
-            }
-
-            foreach (var item in _telemetryKeys)
-            {
-                var result = NvidiaController.EnableTelemetryRegistryItem(item);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
-                    : $"{Properties.Resources.Registry_item_enabled}: {result.Item.Name}");
-            }
-
-            RefreshTelemetryServices(false);
-            RefreshTelemetryTasks(false);
-            RefreshTelemetryRegistry(false);
         }
 
         private void cbTaskTrigger_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -371,7 +312,7 @@ namespace DisableNvidiaTelemetryWPF
             Clipboard.SetText(((Logging.LogEvent) lvLogs.SelectedItem).Message.ToString());
         }
 
-        private void TcServices_OnOnTelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
+        private void TcServices_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
         {
             var telemetry = (TelemetryService) e.Telemetry;
 
@@ -406,7 +347,7 @@ namespace DisableNvidiaTelemetryWPF
             }
         }
 
-        private void TcTasks_OnOnTelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
+        private void TcTasks_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
         {
             var telemetry = (TelemetryTask) e.Telemetry;
 
@@ -435,7 +376,7 @@ namespace DisableNvidiaTelemetryWPF
             }
         }
 
-        private void TcRegistry_OnOnTelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
+        private void TcRegistry_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
         {
             var telemetry = (TelemetryRegistryKey) e.Telemetry;
 
@@ -444,7 +385,10 @@ namespace DisableNvidiaTelemetryWPF
                 var result = NvidiaController.EnableTelemetryRegistryItem(telemetry);
 
                 if (result.Error != null)
+                {
                     e.Cancel = true;
+                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Failed_to_enable_registry_item);
+                }
 
                 Logging.GetFileLogger().Log(Level.Info, result.Error != null
                     ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
@@ -456,7 +400,10 @@ namespace DisableNvidiaTelemetryWPF
                 var result = NvidiaController.DisableTelemetryRegistryItem(telemetry);
 
                 if (result.Error != null)
+                {
                     e.Cancel = true;
+                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Failed_to_disable_registry_item);
+                }
 
                 Logging.GetFileLogger().Log(Level.Info, result.Error != null
                     ? $"{Properties.Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
@@ -467,6 +414,104 @@ namespace DisableNvidiaTelemetryWPF
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());
+        }
+
+        private void ShowNotificationWindow(string title, string message)
+        {
+            if (_notificationWindow != null)
+                _notificationWindow.Close();
+
+            _notificationWindow = new NotificationWindow
+            {
+                Owner = this,
+                Title = title,
+                Message = message
+            };
+            _notificationWindow.ShowDialog();
+        }
+
+        private void tcServices_RefreshClicked(object sender, EventArgs e)
+        {
+            tcServices.Reset();
+            RefreshTelemetryServices(true);
+        }
+
+        private void tcTasks_RefreshClicked(object sender, EventArgs e)
+        {
+            tcTasks.Reset();
+            RefreshTelemetryTasks(true);
+        }
+
+        private void tcRegistry_RefreshClicked(object sender, EventArgs e)
+        {
+            tcRegistry.Reset();
+            RefreshTelemetryRegistry(true);
+        }
+
+        private void tcServices_DefaultClicked(object sender, EventArgs e)
+        {
+            tcServices.Reset();
+
+            foreach (var item in _telemetryServices)
+            {
+                var result = NvidiaController.EnableTelemetryServiceStartup(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Automatic_service_startup_failed}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Properties.Resources.Automatic_service_startup_enabled}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
+
+            foreach (var item in _telemetryServices)
+            {
+                var result = NvidiaController.EnableTelemetryService(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_start_service}: {item.Service.DisplayName} ({item.Service.ServiceName})"
+                    : $"{Properties.Resources.Service_started}: {item.Service.DisplayName} ({item.Service.ServiceName})");
+            }
+
+            RefreshTelemetryServices(false);
+        }
+
+        private void tcTasks_DefaultClicked(object sender, EventArgs e)
+        {
+            tcTasks.Reset();
+
+            foreach (var item in _telemetryTasks)
+            {
+                var result = NvidiaController.EnableTelemetryTask(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
+                    : $"{Properties.Resources.Task_enabled}: {result.Item.Task.Path}");
+            }
+
+            foreach (var item in _telemetryKeys)
+            {
+                var result = NvidiaController.EnableTelemetryRegistryItem(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
+                    : $"{Properties.Resources.Registry_item_enabled}: {result.Item.Name}");
+            }
+
+            RefreshTelemetryTasks(false);
+        }
+
+        private void tcRegistry_DefaultClicked(object sender, EventArgs e)
+        {
+            tcRegistry.Reset();
+
+            foreach (var item in _telemetryKeys)
+            {
+                var result = NvidiaController.EnableTelemetryRegistryItem(item);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
+                    : $"{Properties.Resources.Registry_item_enabled}: {result.Item.Name}");
+            }
+
+            RefreshTelemetryRegistry(false);
         }
     }
 }

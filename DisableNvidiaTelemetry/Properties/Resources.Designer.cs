@@ -19,10 +19,10 @@ namespace DisableNvidiaTelemetry.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace DisableNvidiaTelemetry.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DisableNvidiaTelemetry.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace DisableNvidiaTelemetry.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Administrator Required.
         /// </summary>
-        internal static string AdministratorRequired {
+        public static string AdministratorRequired {
             get {
                 return ResourceManager.GetString("AdministratorRequired", resourceCulture);
             }
@@ -72,9 +72,18 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to All Disabled.
         /// </summary>
-        internal static string All_Disabled {
+        public static string All_Disabled {
             get {
                 return ResourceManager.GetString("All_Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon made by freepik from www.flaticon.com.
+        /// </summary>
+        public static string ApplicationCredits {
+            get {
+                return ResourceManager.GetString("ApplicationCredits", resourceCulture);
             }
         }
         
@@ -83,7 +92,7 @@ namespace DisableNvidiaTelemetry.Properties {
         ///
         ///Redistribution of this software is allowed, but the origin of this software must not be misrepresented; you must not claim that you wrote the original software..
         /// </summary>
-        internal static string ApplicationLicense {
+        public static string ApplicationLicense {
             get {
                 return ResourceManager.GetString("ApplicationLicense", resourceCulture);
             }
@@ -92,7 +101,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Automatic.
         /// </summary>
-        internal static string Automatic {
+        public static string Automatic {
             get {
                 return ResourceManager.GetString("Automatic", resourceCulture);
             }
@@ -101,7 +110,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Automatic service startup disabled.
         /// </summary>
-        internal static string Automatic_service_startup_disabled {
+        public static string Automatic_service_startup_disabled {
             get {
                 return ResourceManager.GetString("Automatic_service_startup_disabled", resourceCulture);
             }
@@ -110,7 +119,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Automatic service startup enabled.
         /// </summary>
-        internal static string Automatic_service_startup_enabled {
+        public static string Automatic_service_startup_enabled {
             get {
                 return ResourceManager.GetString("Automatic_service_startup_enabled", resourceCulture);
             }
@@ -119,7 +128,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Automatic service startup failed.
         /// </summary>
-        internal static string Automatic_service_startup_failed {
+        public static string Automatic_service_startup_failed {
             get {
                 return ResourceManager.GetString("Automatic_service_startup_failed", resourceCulture);
             }
@@ -128,9 +137,9 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap binoculars_64 {
+        public static System.Drawing.Bitmap binoculars_256 {
             get {
-                object obj = ResourceManager.GetObject("binoculars_64", resourceCulture);
+                object obj = ResourceManager.GetObject("binoculars_256", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -138,7 +147,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap btn_donate_92x26 {
+        public static System.Drawing.Bitmap btn_donate_92x26 {
             get {
                 object obj = ResourceManager.GetObject("btn_donate_92x26", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -148,7 +157,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disable Nvidia Telemetry.
         /// </summary>
-        internal static string Disable_Nvidia_Telemetry {
+        public static string Disable_Nvidia_Telemetry {
             get {
                 return ResourceManager.GetString("Disable_Nvidia_Telemetry", resourceCulture);
             }
@@ -157,7 +166,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disable service startup failed.
         /// </summary>
-        internal static string Disable_service_startup_failed {
+        public static string Disable_service_startup_failed {
             get {
                 return ResourceManager.GetString("Disable_service_startup_failed", resourceCulture);
             }
@@ -166,7 +175,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disabled.
         /// </summary>
-        internal static string Disabled {
+        public static string Disabled {
             get {
                 return ResourceManager.GetString("Disabled", resourceCulture);
             }
@@ -175,16 +184,25 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
-        internal static string Enabled {
+        public static string Enabled {
             get {
                 return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to disable registry item.
         /// </summary>
-        internal static string Failed_to_disable_registry_item {
+        public static string Failed_to_disable_registry_item {
             get {
                 return ResourceManager.GetString("Failed_to_disable_registry_item", resourceCulture);
             }
@@ -193,7 +211,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to disable task.
         /// </summary>
-        internal static string Failed_to_disable_task {
+        public static string Failed_to_disable_task {
             get {
                 return ResourceManager.GetString("Failed_to_disable_task", resourceCulture);
             }
@@ -202,7 +220,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to enable registry item.
         /// </summary>
-        internal static string Failed_to_enable_registry_item {
+        public static string Failed_to_enable_registry_item {
             get {
                 return ResourceManager.GetString("Failed_to_enable_registry_item", resourceCulture);
             }
@@ -211,7 +229,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to enable task.
         /// </summary>
-        internal static string Failed_to_enable_task {
+        public static string Failed_to_enable_task {
             get {
                 return ResourceManager.GetString("Failed_to_enable_task", resourceCulture);
             }
@@ -220,7 +238,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to find registry item.
         /// </summary>
-        internal static string Failed_to_find_registry_item {
+        public static string Failed_to_find_registry_item {
             get {
                 return ResourceManager.GetString("Failed_to_find_registry_item", resourceCulture);
             }
@@ -229,7 +247,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to find service.
         /// </summary>
-        internal static string Failed_to_find_service {
+        public static string Failed_to_find_service {
             get {
                 return ResourceManager.GetString("Failed_to_find_service", resourceCulture);
             }
@@ -238,7 +256,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to find task.
         /// </summary>
-        internal static string Failed_to_find_task {
+        public static string Failed_to_find_task {
             get {
                 return ResourceManager.GetString("Failed_to_find_task", resourceCulture);
             }
@@ -247,7 +265,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to start service.
         /// </summary>
-        internal static string Failed_to_start_service {
+        public static string Failed_to_start_service {
             get {
                 return ResourceManager.GetString("Failed_to_start_service", resourceCulture);
             }
@@ -256,7 +274,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Failed to stop service.
         /// </summary>
-        internal static string Failed_to_stop_service {
+        public static string Failed_to_stop_service {
             get {
                 return ResourceManager.GetString("Failed_to_stop_service", resourceCulture);
             }
@@ -265,7 +283,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Found registry item.
         /// </summary>
-        internal static string Found_registry_item {
+        public static string Found_registry_item {
             get {
                 return ResourceManager.GetString("Found_registry_item", resourceCulture);
             }
@@ -274,7 +292,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Found service.
         /// </summary>
-        internal static string Found_service {
+        public static string Found_service {
             get {
                 return ResourceManager.GetString("Found_service", resourceCulture);
             }
@@ -283,7 +301,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Found task.
         /// </summary>
-        internal static string Found_task {
+        public static string Found_task {
             get {
                 return ResourceManager.GetString("Found_task", resourceCulture);
             }
@@ -292,9 +310,9 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap GitHub_Mark_64px {
+        public static System.Drawing.Bitmap GitHub_Mark_Light_120px_plus {
             get {
-                object obj = ResourceManager.GetObject("GitHub_Mark_64px", resourceCulture);
+                object obj = ResourceManager.GetObject("GitHub_Mark_Light_120px_plus", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -302,7 +320,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://github.com/NateShoffner/Disable-Nvidia-Telemetry.
         /// </summary>
-        internal static string GithubUrl {
+        public static string GithubUrl {
             get {
                 return ResourceManager.GetString("GithubUrl", resourceCulture);
             }
@@ -311,16 +329,36 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://nateshoffner.com.
         /// </summary>
-        internal static string Homepage {
+        public static string Homepage {
             get {
                 return ResourceManager.GetString("Homepage", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap honeycomb_dark {
+            get {
+                object obj = ResourceManager.GetObject("honeycomb_dark", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap honeycomb_gray {
+            get {
+                object obj = ResourceManager.GetObject("honeycomb_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging disabled on read-only device.
         /// </summary>
-        internal static string Logging_disabled_on_read_only_device {
+        public static string Logging_disabled_on_read_only_device {
             get {
                 return ResourceManager.GetString("Logging_disabled_on_read_only_device", resourceCulture);
             }
@@ -329,7 +367,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Manual.
         /// </summary>
-        internal static string Manual {
+        public static string Manual {
             get {
                 return ResourceManager.GetString("Manual", resourceCulture);
             }
@@ -338,16 +376,16 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No Updates.
         /// </summary>
-        internal static string No_Upades {
+        public static string No_Updates {
             get {
-                return ResourceManager.GetString("No_Upades", resourceCulture);
+                return ResourceManager.GetString("No_Updates", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to There are no updates available..
         /// </summary>
-        internal static string No_updates_available_message {
+        public static string No_updates_available_message {
             get {
                 return ResourceManager.GetString("No_updates_available_message", resourceCulture);
             }
@@ -356,7 +394,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=nate.shoffner@gmail.com&amp;lc=US&amp;item_name=Disable%20Nvidia%20Telemetry&amp;currency_code=USD&amp;bn=PP%2dDonationsBF.
         /// </summary>
-        internal static string PaypalUrl {
+        public static string PaypalUrl {
             get {
                 return ResourceManager.GetString("PaypalUrl", resourceCulture);
             }
@@ -365,16 +403,25 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Please run the program as administrator to continue..
         /// </summary>
-        internal static string Please_run_the_program_as_administrator_to_continue {
+        public static string Please_run_the_program_as_administrator_to_continue {
             get {
                 return ResourceManager.GetString("Please_run_the_program_as_administrator_to_continue", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Portable.
+        /// </summary>
+        public static string Portable {
+            get {
+                return ResourceManager.GetString("Portable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registry item disabled.
         /// </summary>
-        internal static string Registry_item_disabled {
+        public static string Registry_item_disabled {
             get {
                 return ResourceManager.GetString("Registry_item_disabled", resourceCulture);
             }
@@ -383,7 +430,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Registry item enabled.
         /// </summary>
-        internal static string Registry_item_enabled {
+        public static string Registry_item_enabled {
             get {
                 return ResourceManager.GetString("Registry_item_enabled", resourceCulture);
             }
@@ -392,7 +439,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Registry item is.
         /// </summary>
-        internal static string Registry_item_is {
+        public static string Registry_item_is {
             get {
                 return ResourceManager.GetString("Registry_item_is", resourceCulture);
             }
@@ -401,7 +448,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Service.
         /// </summary>
-        internal static string Service {
+        public static string Service {
             get {
                 return ResourceManager.GetString("Service", resourceCulture);
             }
@@ -410,7 +457,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Service is.
         /// </summary>
-        internal static string Service_is {
+        public static string Service_is {
             get {
                 return ResourceManager.GetString("Service_is", resourceCulture);
             }
@@ -419,7 +466,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Service started.
         /// </summary>
-        internal static string Service_started {
+        public static string Service_started {
             get {
                 return ResourceManager.GetString("Service_started", resourceCulture);
             }
@@ -428,7 +475,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Service startup mode.
         /// </summary>
-        internal static string Service_startup_mode {
+        public static string Service_startup_mode {
             get {
                 return ResourceManager.GetString("Service_startup_mode", resourceCulture);
             }
@@ -437,7 +484,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Service stopped.
         /// </summary>
-        internal static string Service_stopped {
+        public static string Service_stopped {
             get {
                 return ResourceManager.GetString("Service_stopped", resourceCulture);
             }
@@ -446,7 +493,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Silently disabling telemetry registry items.
         /// </summary>
-        internal static string Silently_disabling_telemetry_registry_items {
+        public static string Silently_disabling_telemetry_registry_items {
             get {
                 return ResourceManager.GetString("Silently_disabling_telemetry_registry_items", resourceCulture);
             }
@@ -455,7 +502,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Silently disabling telemetry services.
         /// </summary>
-        internal static string Silently_disabling_telemetry_services {
+        public static string Silently_disabling_telemetry_services {
             get {
                 return ResourceManager.GetString("Silently_disabling_telemetry_services", resourceCulture);
             }
@@ -464,16 +511,25 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Silently disabling telemetry tasks.
         /// </summary>
-        internal static string Silently_disabling_telemetry_tasks {
+        public static string Silently_disabling_telemetry_tasks {
             get {
                 return ResourceManager.GetString("Silently_disabling_telemetry_tasks", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=cmkpISz6RvA.
+        /// </summary>
+        public static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Task.
         /// </summary>
-        internal static string Task {
+        public static string Task {
             get {
                 return ResourceManager.GetString("Task", resourceCulture);
             }
@@ -482,7 +538,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Task disabled.
         /// </summary>
-        internal static string Task_disabled {
+        public static string Task_disabled {
             get {
                 return ResourceManager.GetString("Task_disabled", resourceCulture);
             }
@@ -491,7 +547,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Task enabled.
         /// </summary>
-        internal static string Task_enabled {
+        public static string Task_enabled {
             get {
                 return ResourceManager.GetString("Task_enabled", resourceCulture);
             }
@@ -500,7 +556,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Task is.
         /// </summary>
-        internal static string Task_is {
+        public static string Task_is {
             get {
                 return ResourceManager.GetString("Task_is", resourceCulture);
             }
@@ -509,7 +565,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disables Nvidia telemetry services and tasks on startup..
         /// </summary>
-        internal static string Task_scheduler_description {
+        public static string Task_scheduler_description {
             get {
                 return ResourceManager.GetString("Task_scheduler_description", resourceCulture);
             }
@@ -518,7 +574,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disable Nvidia Telemetry.
         /// </summary>
-        internal static string Task_scheduler_name {
+        public static string Task_scheduler_name {
             get {
                 return ResourceManager.GetString("Task_scheduler_name", resourceCulture);
             }
@@ -527,7 +583,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Telemetry Registry Items.
         /// </summary>
-        internal static string Telemetry_registry_items {
+        public static string Telemetry_registry_items {
             get {
                 return ResourceManager.GetString("Telemetry_registry_items", resourceCulture);
             }
@@ -536,16 +592,16 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Telemetry Services.
         /// </summary>
-        internal static string Telemetry_serivces {
+        public static string Telemetry_services {
             get {
-                return ResourceManager.GetString("Telemetry_serivces", resourceCulture);
+                return ResourceManager.GetString("Telemetry_services", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Telemetry Tasks.
         /// </summary>
-        internal static string Telemetry_tasks {
+        public static string Telemetry_tasks {
             get {
                 return ResourceManager.GetString("Telemetry_tasks", resourceCulture);
             }
@@ -554,7 +610,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Update Available.
         /// </summary>
-        internal static string Update_available {
+        public static string Update_available {
             get {
                 return ResourceManager.GetString("Update_available", resourceCulture);
             }
@@ -563,7 +619,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A new update is available, would you like to download it?.
         /// </summary>
-        internal static string Update_available_message {
+        public static string Update_available_message {
             get {
                 return ResourceManager.GetString("Update_available_message", resourceCulture);
             }
@@ -572,7 +628,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Update Error.
         /// </summary>
-        internal static string Update_error {
+        public static string Update_error {
             get {
                 return ResourceManager.GetString("Update_error", resourceCulture);
             }
@@ -581,7 +637,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to There was an error while checking for updates..
         /// </summary>
-        internal static string Update_error_messsage {
+        public static string Update_error_messsage {
             get {
                 return ResourceManager.GetString("Update_error_messsage", resourceCulture);
             }
@@ -590,7 +646,7 @@ namespace DisableNvidiaTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
-        internal static string Version {
+        public static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
             }

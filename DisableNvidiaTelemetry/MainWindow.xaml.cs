@@ -37,6 +37,12 @@ namespace DisableNvidiaTelemetry
             LogExtensions.LogEvent += OnLogEvent;
             UpdaterUtilities.UpdateResponse += UpdaterUtilities_UpdateResponse;
 
+            var driverVersion = GeforceUtilities.GetDriverVersion();
+            Logging.GetFileLogger().Log(Level.Info, $"Driver Version: {(driverVersion != null ? driverVersion.ToString() : "N/A")}");
+
+            var gfeVersion = GeforceUtilities.GetGeForceExperienceVersion();
+            Logging.GetFileLogger().Log(Level.Info, $"GeForce Experience Version: {(gfeVersion != null ? gfeVersion.ToString() : "N/A")}");
+
             CheckBackgroundTask();
 
             chkFileLogging.IsChecked = Settings.Default.FileLogging;

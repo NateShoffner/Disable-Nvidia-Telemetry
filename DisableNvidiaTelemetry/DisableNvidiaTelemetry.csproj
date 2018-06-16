@@ -108,6 +108,7 @@
     <Compile Include="Model\TelemetryTask.cs" />
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SwitchCheckbox.cs" />
+    <Compile Include="Utilities\GeforceUtilities.cs" />
     <Compile Include="View\NotificationWindow.xaml.cs">
       <DependentUpon>NotificationWindow.xaml</DependentUpon>
     </Compile>

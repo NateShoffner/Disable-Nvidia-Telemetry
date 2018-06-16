@@ -62,7 +62,10 @@ namespace DisableNvidiaTelemetry.View
 
             var cb = new CheckBox
             {
-                Content = displayText,
+                Content = new TextBlock
+                {
+                    Text = displayText
+                },
                 IsChecked = telemetry.IsActive(),
                 FontSize = 13,
                 Style = (Style) FindResource("SwitchCheckBox")

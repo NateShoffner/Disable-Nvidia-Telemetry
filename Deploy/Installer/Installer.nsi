@@ -71,7 +71,8 @@ Section
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\log4net.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Microsoft.Win32.TaskScheduler.dll"
   File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\Newtonsoft.Json.dll"  
-  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\ExtendedVersion.dll"  
+  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\ExtendedVersion.dll"
+  File "${SOLUTION_DIRECTORY}\DisableNvidiaTelemetry\bin\Release\FontAwesome5.WPF.dll"
   CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRIMARY_EXE_NAME}.lnk" "$INSTDIR\${PRIMARY_EXE_NAME}.exe"
 
@@ -96,7 +97,7 @@ Section "Uninstall"
   Delete "$INSTDIR\Microsoft.Win32.TaskScheduler.dll"
   Delete "$INSTDIR\Newtonsoft.Json.dll"
   Delete "$INSTDIR\ExtendedVersion.dll"
-  
+  Delete "$INSTDIR\FontAwesome5.WPF.dll"
   Delete "$INSTDIR\Uninstall.exe"
   Delete "$SMPROGRAMS\Disable Nvidia Telemetry\Disable Nvidia Telemetry.lnk"
   RMDir "$SMPROGRAMS\Disable Nvidia Telemetry"

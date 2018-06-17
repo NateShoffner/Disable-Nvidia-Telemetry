@@ -163,7 +163,6 @@ namespace DisableNvidiaTelemetry
                 }
             }
 
-            tcTasks.IsEnabled = tcTasks.TelemetryItems.Count != 0;
             _telemetryTasks = tasks;
         }
 
@@ -213,8 +212,6 @@ namespace DisableNvidiaTelemetry
                 }
             }
 
-
-            tcServices.IsEnabled = tcServices.TelemetryItems.Count != 0;
             _telemetryServices = services;
         }
 
@@ -253,7 +250,6 @@ namespace DisableNvidiaTelemetry
                 }
             }
 
-            tcRegistry.IsEnabled = tcRegistry.TelemetryItems.Count != 0;
             _telemetryKeys = keys;
         }
 
@@ -263,7 +259,6 @@ namespace DisableNvidiaTelemetry
             RefreshTelemetryTasks(true);
             RefreshTelemetryRegistry(true);
         }
-
 
         private void btnDonate_Click(object sender, RoutedEventArgs e)
         {

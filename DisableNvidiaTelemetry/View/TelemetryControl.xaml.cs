@@ -19,6 +19,7 @@ namespace DisableNvidiaTelemetry.View
         {
             InitializeComponent();
             containerPanel.Loaded += ContainerPanel_Loaded;
+            Loaded += TelemetryControl_Loaded;
 
             lblRefresh.MouseLeftButtonDown += (sender, e) =>
             {
@@ -39,10 +40,20 @@ namespace DisableNvidiaTelemetry.View
             };
         }
 
+        private void TelemetryControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblName.Content = Text;
+            UpdateStatus();
+        }
+
         public string Text
         {
             get => (string) GetValue(TextProperty);
-            set => SetValue(TextProperty, value);
+            set
+            {
+                SetValue(TextProperty, value);
+                lblName.Content = value;
+            }
         }
 
         public ReadOnlyCollection<ITelemetry> TelemetryItems => _telemetryItems.AsReadOnly();
@@ -58,6 +69,10 @@ namespace DisableNvidiaTelemetry.View
 
         public void AddTelemetryItem(ITelemetry telemetry, string displayText)
         {
+            lblPlaceholder.Visibility = Visibility.Collapsed;
+            btnDefault.Visibility = Visibility.Visible;
+            lblDefault.Visibility = Visibility.Visible;
+
             _telemetryItems.Add(telemetry);
 
             var cb = new CheckBox
@@ -130,7 +145,9 @@ namespace DisableNvidiaTelemetry.View
                 lblName.Visibility = Visibility.Visible;
 
             var allDisabled = disabledCount == _telemetryItems.Count;
-            lblName.Content = $"{Text} - ({(allDisabled ? Properties.Resources.All_Disabled : $"{disabledCount} / {_telemetryItems.Count} {Properties.Resources.Disabled}")})";
+
+            if (_telemetryItems.Count > 0)
+                lblName.Content = $"{Text} - ({(allDisabled ? Properties.Resources.All_Disabled : $"{disabledCount} / {_telemetryItems.Count} {Properties.Resources.Disabled}")})";
         }
 
         public void Reset()

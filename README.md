@@ -3,18 +3,15 @@ Disable Nvidia Telemetry
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ehusy6jle2om8t3g/branch/master?svg=true)](https://ci.appveyor.com/project/NateShoffner/disable-nvidia-telemetry/branch/master)
 
-
 Disable Nvidia Telemetry is a utility that allows you to disable the telemetry services Nvidia bundles with their drivers.
 
  ### Download ###
 
- [v1.1](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/1.1)
+![Github All Releases]( https://img.shields.io/github/downloads/nateshoffner/disable-nvidia-telemetry/total.svg)
 
-![](http://i.imgur.com/0w5eIdN.png)
+[Click here to download v1.2 Installer / Portable Versions](https://github.com/NateShoffner/Disable-Nvidia-Telemetry/releases/1.2)
 
-![](http://i.imgur.com/ulsBmfd.png)
-
-![](http://i.imgur.com/l8PBL3B.png)
+![](https://i.imgur.com/cqOmSGW.png)
 
  ### License ###
 
@@ -33,3 +30,5 @@ Disable Nvidia Telemetry is a utility that allows you to disable the telemetry s
     limitations under the License.
 
 Icon originally made by freepik from www.flaticon.com
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RGQ8NSYPA59FL)

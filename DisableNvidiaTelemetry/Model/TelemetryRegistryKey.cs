@@ -6,6 +6,8 @@ namespace DisableNvidiaTelemetry.Model
 {
     internal class TelemetryRegistryKey : ITelemetry
     {
+
+
         private readonly string _subKeyPath;
 
         public Dictionary<string, RegistryValuePair> ValueData;
@@ -19,7 +21,7 @@ namespace DisableNvidiaTelemetry.Model
 
         private RegistryKey BaseKey { get; }
 
-        public RegistryKey SubKey => BaseKey.OpenSubKey(_subKeyPath);
+        public RegistryKey SubKey => BaseKey.OpenSubKey(_subKeyPath, RegistryKeyPermissionCheck.ReadWriteSubTree);
 
         public string Name => $"{BaseKey.Name}\\{_subKeyPath}";
 

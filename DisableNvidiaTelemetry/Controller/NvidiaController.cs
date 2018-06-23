@@ -96,6 +96,9 @@ namespace DisableNvidiaTelemetry.Controller
                     // attempt to enter subkey
                     var subKey = key.SubKey;
                     telemetryRegistryKey = key;
+
+                    if (subKey == null)
+                        throw new NullReferenceException();
                 }
 
                 catch (Exception ex)

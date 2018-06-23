@@ -20,7 +20,8 @@ namespace DisableNvidiaTelemetry.Controller
         /// </summary>
         public static IEnumerable<NvidiaControllerResult<TelemetryTask>> EnumerateTelemetryTasks()
         {
-            var taskFilters = new Regex[] {
+            var taskFilters = new[]
+            {
                 new Regex("NvTmMon_*", RegexOptions.Compiled),
                 new Regex("NvTmRep*", RegexOptions.Compiled),
                 new Regex("NvTmRepOnLogon_*", RegexOptions.Compiled)
@@ -28,20 +29,15 @@ namespace DisableNvidiaTelemetry.Controller
 
             foreach (var filter in taskFilters)
             {
-                TelemetryTask telemetryTask = null;
-                Exception error = null;
-
                 var tasks = TaskService.Instance.FindAllTasks(filter);
+
+                if (tasks.Length == 0)
+                    yield return new NvidiaControllerResult<TelemetryTask>(null, new TaskNotFoundException($"Failed to find task: {filter}")) {Name = filter.ToString()};
 
                 foreach (var task in tasks)
                 {
-                    if (task != null)
-                        telemetryTask = new TelemetryTask(task);
-
-                    else
-                        error = new TaskNotFoundException($"Failed to find task: {filter}");
-
-                    yield return new NvidiaControllerResult<TelemetryTask>(telemetryTask, error) { Name = filter.ToString() };
+                    var telemetryTask = new TelemetryTask(task);
+                    yield return new NvidiaControllerResult<TelemetryTask>(telemetryTask) {Name = filter.ToString()};
                 }
             }
         }
@@ -51,7 +47,7 @@ namespace DisableNvidiaTelemetry.Controller
         /// </summary>
         public static IEnumerable<NvidiaControllerResult<TelemetryService>> EnumerateTelemetryServices()
         {
-            var serviceNames = new[] { "NvTelemetryContainer" };
+            var serviceNames = new[] {"NvTelemetryContainer"};
 
             foreach (var serviceName in serviceNames)
             {
@@ -72,7 +68,7 @@ namespace DisableNvidiaTelemetry.Controller
                     error = ex;
                 }
 
-                yield return new NvidiaControllerResult<TelemetryService>(service, error) { Name = serviceName };
+                yield return new NvidiaControllerResult<TelemetryService>(service, error) {Name = serviceName};
             }
         }
 
@@ -107,7 +103,7 @@ namespace DisableNvidiaTelemetry.Controller
                     error = ex;
                 }
 
-                yield return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, error) { Name = key.Name };
+                yield return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, error) {Name = key.Name};
             }
         }
 
@@ -129,7 +125,7 @@ namespace DisableNvidiaTelemetry.Controller
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -156,7 +152,7 @@ namespace DisableNvidiaTelemetry.Controller
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -183,7 +179,7 @@ namespace DisableNvidiaTelemetry.Controller
                 }
 
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -210,7 +206,7 @@ namespace DisableNvidiaTelemetry.Controller
                 }
 
 
-                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -237,7 +233,7 @@ namespace DisableNvidiaTelemetry.Controller
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -264,7 +260,7 @@ namespace DisableNvidiaTelemetry.Controller
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryService>(telemetryService) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryService>(telemetryService) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -290,7 +286,7 @@ namespace DisableNvidiaTelemetry.Controller
                 }
 
 
-                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryTask>(telemetryTask) {Modified = modified};
             }
 
             catch (Exception ex)
@@ -316,7 +312,7 @@ namespace DisableNvidiaTelemetry.Controller
                     modified = true;
                 }
 
-                return new NvidiaControllerResult<TelemetryRegistryKey>(key) { Modified = modified };
+                return new NvidiaControllerResult<TelemetryRegistryKey>(key) {Modified = modified};
             }
 
             catch (Exception ex)

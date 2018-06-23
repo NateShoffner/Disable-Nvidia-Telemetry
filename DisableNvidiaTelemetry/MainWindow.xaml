@@ -164,7 +164,7 @@
                     <CheckBox Name="chkBackgroundTask"
                               Content="Run in background and disable Nvidia telemetry services and tasks:"
                               HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"
-                              Checked="chkBackgroundTask_Checked" />
+                              Checked="chkBackgroundTask_Checked" Unchecked="chkBackgroundTask_Checked" />
                     <CheckBox Name="chkUpdates" Content="Check for updates when program is opened"
                               HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top"
                               Click="ChkUpdates_OnClick" />

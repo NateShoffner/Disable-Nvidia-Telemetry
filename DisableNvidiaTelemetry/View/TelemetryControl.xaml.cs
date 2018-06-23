@@ -40,12 +40,6 @@ namespace DisableNvidiaTelemetry.View
             };
         }
 
-        private void TelemetryControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            lblName.Content = Text;
-            UpdateStatus();
-        }
-
         public string Text
         {
             get => (string) GetValue(TextProperty);
@@ -57,6 +51,12 @@ namespace DisableNvidiaTelemetry.View
         }
 
         public ReadOnlyCollection<ITelemetry> TelemetryItems => _telemetryItems.AsReadOnly();
+
+        private void TelemetryControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            lblName.Content = Text;
+            UpdateStatus();
+        }
 
         public event EventHandler<TelemetryModifiedEventArgs> TelemetryModified;
         public event EventHandler<EventArgs> RefreshClicked;

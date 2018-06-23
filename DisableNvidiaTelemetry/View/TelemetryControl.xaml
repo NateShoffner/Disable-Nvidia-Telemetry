@@ -10,7 +10,6 @@
     <Grid Margin="0, 0, 0, 0">
 
 
-
         <Label Name="lblName" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5, 0, 0, 0"
                FontWeight="Bold" FontSize="12" />
 
@@ -23,17 +22,16 @@
 
 
         <fa5:SvgAwesome Icon="Solid_SyncAlt" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="right"
-                        Margin="0, 5, 60, 0" Foreground="#76B900" Cursor="Hand" Name="btnRefresh"  />
+                        Margin="0, 5, 60, 0" Foreground="#76B900" Cursor="Hand" Name="btnRefresh" />
 
         <Label Name="lblRefresh" Content="Refresh" HorizontalAlignment="Right" VerticalAlignment="Top"
                Margin="0, 0, 10, 0"
                FontWeight="Bold" FontSize="12" Cursor="Hand" />
 
-        <Label Name="lblPlaceholder" HorizontalAlignment="Center" Content="No telemetry items found for this category." Margin="0, 40, 0, 40"/>
-        
-        <StackPanel Name="containerPanel" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="15,30,5,15"
-                    local:MarginSetter.Margin="5" Grid.ColumnSpan="2">
+        <Label Name="lblPlaceholder" HorizontalAlignment="Center" Content="No telemetry items found for this category."
+               Margin="0, 40, 0, 40" />
 
-        </StackPanel>
+        <StackPanel Name="containerPanel" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="15,30,5,15"
+                    local:MarginSetter.Margin="5" Grid.ColumnSpan="2" />
     </Grid>
 </UserControl>

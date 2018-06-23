@@ -26,7 +26,6 @@ namespace DisableNvidiaTelemetry.Utilities
                 {
                     using (var subkey = key.OpenSubKey(subkey_name))
                     {
-                        Console.WriteLine(subkey_name);
                         var name = subkey.GetValue("DisplayName");
 
                         if (name != null)

@@ -21,7 +21,7 @@ Disable Nvidia Telemetry is a utility that allows you to disable the telemetry s
 
  ### License ###
 
-    Copyright 2017 Nate Shoffner
+    Copyright 2018 Nate Shoffner
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

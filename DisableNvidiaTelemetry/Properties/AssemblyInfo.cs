@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Nate Shoffner")]
 [assembly: AssemblyProduct("Disable Nvidia Telemetry")]
-[assembly: AssemblyCopyright("Copyright © Nate Shoffner 2017")]
+[assembly: AssemblyCopyright("Copyright © Nate Shoffner 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -156,7 +156,9 @@ namespace DisableNvidiaTelemetry.View
 
             _telemetryItems.Clear();
             containerPanel.Children.Clear();
-
+            lblPlaceholder.Visibility = Visibility.Visible;
+            btnDefault.Visibility = Visibility.Collapsed;
+            lblDefault.Visibility = Visibility.Collapsed;
             _suppressEvents = false;
         }
 

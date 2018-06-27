@@ -10,8 +10,8 @@
         mc:Ignorable="d"
         Title="Disable Nvidia Telemetry"
         MinHeight="355"
-        MinWidth="800"
-        Height="515" Width="800" ResizeMode="CanResize"
+        MinWidth="850"
+        Height="580" Width="850" ResizeMode="CanResize"
         Icon="Resources/binoculars-256.png" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen">
 
 
@@ -153,10 +153,6 @@
 
                 <Grid>
 
-                    <Button Name="btnUpdatecheck" Content="Check for Updates" HorizontalAlignment="Left"
-                            Margin="10,161,0,0"
-                            VerticalAlignment="Top" Width="120" Click="btnUpdatecheck_Click"
-                            Template="{DynamicResource ButtonBaseControlTemplate}" />
                     <CheckBox Name="chkFileLogging"
                               Content="Enable logging"
                               HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
@@ -174,6 +170,8 @@
                         <ComboBoxItem>Every Day</ComboBoxItem>
                         <ComboBoxItem>After Windows Startup</ComboBoxItem>
                     </ComboBox>
+
+                    <Button Content="Check For Updates" Height="40" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,157,0,0" Name="btnUpdateCheck" Click="btnUpdatecheck_Click" />
 
                 </Grid>
             </TabItem>

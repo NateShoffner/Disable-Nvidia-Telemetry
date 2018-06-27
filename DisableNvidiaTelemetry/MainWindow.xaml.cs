@@ -57,7 +57,7 @@ namespace DisableNvidiaTelemetry
 
             if (Settings.Default.StartupUpdate)
             {
-                btnUpdatecheck.IsEnabled = false;
+                btnUpdateCheck.IsEnabled = false;
                 UpdaterUtilities.UpdateCheck(false);
             }
 
@@ -103,7 +103,7 @@ namespace DisableNvidiaTelemetry
 
                 else if (showDialog)
                 {
-                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.No_updates_available_message);
+                    ShowNotificationWindow(Properties.Resources.Updates, Properties.Resources.No_updates_available_message);
                 }
             }
 
@@ -115,7 +115,7 @@ namespace DisableNvidiaTelemetry
                     ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Update_error_messsage);
             }
 
-            btnUpdatecheck.IsEnabled = true;
+            btnUpdateCheck.IsEnabled = true;
         }
 
         private void CheckBackgroundTask()
@@ -237,7 +237,7 @@ namespace DisableNvidiaTelemetry
 
                     sb.AppendLine(key.Name);
 
-                    foreach (var vd in key.ValueData)
+                    foreach (var vd in key.GetValues())
                     {
                         sb.Append("@=\"");
                         sb.Append(vd.Key);
@@ -280,7 +280,7 @@ namespace DisableNvidiaTelemetry
 
         private void btnUpdatecheck_Click(object sender, RoutedEventArgs e)
         {
-            btnUpdatecheck.IsEnabled = false;
+            btnUpdateCheck.IsEnabled = false;
             UpdaterUtilities.UpdateCheck(true);
         }
 

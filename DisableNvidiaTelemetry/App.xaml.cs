@@ -6,6 +6,7 @@ using DisableNvidiaTelemetry.Controller;
 using DisableNvidiaTelemetry.Properties;
 using DisableNvidiaTelemetry.Utilities;
 using log4net.Core;
+using WPFCustomMessageBox;
 
 namespace DisableNvidiaTelemetry
 {
@@ -136,7 +137,7 @@ namespace DisableNvidiaTelemetry
             }
 
             if (!AppUtils.IsAdministrator())
-                MessageBox.Show(DisableNvidiaTelemetry.Properties.Resources.Please_run_the_program_as_administrator_to_continue,
+                CustomMessageBox.Show(DisableNvidiaTelemetry.Properties.Resources.Please_run_the_program_as_administrator_to_continue,
                     DisableNvidiaTelemetry.Properties.Resources.AdministratorRequired, MessageBoxButton.OK, MessageBoxImage.Error);
 
             if (showUI)

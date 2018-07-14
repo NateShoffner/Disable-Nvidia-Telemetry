@@ -155,6 +155,15 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for updates when program is opened.
+        /// </summary>
+        public static string Check_for_updates_on_startup {
+            get {
+                return ResourceManager.GetString("Check_for_updates_on_startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable Nvidia Telemetry.
         /// </summary>
         public static string Disable_Nvidia_Telemetry {
@@ -178,6 +187,15 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Disabled {
             get {
                 return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable logging.
+        /// </summary>
+        public static string Enable_logging {
+            get {
+                return ResourceManager.GetString("Enable_logging", resourceCulture);
             }
         }
         
@@ -442,6 +460,51 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Registry_item_is {
             get {
                 return ResourceManager.GetString("Registry_item_is", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Later.
+        /// </summary>
+        public static string Restart_later {
+            get {
+                return ResourceManager.GetString("Restart_later", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Now.
+        /// </summary>
+        public static string Restart_now {
+            get {
+                return ResourceManager.GetString("Restart_now", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A Windows restart is required in order for this change to take effect..
+        /// </summary>
+        public static string Restart_required_message {
+            get {
+                return ResourceManager.GetString("Restart_required_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart Required.
+        /// </summary>
+        public static string Restart_requried {
+            get {
+                return ResourceManager.GetString("Restart_requried", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run in background and disable Nvidia telemetry services and tasks:.
+        /// </summary>
+        public static string Run_in_background {
+            get {
+                return ResourceManager.GetString("Run_in_background", resourceCulture);
             }
         }
         

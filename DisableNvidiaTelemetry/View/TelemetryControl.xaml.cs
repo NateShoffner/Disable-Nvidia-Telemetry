@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using DisableNvidiaTelemetry.Model;
 
 namespace DisableNvidiaTelemetry.View
@@ -18,26 +19,13 @@ namespace DisableNvidiaTelemetry.View
         public TelemetryControl()
         {
             InitializeComponent();
-            containerPanel.Loaded += ContainerPanel_Loaded;
+            containerPanel.Loaded += (sender, e) => { MarginSetter.CreateThicknesForChildren(sender, new DependencyPropertyChangedEventArgs()); };
+
             Loaded += TelemetryControl_Loaded;
 
-            lblRefresh.MouseLeftButtonDown += (sender, e) =>
-            {
-                if (RefreshClicked != null)
-                    RefreshClicked(sender, e);
-            };
-
-            btnRefresh.MouseLeftButtonDown += (sender, e) =>
-            {
-                if (RefreshClicked != null)
-                    RefreshClicked(sender, e);
-            };
-
-            lblDefault.MouseLeftButtonDown += (sender, e) =>
-            {
-                if (DefaultClicked != null)
-                    DefaultClicked(sender, e);
-            };
+            lblRefresh.MouseLeftButtonDown += (sender, e) => { RefreshClicked?.Invoke(sender, e); };
+            btnRefresh.MouseLeftButtonDown += (sender, e) => { RefreshClicked?.Invoke(sender, e); };
+            lblDefault.MouseLeftButtonDown += (sender, e) => { DefaultClicked?.Invoke(sender, e); };
         }
 
         public string Text
@@ -58,14 +46,11 @@ namespace DisableNvidiaTelemetry.View
             UpdateStatus();
         }
 
-        public event EventHandler<TelemetryModifiedEventArgs> TelemetryModified;
         public event EventHandler<EventArgs> RefreshClicked;
         public event EventHandler<EventArgs> DefaultClicked;
 
-        private void ContainerPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            MarginSetter.CreateThicknesForChildren(sender, new DependencyPropertyChangedEventArgs());
-        }
+        public event EventHandler<TelemetryEventArgs> TelemetryChanged;
+        public event EventHandler<TelemetryEventArgs> TelemetryChanging;
 
         public void AddTelemetryItem(ITelemetry telemetry, string displayText)
         {
@@ -82,59 +67,47 @@ namespace DisableNvidiaTelemetry.View
                     Text = displayText
                 },
                 IsChecked = telemetry.IsActive(),
-                FontSize = 13,
                 Style = (Style) FindResource("SwitchCheckBox")
             };
 
             containerPanel.Children.Add(cb);
 
-            cb.Margin = new Thickness(5, 0, cb.ActualHeight * (_telemetryItems.Count - 1), 0);
-            cb.Checked += (s, e) =>
-            {
-                if (_suppressEvents)
-                    return;
-
-                var eventArgs = new TelemetryModifiedEventArgs(telemetry, true);
-
-                if (TelemetryModified != null)
-                {
-                    TelemetryModified(this, eventArgs);
-
-                    if (eventArgs.Cancel)
-                    {
-                        _suppressEvents = true;
-                        cb.IsChecked = false;
-                        _suppressEvents = false;
-                    }
-
-                    UpdateStatus();
-                }
-            };
-            cb.Unchecked += (s, e) =>
-            {
-                if (_suppressEvents)
-                    return;
-
-                var eventArgs = new TelemetryModifiedEventArgs(telemetry, false);
-
-                if (TelemetryModified != null)
-                {
-                    TelemetryModified(this, eventArgs);
-
-                    if (eventArgs.Cancel)
-                    {
-                        _suppressEvents = true;
-                        cb.IsChecked = true;
-                        _suppressEvents = false;
-                    }
-
-                    UpdateStatus();
-                }
-            };
+            cb.Checked += (s, e) => { ProcessCheckChange(telemetry, cb, true); };
+            cb.Unchecked += (s, e) => { ProcessCheckChange(telemetry, cb, false); };
 
             UpdateStatus();
 
             MarginSetter.CreateThicknesForChildren(containerPanel, new DependencyPropertyChangedEventArgs());
+        }
+
+        private void ProcessCheckChange(ITelemetry telemetry, ToggleButton cb, bool isChecked)
+        {
+            if (_suppressEvents)
+                return;
+
+            var eventArgs = new TelemetryEventArgs(telemetry, isChecked);
+
+            var cancelled = false;
+
+            if (TelemetryChanging != null)
+            {
+                TelemetryChanging(this, eventArgs);
+                cancelled = eventArgs.Cancel;
+            }
+
+            if (cancelled)
+            {
+                _suppressEvents = true;
+                cb.IsChecked = !isChecked;
+                _suppressEvents = false;
+            }
+
+            else
+            {
+                TelemetryChanged?.Invoke(this, eventArgs);
+            }
+
+            UpdateStatus();
         }
 
         private void UpdateStatus()
@@ -159,12 +132,13 @@ namespace DisableNvidiaTelemetry.View
             lblPlaceholder.Visibility = Visibility.Visible;
             btnDefault.Visibility = Visibility.Collapsed;
             lblDefault.Visibility = Visibility.Collapsed;
+
             _suppressEvents = false;
         }
 
-        public class TelemetryModifiedEventArgs : EventArgs
+        public class TelemetryEventArgs : EventArgs
         {
-            public TelemetryModifiedEventArgs(ITelemetry telemetry, bool enabled)
+            public TelemetryEventArgs(ITelemetry telemetry, bool enabled)
             {
                 Telemetry = telemetry;
                 Enabled = enabled;

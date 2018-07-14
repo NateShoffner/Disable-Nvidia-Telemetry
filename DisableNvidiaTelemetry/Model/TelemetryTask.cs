@@ -13,6 +13,8 @@ namespace DisableNvidiaTelemetry.Model
 
         #region Implementation of ITelemetry
 
+        public bool RestartRequired { get; set; }
+
         public bool IsActive()
         {
             return Task != null && Task.Enabled;

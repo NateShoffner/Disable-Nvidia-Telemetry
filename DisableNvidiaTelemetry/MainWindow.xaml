@@ -85,21 +85,24 @@
 
                             <view:TelemetryControl x:Name="tcServices"
                                                    Text="{x:Static properties:Resources.Telemetry_services}"
-                                                   TelemetryModified="TcServices_TelemetryModified"
                                                    RefreshClicked="tcServices_RefreshClicked"
-                                                   DefaultClicked="tcServices_DefaultClicked" />
+                                                   DefaultClicked="tcServices_DefaultClicked"
+                                                   TelemetryChanging="TcServices_OnTelemetryChanging"
+                                                   TelemetryChanged="OnTelemetryChanged" />
 
                             <view:TelemetryControl x:Name="tcTasks"
                                                    Text="{x:Static properties:Resources.Telemetry_tasks}"
-                                                   TelemetryModified="TcTasks_TelemetryModified"
                                                    RefreshClicked="tcTasks_RefreshClicked"
-                                                   DefaultClicked="tcTasks_DefaultClicked" />
+                                                   DefaultClicked="tcTasks_DefaultClicked"
+                                                   TelemetryChanging="TcTasks_OnTelemetryChanging"
+                                                   TelemetryChanged="OnTelemetryChanged" />
 
                             <view:TelemetryControl x:Name="tcRegistry"
                                                    Text="{x:Static properties:Resources.Telemetry_registry_items}"
-                                                   TelemetryModified="TcRegistry_TelemetryModified"
                                                    RefreshClicked="tcRegistry_RefreshClicked"
-                                                   DefaultClicked="tcRegistry_DefaultClicked" />
+                                                   DefaultClicked="tcRegistry_DefaultClicked"
+                                                   TelemetryChanging="TcRegistry_OnTelemetryChanging"
+                                                   TelemetryChanged="OnTelemetryChanged" />
 
                         </StackPanel>
                     </ScrollViewer>
@@ -154,24 +157,27 @@
                 <Grid>
 
                     <CheckBox Name="chkFileLogging"
-                              Content="Enable logging"
+                              Content="{x:Static properties:Resources.Enable_logging}"
                               HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
                               Click="ChkFileLogging_OnClick" />
                     <CheckBox Name="chkBackgroundTask"
-                              Content="Run in background and disable Nvidia telemetry services and tasks:"
+                              Content="{x:Static properties:Resources.Run_in_background}"
                               HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"
                               Checked="chkBackgroundTask_Checked" Unchecked="chkBackgroundTask_Checked" />
-                    <CheckBox Name="chkUpdates" Content="Check for updates when program is opened"
+                    <CheckBox Name="chkUpdates"
+                              Content="{x:Static properties:Resources.Check_for_updates_on_startup}"
                               HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top"
                               Click="ChkUpdates_OnClick" />
-                    <ComboBox Name="cbTaskTrigger" HorizontalAlignment="Left" Margin="421,99,0,0"
+                    <ComboBox Name="cbTaskTrigger" HorizontalAlignment="Left" Margin="444,99,0,0"
                               VerticalAlignment="Top" Width="218" IsEnabled="False" Height="23"
                               SelectionChanged="cbTaskTrigger_SelectionChanged">
                         <ComboBoxItem>Every Day</ComboBoxItem>
                         <ComboBoxItem>After Windows Startup</ComboBoxItem>
                     </ComboBox>
 
-                    <Button Content="Check For Updates" Height="40" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,157,0,0" Name="btnUpdateCheck" Click="btnUpdatecheck_Click" />
+                    <Button Content="Check For Updates" Height="40" Width="200" HorizontalAlignment="Left"
+                            VerticalAlignment="Top" Margin="10,157,0,0" Name="btnUpdateCheck"
+                            Click="btnUpdatecheck_Click" />
 
                 </Grid>
             </TabItem>

@@ -83,7 +83,21 @@ namespace DisableNvidiaTelemetry.Controller
                     new Dictionary<string, TelemetryRegistryKey.RegistryValuePair>
                     {
                         {"OptInOrOutPreference", new TelemetryRegistryKey.RegistryValuePair("1", "0")}
-                    })
+                    }),
+                new TelemetryRegistryKey(Registry.LocalMachine, @"SYSTEM\CurrentControlSet\Services\NvContainerLocalSystem",
+                    new Dictionary<string, TelemetryRegistryKey.RegistryExpressionModifiers>
+                    {
+                        {
+                            "ImagePath", new TelemetryRegistryKey.RegistryExpressionModifiers(
+                                new Regex(@"-st ""(.*)\\NVIDIA Corporation\\NvContainer\\NvContainerTelemetryApi.dll""$", RegexOptions.Compiled),
+                                new TelemetryRegistryKey.Replacement(
+                                    new Regex(@"""(.*)\\NVIDIA Corporation\\NvContainer\\nvcontainer.exe""(.*)$", RegexOptions.Compiled),
+                                    @"""$1\NVIDIA Corporation\NvContainer\nvcontainer.exe""$2 -st ""$1\NVIDIA Corporation\NvContainer\NvContainerTelemetryApi.dll"""),
+                                new TelemetryRegistryKey.Replacement(
+                                    new Regex(@"(.*) -st ""(.*)\\NVIDIA Corporation\\NvContainer\\NvContainerTelemetryApi.dll""$", RegexOptions.Compiled),
+                                    "$1"))
+                        }
+                    }) {RestartRequired = true}
             };
 
             foreach (var key in keys)

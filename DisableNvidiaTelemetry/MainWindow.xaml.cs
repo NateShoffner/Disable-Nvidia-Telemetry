@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -15,6 +17,7 @@ using DisableNvidiaTelemetry.Utilities;
 using DisableNvidiaTelemetry.View;
 using ExtendedVersion;
 using log4net.Core;
+using WPFCustomMessageBox;
 
 namespace DisableNvidiaTelemetry
 {
@@ -22,8 +25,6 @@ namespace DisableNvidiaTelemetry
     {
         private readonly List<Logging.LogEvent> _logEvents = new List<Logging.LogEvent>();
         private bool _ignoreTaskSetting;
-
-        private NotificationWindow _notificationWindow;
         private List<TelemetryRegistryKey> _telemetryKeys = new List<TelemetryRegistryKey>();
         private List<TelemetryService> _telemetryServices = new List<TelemetryService>();
         private List<TelemetryTask> _telemetryTasks = new List<TelemetryTask>();
@@ -95,7 +96,7 @@ namespace DisableNvidiaTelemetry
 
                 if (e.LatestVersion > current)
                 {
-                    var result = MessageBox.Show(Properties.Resources.Update_available_message, Properties.Resources.Update_available, MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    var result = CustomMessageBox.Show(Properties.Resources.Update_available_message, Properties.Resources.Update_available, MessageBoxButton.YesNo, MessageBoxImage.Information);
 
                     if (result == MessageBoxResult.Yes)
                         Process.Start(e.Url.ToString());
@@ -103,7 +104,9 @@ namespace DisableNvidiaTelemetry
 
                 else if (showDialog)
                 {
-                    ShowNotificationWindow(Properties.Resources.Updates, Properties.Resources.No_updates_available_message);
+                    CustomMessageBox.Show(
+                        Properties.Resources.No_updates_available_message,
+                        Properties.Resources.Updates);
                 }
             }
 
@@ -112,7 +115,11 @@ namespace DisableNvidiaTelemetry
                 Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
 
                 if (showDialog)
-                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Update_error_messsage);
+                {
+                    CustomMessageBox.Show(
+                        Properties.Resources.Update_error_messsage,
+                        Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
 
             btnUpdateCheck.IsEnabled = true;
@@ -253,6 +260,7 @@ namespace DisableNvidiaTelemetry
             _telemetryKeys = keys;
         }
 
+
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTelemetryServices(true);
@@ -313,122 +321,9 @@ namespace DisableNvidiaTelemetry
             Clipboard.SetText(((Logging.LogEvent) lvLogs.SelectedItem).Message.ToString());
         }
 
-        private void TcServices_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
-        {
-            var telemetry = (TelemetryService) e.Telemetry;
-
-            if (e.Enabled)
-            {
-                var startupResult = NvidiaController.EnableTelemetryServiceStartup(telemetry);
-
-                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
-                    ? $"{Properties.Resources.Automatic_service_startup_failed}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
-                    : $"{Properties.Resources.Automatic_service_startup_enabled}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
-
-                var result = NvidiaController.EnableTelemetryService(telemetry);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_start_service}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
-                    : $"{Properties.Resources.Service_started}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
-            }
-
-            else
-            {
-                var startupResult = NvidiaController.DisableTelemetryServiceStartup(telemetry);
-
-                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
-                    ? $"{Properties.Resources.Disable_service_startup_failed}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
-                    : $"{Properties.Resources.Automatic_service_startup_disabled}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
-
-                var result = NvidiaController.DisableTelemetryService(telemetry);
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_stop_service}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
-                    : $"{Properties.Resources.Service_stopped}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
-            }
-        }
-
-        private void TcTasks_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
-        {
-            var telemetry = (TelemetryTask) e.Telemetry;
-
-            if (e.Enabled)
-            {
-                var result = NvidiaController.EnableTelemetryTask(telemetry);
-
-                if (result.Error != null)
-                    e.Cancel = true;
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
-                    : $"{Properties.Resources.Task_enabled}: {result.Item.Task.Path}");
-            }
-
-            else
-            {
-                var result = NvidiaController.DisableTelemetryTask(telemetry);
-
-                if (result.Error != null)
-                    e.Cancel = true;
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_disable_task}: {result.Item.Task.Path}"
-                    : $"{Properties.Resources.Task_disabled}: {result.Item.Task.Path}");
-            }
-        }
-
-        private void TcRegistry_TelemetryModified(object sender, TelemetryControl.TelemetryModifiedEventArgs e)
-        {
-            var telemetry = (TelemetryRegistryKey) e.Telemetry;
-
-            if (e.Enabled)
-            {
-                var result = NvidiaController.EnableTelemetryRegistryItem(telemetry);
-
-                if (result.Error != null)
-                {
-                    e.Cancel = true;
-                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Failed_to_enable_registry_item);
-                }
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
-                    : $"{Properties.Resources.Registry_item_enabled}: {result.Item.Name}");
-            }
-
-            else
-            {
-                var result = NvidiaController.DisableTelemetryRegistryItem(telemetry);
-
-                if (result.Error != null)
-                {
-                    e.Cancel = true;
-                    ShowNotificationWindow(Properties.Resources.Error, Properties.Resources.Failed_to_disable_registry_item);
-                }
-
-                Logging.GetFileLogger().Log(Level.Info, result.Error != null
-                    ? $"{Properties.Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
-                    : $"{Properties.Resources.Registry_item_disabled}: {result.Item.Name}");
-            }
-        }
-
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());
-        }
-
-        private void ShowNotificationWindow(string title, string message)
-        {
-            if (_notificationWindow != null)
-                _notificationWindow.Close();
-
-            _notificationWindow = new NotificationWindow
-            {
-                Owner = this,
-                Title = title,
-                Message = message
-            };
-            _notificationWindow.ShowDialog();
         }
 
         private void tcServices_RefreshClicked(object sender, EventArgs e)
@@ -513,6 +408,128 @@ namespace DisableNvidiaTelemetry
             }
 
             RefreshTelemetryRegistry(false);
+        }
+
+        private void TcRegistry_OnTelemetryChanging(object sender, TelemetryControl.TelemetryEventArgs e)
+        {
+            var telemetry = (TelemetryRegistryKey) e.Telemetry;
+
+            if (e.Enabled)
+            {
+                var result = NvidiaController.EnableTelemetryRegistryItem(telemetry);
+
+                if (result.Error != null)
+                {
+                    e.Cancel = true;
+                    CustomMessageBox.Show(
+                        Properties.Resources.Failed_to_enable_registry_item,
+                        Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_enable_registry_item}: {result.Item.Name}"
+                    : $"{Properties.Resources.Registry_item_enabled}: {result.Item.Name}");
+            }
+
+            else
+            {
+                var result = NvidiaController.DisableTelemetryRegistryItem(telemetry);
+
+                if (result.Error != null)
+                {
+                    e.Cancel = true;
+                    CustomMessageBox.Show(
+                        Properties.Resources.Failed_to_disable_registry_item,
+                        Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_disable_registry_item}: {result.Item.Name}"
+                    : $"{Properties.Resources.Registry_item_disabled}: {result.Item.Name}");
+            }
+        }
+
+        private void TcServices_OnTelemetryChanging(object sender, TelemetryControl.TelemetryEventArgs e)
+        {
+            var telemetry = (TelemetryService) e.Telemetry;
+
+            if (e.Enabled)
+            {
+                var startupResult = NvidiaController.EnableTelemetryServiceStartup(telemetry);
+
+                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
+                    ? $"{Properties.Resources.Automatic_service_startup_failed}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
+                    : $"{Properties.Resources.Automatic_service_startup_enabled}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
+
+                var result = NvidiaController.EnableTelemetryService(telemetry);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_start_service}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
+                    : $"{Properties.Resources.Service_started}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
+            }
+
+            else
+            {
+                var startupResult = NvidiaController.DisableTelemetryServiceStartup(telemetry);
+
+                Logging.GetFileLogger().Log(Level.Info, startupResult.Error != null
+                    ? $"{Properties.Resources.Disable_service_startup_failed}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
+                    : $"{Properties.Resources.Automatic_service_startup_disabled}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
+
+                var result = NvidiaController.DisableTelemetryService(telemetry);
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_stop_service}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})"
+                    : $"{Properties.Resources.Service_stopped}: {telemetry.Service.DisplayName} ({telemetry.Service.ServiceName})");
+            }
+        }
+
+        private void TcTasks_OnTelemetryChanging(object sender, TelemetryControl.TelemetryEventArgs e)
+        {
+            var telemetry = (TelemetryTask) e.Telemetry;
+
+            if (e.Enabled)
+            {
+                var result = NvidiaController.EnableTelemetryTask(telemetry);
+
+                if (result.Error != null)
+                    e.Cancel = true;
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_enable_task}: {result.Item.Task.Path}"
+                    : $"{Properties.Resources.Task_enabled}: {result.Item.Task.Path}");
+            }
+
+            else
+            {
+                var result = NvidiaController.DisableTelemetryTask(telemetry);
+
+                if (result.Error != null)
+                    e.Cancel = true;
+
+                Logging.GetFileLogger().Log(Level.Info, result.Error != null
+                    ? $"{Properties.Resources.Failed_to_disable_task}: {result.Item.Task.Path}"
+                    : $"{Properties.Resources.Task_disabled}: {result.Item.Task.Path}");
+            }
+        }
+
+        private void OnTelemetryChanged(object sender, TelemetryControl.TelemetryEventArgs e)
+        {
+            if (e.Telemetry.RestartRequired)
+                Task.Factory.StartNew(() => Thread.Sleep(200))
+                    .ContinueWith(t => { PromptRestart(); }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        private static void PromptRestart()
+        {
+            var result = CustomMessageBox.ShowYesNo(
+                Properties.Resources.Restart_required_message,
+                Properties.Resources.Restart_requried,
+                Properties.Resources.Restart_now,
+                Properties.Resources.Restart_later);
+
+            if (result == MessageBoxResult.Yes)
+                WindowsUtils.Restart();
         }
     }
 }

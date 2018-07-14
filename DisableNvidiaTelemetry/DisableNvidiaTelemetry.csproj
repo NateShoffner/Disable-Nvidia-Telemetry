@@ -84,10 +84,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -96,6 +94,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFCustomMessageBox, Version=1.0.7.25844, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFCustomMessageBox.Fork.1.0.9\lib\WPFCustomMessageBox.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\NvidiaController.cs" />
@@ -109,9 +110,7 @@
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="SwitchCheckbox.cs" />
     <Compile Include="Utilities\GeforceUtilities.cs" />
-    <Compile Include="View\NotificationWindow.xaml.cs">
-      <DependentUpon>NotificationWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Utilities\WindowsUtils.cs" />
     <Compile Include="View\TelemetryControl.xaml.cs">
       <DependentUpon>TelemetryControl.xaml</DependentUpon>
     </Compile>
@@ -136,10 +135,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\NotificationWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\TelemetryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

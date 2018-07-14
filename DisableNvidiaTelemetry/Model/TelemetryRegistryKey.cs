@@ -1,22 +1,31 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace DisableNvidiaTelemetry.Model
 {
     internal class TelemetryRegistryKey : ITelemetry
     {
-
-
         private readonly string _subKeyPath;
+        private readonly bool _useRegex;
+        public Dictionary<string, RegistryExpressionModifiers> ValueExpressions;
 
-        public Dictionary<string, RegistryValuePair> ValueData;
+        public Dictionary<string, RegistryValuePair> ValueStrings;
 
-        public TelemetryRegistryKey(RegistryKey baseKey, string subKeyPath, Dictionary<string, RegistryValuePair> valueData)
+        public TelemetryRegistryKey(RegistryKey baseKey, string subKeyPath, Dictionary<string, RegistryValuePair> valueStrings)
         {
             BaseKey = baseKey;
             _subKeyPath = subKeyPath;
-            ValueData = valueData;
+            ValueStrings = valueStrings;
+        }
+
+        public TelemetryRegistryKey(RegistryKey baseKey, string subKeyPath, Dictionary<string, RegistryExpressionModifiers> valueExpressions)
+        {
+            BaseKey = baseKey;
+            _subKeyPath = subKeyPath;
+            ValueExpressions = valueExpressions;
+            _useRegex = true;
         }
 
         private RegistryKey BaseKey { get; }
@@ -31,28 +40,25 @@ namespace DisableNvidiaTelemetry.Model
             {
                 var subKey = SubKey;
 
-                foreach (var vd in ValueData)
-                {
-                    subKey.SetValue(vd.Key, value
-                        ? vd.Value.Enabled
-                        : vd.Value.Disabled);
-                }
+                if (_useRegex)
+                    foreach (var vd in ValueExpressions)
+                    {
+                        var currentValue = subKey.GetValue(vd.Key).ToString();
+
+                        subKey.SetValue(vd.Key, value
+                            ? vd.Value.Enabled.Regex.Replace(currentValue, vd.Value.Enabled.Replacment)
+                            : vd.Value.Disabled.Regex.Replace(currentValue, vd.Value.Disabled.Replacment));
+                    }
+
+                else
+                    foreach (var vd in ValueStrings)
+                    {
+                        subKey.SetValue(vd.Key, value
+                            ? vd.Value.Enabled
+                            : vd.Value.Disabled);
+                    }
             }
         }
-
-        #region Implementation of ITelemetry
-
-        public bool IsActive()
-        {
-            var subKey = SubKey;
-
-            if (subKey == null)
-                return false;
-
-            return ValueData.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
-        }
-
-        #endregion
 
         public Dictionary<string, string> GetValues()
         {
@@ -63,13 +69,36 @@ namespace DisableNvidiaTelemetry.Model
             if (subKey == null)
                 return null;
 
-            foreach (var vd in ValueData)
-            {
-                var value = subKey.GetValue(vd.Key);
-                values.Add(vd.Key, value?.ToString());
-            }
+            if (_useRegex)
+                foreach (var vd in ValueExpressions)
+                {
+                    values.Add(vd.Key, subKey.GetValue(vd.Key)?.ToString());
+                }
+
+            else
+                foreach (var vd in ValueStrings)
+                {
+                    var value = subKey.GetValue(vd.Key);
+                    values.Add(vd.Key, value?.ToString());
+                }
 
             return values;
+        }
+
+        public class RegistryExpressionModifiers
+        {
+            public RegistryExpressionModifiers(Regex match, Replacement enabled, Replacement disabled)
+            {
+                Match = match;
+                Enabled = enabled;
+                Disabled = disabled;
+            }
+
+            public Regex Match { get; }
+
+            public Replacement Enabled { get; }
+
+            public Replacement Disabled { get; }
         }
 
         public class RegistryValuePair
@@ -84,5 +113,36 @@ namespace DisableNvidiaTelemetry.Model
 
             public string Disabled { get; }
         }
+
+
+        public class Replacement
+        {
+            public Replacement(Regex regex, string replacment)
+            {
+                Regex = regex;
+                Replacment = replacment;
+            }
+
+            public Regex Regex { get; }
+            public string Replacment { get; }
+        }
+
+        #region Implementation of ITelemetry
+
+        public bool IsActive()
+        {
+            var subKey = SubKey;
+
+            if (subKey == null)
+                return false;
+
+            return _useRegex
+                ? ValueExpressions.Select(vd => vd.Value.Match.IsMatch(subKey.GetValue(vd.Key).ToString())).FirstOrDefault()
+                : ValueStrings.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
+        }
+
+        public bool RestartRequired { get; set; }
+
+        #endregion
     }
 }

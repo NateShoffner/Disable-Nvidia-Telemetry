@@ -318,4 +318,25 @@ Redistribution of this software is allowed, but the origin of this software must
   <data name="Updates" xml:space="preserve">
     <value>Updates</value>
   </data>
+  <data name="Check_for_updates_on_startup" xml:space="preserve">
+    <value>Check for updates when program is opened</value>
+  </data>
+  <data name="Enable_logging" xml:space="preserve">
+    <value>Enable logging</value>
+  </data>
+  <data name="Restart_later" xml:space="preserve">
+    <value>Restart Later</value>
+  </data>
+  <data name="Restart_now" xml:space="preserve">
+    <value>Restart Now</value>
+  </data>
+  <data name="Restart_required_message" xml:space="preserve">
+    <value>A Windows restart is required in order for this change to take effect.</value>
+  </data>
+  <data name="Restart_requried" xml:space="preserve">
+    <value>Restart Required</value>
+  </data>
+  <data name="Run_in_background" xml:space="preserve">
+    <value>Run in background and disable Nvidia telemetry services and tasks:</value>
+  </data>
 </root>

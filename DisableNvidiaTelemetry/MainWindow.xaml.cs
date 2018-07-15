@@ -115,11 +115,9 @@ namespace DisableNvidiaTelemetry
                 Logging.GetFileLogger().Log(Level.Error, e.Error, suppressEvents: true);
 
                 if (showDialog)
-                {
                     CustomMessageBox.Show(
                         Properties.Resources.Update_error_messsage,
                         Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
 
             btnUpdateCheck.IsEnabled = true;
@@ -530,6 +528,14 @@ namespace DisableNvidiaTelemetry
 
             if (result == MessageBoxResult.Yes)
                 WindowsUtils.Restart();
+        }
+
+        private void btnGeforce_Click(object sender, RoutedEventArgs e)
+        {
+            var path = GeforceUtilities.GetGeforceExperiencePath();
+
+            if (path != null)
+                Process.Start(path);
         }
     }
 }

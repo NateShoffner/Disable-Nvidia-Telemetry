@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DisableNvidiaTelemetry"
              xmlns:fa5="http://schemas.fontawesome.com/icons/"
+             xmlns:properties="clr-namespace:DisableNvidiaTelemetry.Properties"
              mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="550">
     <Grid Margin="0, 0, 0, 0">
@@ -16,7 +17,7 @@
         <fa5:SvgAwesome Icon="Solid_Undo" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="right"
                         Margin="0, 5, 140, 0" Foreground="#76B900" Cursor="Hand" Name="btnDefault" Visibility="Hidden" />
 
-        <Label Name="lblDefault" Content="Default" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <Label Name="lblDefault" Content="{x:Static properties:Resources.Default}" HorizontalAlignment="Right" VerticalAlignment="Top"
                Margin="0, 0, 90, 0"
                FontWeight="Bold" FontSize="12" Cursor="Hand" Visibility="Hidden" />
 
@@ -24,11 +25,11 @@
         <fa5:SvgAwesome Icon="Solid_SyncAlt" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="right"
                         Margin="0, 5, 60, 0" Foreground="#76B900" Cursor="Hand" Name="btnRefresh" />
 
-        <Label Name="lblRefresh" Content="Refresh" HorizontalAlignment="Right" VerticalAlignment="Top"
+        <Label Name="lblRefresh" Content="{x:Static properties:Resources.Refresh}" HorizontalAlignment="Right" VerticalAlignment="Top"
                Margin="0, 0, 10, 0"
                FontWeight="Bold" FontSize="12" Cursor="Hand" />
 
-        <Label Name="lblPlaceholder" HorizontalAlignment="Center" Content="No telemetry items found for this category."
+        <Label Name="lblPlaceholder" HorizontalAlignment="Center" Content="{x:Static properties:Resources.Telemetry_placeholder}"
                Margin="0, 40, 0, 40" />
 
         <StackPanel Name="containerPanel" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="15,30,5,15"

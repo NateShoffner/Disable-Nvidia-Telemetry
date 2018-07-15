@@ -56,7 +56,7 @@
                                     </Style>
                                 </fa5:SvgAwesome.Style>
                             </fa5:SvgAwesome>
-                            <TextBlock Text="Telemetry" TextAlignment="Center" FontSize="18">
+                            <TextBlock Text="{x:Static properties:Resources.Telemetry}" TextAlignment="Center" FontSize="18">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -132,7 +132,7 @@
                                     </Style>
                                 </fa5:SvgAwesome.Style>
                             </fa5:SvgAwesome>
-                            <TextBlock Text="Settings" TextAlignment="Center" FontSize="18">
+                            <TextBlock Text="{x:Static properties:Resources.Settings}" TextAlignment="Center" FontSize="18">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -175,9 +175,12 @@
                         <ComboBoxItem>After Windows Startup</ComboBoxItem>
                     </ComboBox>
 
-                    <Button Content="Check For Updates" Height="40" Width="200" HorizontalAlignment="Left"
+                    <Button Content="{x:Static properties:Resources.Check_for_updates}" Height="40" Width="200" HorizontalAlignment="Left"
                             VerticalAlignment="Top" Margin="10,157,0,0" Name="btnUpdateCheck"
                             Click="btnUpdatecheck_Click" />
+                    <Button Content="{x:Static properties:Resources.Open_geforce_experience}" Height="40" Width="200" HorizontalAlignment="Left"
+                        VerticalAlignment="Top" Margin="10,215,0,0" x:Name="btnUpdateCheck_Copy"
+                        Click="btnGeforce_Click" />
 
                 </Grid>
             </TabItem>
@@ -205,7 +208,7 @@
                                     </Style>
                                 </fa5:SvgAwesome.Style>
                             </fa5:SvgAwesome>
-                            <TextBlock Text="Event Log" TextAlignment="Center" FontSize="18">
+                            <TextBlock Text="{x:Static properties:Resources.Event_log}" TextAlignment="Center" FontSize="18">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -232,7 +235,7 @@
                     <ListView Name="lvLogs" SelectionMode="Single">
                         <ListView.Resources>
                             <ContextMenu x:Key="LogContextMenu">
-                                <MenuItem Header="Copy" Name="menuCopy" Click="MenuItem_OnClick" />
+                                <MenuItem Header="{x:Static properties:Resources.Copy}" Name="menuCopy" Click="MenuItem_OnClick" />
                             </ContextMenu>
                         </ListView.Resources>
                         <ListView.ItemContainerStyle>
@@ -242,9 +245,9 @@
                         </ListView.ItemContainerStyle>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Time" Width="Auto"
+                                <GridViewColumn Header="{x:Static properties:Resources.Time}" Width="Auto"
                                                 DisplayMemberBinding="{Binding Date, StringFormat='T'}" />
-                                <GridViewColumn Header="Details" Width="Auto" DisplayMemberBinding="{Binding Message}" />
+                                <GridViewColumn Header="{x:Static properties:Resources.Details}" Width="Auto" DisplayMemberBinding="{Binding Message}" />
                             </GridView>
 
                         </ListView.View>
@@ -278,7 +281,7 @@
                                     </Style>
                                 </fa5:SvgAwesome.Style>
                             </fa5:SvgAwesome>
-                            <TextBlock Text="About" TextAlignment="Center" FontSize="18">
+                            <TextBlock Text="{x:Static properties:Resources.About}" TextAlignment="Center" FontSize="18">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -339,7 +342,7 @@
                             <Hyperlink NavigateUri="https://github.com/NateShoffner/Disable-Nvidia-Telemetry"
                                        RequestNavigate="Hyperlink_OnRequestNavigate">
                                 <Hyperlink.Inlines>
-                                    <Run Text="View on GitHub" />
+                                    <Run Text="{x:Static properties:Resources.View_on_github}" />
                                 </Hyperlink.Inlines>
                             </Hyperlink>
                         </TextBlock>

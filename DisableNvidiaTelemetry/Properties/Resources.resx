@@ -339,4 +339,43 @@ Redistribution of this software is allowed, but the origin of this software must
   <data name="Run_in_background" xml:space="preserve">
     <value>Run in background and disable Nvidia telemetry services and tasks:</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Check_for_updates" xml:space="preserve">
+    <value>Check For Updates</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Event_log" xml:space="preserve">
+    <value>Event Log</value>
+  </data>
+  <data name="Open_geforce_experience" xml:space="preserve">
+    <value>Open GeForce Experience</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Telemetry" xml:space="preserve">
+    <value>Telemetry</value>
+  </data>
+  <data name="Telemetry_placeholder" xml:space="preserve">
+    <value>No telemetry items found for this category</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="View_on_github" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
 </root>

@@ -61,6 +61,15 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Administrator Required.
         /// </summary>
         public static string AdministratorRequired {
@@ -155,11 +164,47 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check For Updates.
+        /// </summary>
+        public static string Check_for_updates {
+            get {
+                return ResourceManager.GetString("Check_for_updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates when program is opened.
         /// </summary>
         public static string Check_for_updates_on_startup {
             get {
                 return ResourceManager.GetString("Check_for_updates_on_startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
             }
         }
         
@@ -214,6 +259,15 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event Log.
+        /// </summary>
+        public static string Event_log {
+            get {
+                return ResourceManager.GetString("Event_log", resourceCulture);
             }
         }
         
@@ -410,6 +464,15 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open GeForce Experience.
+        /// </summary>
+        public static string Open_geforce_experience {
+            get {
+                return ResourceManager.GetString("Open_geforce_experience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=nate.shoffner@gmail.com&amp;lc=US&amp;item_name=Disable%20Nvidia%20Telemetry&amp;currency_code=USD&amp;bn=PP%2dDonationsBF.
         /// </summary>
         public static string PaypalUrl {
@@ -433,6 +496,15 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Portable {
             get {
                 return ResourceManager.GetString("Portable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
             }
         }
         
@@ -554,6 +626,15 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Silently disabling telemetry registry items.
         /// </summary>
         public static string Silently_disabling_telemetry_registry_items {
@@ -644,6 +725,24 @@ namespace DisableNvidiaTelemetry.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Telemetry.
+        /// </summary>
+        public static string Telemetry {
+            get {
+                return ResourceManager.GetString("Telemetry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No telemetry items found for this category.
+        /// </summary>
+        public static string Telemetry_placeholder {
+            get {
+                return ResourceManager.GetString("Telemetry_placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Telemetry Registry Items.
         /// </summary>
         public static string Telemetry_registry_items {
@@ -667,6 +766,15 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Telemetry_tasks {
             get {
                 return ResourceManager.GetString("Telemetry_tasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string Time {
+            get {
+                return ResourceManager.GetString("Time", resourceCulture);
             }
         }
         
@@ -721,6 +829,15 @@ namespace DisableNvidiaTelemetry.Properties {
         public static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View on GitHub.
+        /// </summary>
+        public static string View_on_github {
+            get {
+                return ResourceManager.GetString("View_on_github", resourceCulture);
             }
         }
     }

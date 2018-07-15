@@ -6,6 +6,24 @@ namespace DisableNvidiaTelemetry.Utilities
 {
     internal class GeforceUtilities
     {
+        public static string GetGeforceExperiencePath()
+        {
+            using (var hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+
+            using (var key = hklm.OpenSubKey(@"SOFTWARE\NVIDIA Corporation\Global\GFExperience"))
+            {
+                if (key != null)
+                {
+                    var path = key.GetValue("FullPath");
+
+                    if (path != null)
+                        return path.ToString();
+                }
+            }
+
+            return null;
+        }
+
         public static ExtendedVersion.ExtendedVersion GetGeForceExperienceVersion()
         {
             return GetApplicationVersion("NVIDIA GeForce Experience");

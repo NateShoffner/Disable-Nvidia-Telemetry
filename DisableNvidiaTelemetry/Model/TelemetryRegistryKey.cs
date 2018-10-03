@@ -127,6 +127,27 @@ namespace DisableNvidiaTelemetry.Model
             public string Replacment { get; }
         }
 
+        /// <summary>Check to see if the value exists.</summary>
+        /// <returns>True if it exists, false if not.</returns>
+        public bool exists()
+        {
+            var subKey = SubKey;
+
+            try
+            {
+                if (_useRegex)
+                    ValueExpressions.Select(vd => vd.Value.Match.IsMatch(subKey.GetValue(vd.Key).ToString())).FirstOrDefault();
+                else
+                    ValueStrings.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
+            }
+            catch (System.NullReferenceException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #region Implementation of ITelemetry
 
         public bool IsActive()

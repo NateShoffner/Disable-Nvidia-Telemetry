@@ -102,6 +102,7 @@
     <Compile Include="Controller\NvidiaController.cs" />
     <Compile Include="Controller\NvidiaControllerResult.cs" />
     <Compile Include="MarginSetter.cs" />
+    <Compile Include="Model\RegistryKeyNotFoundException.cs" />
     <Compile Include="Model\ITelemetry.cs" />
     <Compile Include="Model\TaskNotFoundException.cs" />
     <Compile Include="Model\TelemetryRegistryKey.cs" />

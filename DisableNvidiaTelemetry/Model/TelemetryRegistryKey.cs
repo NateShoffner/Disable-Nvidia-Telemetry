@@ -158,8 +158,8 @@ namespace DisableNvidiaTelemetry.Model
                 return false;
 
             return _useRegex
-            ? ValueExpressions.Select(vd => vd.Value.Match.IsMatch(subKey.GetValue(vd.Key).ToString())).FirstOrDefault()
-            : ValueStrings.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
+                ? ValueExpressions.Select(vd => vd.Value.Match.IsMatch(subKey.GetValue(vd.Key).ToString())).FirstOrDefault()
+                : ValueStrings.Any(vd => subKey.GetValue(vd.Key).ToString() == vd.Value.Enabled);
         }
 
         public bool RestartRequired { get; set; }

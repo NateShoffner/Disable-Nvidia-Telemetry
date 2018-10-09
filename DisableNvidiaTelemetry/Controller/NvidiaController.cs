@@ -120,7 +120,10 @@ namespace DisableNvidiaTelemetry.Controller
                     error = ex;
                 }
 
-                yield return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, error) {Name = key.Name};
+                if (key.exists())
+                    yield return new NvidiaControllerResult<TelemetryRegistryKey>(telemetryRegistryKey, error) { Name = key.Name };
+                else
+                    yield return new NvidiaControllerResult<TelemetryRegistryKey>(null, new RegistryKeyNotFoundException($"Failed to find registry key: {key.Name}"));
             }
         }
 
